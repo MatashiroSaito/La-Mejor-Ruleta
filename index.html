@@ -777,9 +777,9 @@ const trollEvents = [
     },
     {
         id: 'name_glitch',
-        label: '👾 ¡Los nombres se vuelven locos por un momento!',
+        label: '👾 ¡Los nombres se intercambian de lugar hasta que la ruleta pare!',
         apply: function() {
-            window._trollGlitch = true;
+            window._trollShuffleUntilStop = true;
         }
     },
     {
@@ -881,24 +881,24 @@ function showTrollBanner(text, duration) {
     setTimeout(() => banner.classList.remove('show'), duration || 3000);
 }
 
-function glitchItems() {
-    const origItems = [...items];
-    const glitchChars = '!@#$%&*?¿¡~^';
-    let count = 0;
+function shuffleItemsContinuously(realItems, stopSignal) {
     const interval = setInterval(() => {
-        const fakeItems = origItems.map(name =>
-            name.split('').map(c => Math.random() > 0.5 ? glitchChars[Math.floor(Math.random()*glitchChars.length)] : c).join('')
-        );
-        items = fakeItems;
-        drawWheel();
-        count++;
-        if (count > 8) {
+        if (stopSignal.stop) {
             clearInterval(interval);
-            items = origItems;
+            items = [...realItems];
             drawWheel();
             updateItemsList();
+            return;
         }
-    }, 150);
+        // Fisher-Yates shuffle de una copia
+        const shuffled = [...realItems];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        items = shuffled;
+        drawWheel();
+    }, 120);
 }
 
 // ===== COUNTDOWN ANTES DEL RE-GIRO =====
@@ -942,6 +942,7 @@ function runTrollEvents(callback) {
     window._trollShootWinner = false;
     window._trollFlyAway = false;
     window._trollGlitchUntilStop = false;
+    window._trollShuffleUntilStop = false;
 
     const event = trollEvents[Math.floor(Math.random() * trollEvents.length)];
     event.apply();
@@ -949,7 +950,7 @@ function runTrollEvents(callback) {
     showTrollBanner('🔥 EVENTO TROLL: ' + event.label, 4000);
 
     if (window._trollGlitch) {
-        glitchItems();
+        // legacy — no longer used
     } else {
         drawWheel();
         updateItemsList();
@@ -1172,11 +1173,13 @@ function spinTroll() {
     window._trollGlitch = false;
     window._trollShootWinner = false;
     window._trollGlitchUntilStop = false;
+    window._trollShuffleUntilStop = false;
 
     runTrollEvents(() => {
-        const isReverse        = !!window._trollReverseSpin;
-        const doShoot          = !!window._trollShootWinner;
-        const doGlitchUntilStop = !!window._trollGlitchUntilStop;
+        const isReverse          = !!window._trollReverseSpin;
+        const doShoot            = !!window._trollShootWinner;
+        const doGlitchUntilStop  = !!window._trollGlitchUntilStop;
+        const doShuffleUntilStop = !!window._trollShuffleUntilStop;
         const spinDuration = 5000;
 
         let winnerIndex = Math.floor(Math.random() * items.length);
@@ -1207,6 +1210,12 @@ function spinTroll() {
             }, 80);
         }
 
+        // Shuffle continuo durante el giro
+        let shuffleSignal = { stop: false };
+        if (doShuffleUntilStop) {
+            shuffleItemsContinuously(realItems, shuffleSignal);
+        }
+
         setTimeout(() => {
             // Detener glitch y restaurar nombres reales
             if (glitchInterval) {
@@ -1215,6 +1224,12 @@ function spinTroll() {
                 items = realItems;
                 drawWheel();
                 updateItemsList();
+            }
+
+            // Detener shuffle y restaurar nombres reales
+            if (doShuffleUntilStop) {
+                shuffleSignal.stop = true;
+                // shuffleItemsContinuously se encarga de restaurar items en su próximo tick
             }
 
             lastWinner = winner;
