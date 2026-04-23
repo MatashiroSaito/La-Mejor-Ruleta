@@ -11,11 +11,7 @@
             background: linear-gradient(135deg, #FF0080 0%, #FF8C00 25%, #FFD700 50%, #00D4FF 75%, #8A2BE2 100%);
             background-size: 400% 400%;
             animation: gradientShift 15s ease infinite;
-            min-height:100vh; 
-            display:flex; 
-            justify-content:center;
-            align-items:center; 
-            padding:40px;
+            min-height:100vh; display:flex; justify-content:center; align-items:center; padding:40px;
         }
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
@@ -23,748 +19,220 @@
             100% { background-position: 0% 50%; }
         }
         .container{
-            background:rgba(255, 255, 255, 0.95);
-            border-radius:30px;
-            padding:40px;
-            box-shadow:0 20px 60px rgba(0,0,0,.5);
-            max-width:500px;
-            width:100%;
-            backdrop-filter: blur(10px);
+            background:rgba(255,255,255,0.95); border-radius:30px; padding:40px;
+            box-shadow:0 20px 60px rgba(0,0,0,.5); max-width:500px; width:100%; backdrop-filter:blur(10px);
         }
-        h1{
-            text-align:center;
-            color:#667eea;
-            margin-bottom:30px;
-            font-size:2em;
-            text-shadow:2px 2px 4px rgba(0,0,0,.1)
-        }
-        h1.troll-title {
-            color: #ff4757;
-            animation: trollPulse 1s infinite alternate;
-        }
+        h1{ text-align:center; color:#667eea; margin-bottom:30px; font-size:2em; text-shadow:2px 2px 4px rgba(0,0,0,.1) }
+        h1.troll-title { color:#ff4757; animation:trollPulse 1s infinite alternate; }
         @keyframes trollPulse {
-            from { text-shadow: 2px 2px 4px rgba(255,71,87,0.3); }
-            to { text-shadow: 0 0 20px rgba(255,71,87,0.9), 0 0 40px rgba(255,71,87,0.5); }
+            from { text-shadow:2px 2px 4px rgba(255,71,87,0.3); }
+            to   { text-shadow:0 0 20px rgba(255,71,87,0.9), 0 0 40px rgba(255,71,87,0.5); }
         }
-        .wheel-container{
-            position:relative;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            margin-bottom:30px;
-        }
-        .wheel-wrapper{
-            position:relative;
-            width:300px;
-            height:300px;
-        }
-        #wheelCanvas{
-            width:100%;
-            height:100%;
-            transition: transform 4s cubic-bezier(.17,.67,.12,.99);
-        }
+        .wheel-container{ position:relative; display:flex; flex-direction:column; align-items:center; margin-bottom:30px; }
+        .wheel-wrapper{ position:relative; width:300px; height:300px; }
+        #wheelCanvas{ width:100%; height:100%; transition:transform 4s cubic-bezier(.17,.67,.12,.99); }
         .pointer{
-            position:absolute;
-            top:-20px;
-            left:50%;
-            transform:translateX(-50%);
-            width:0;
-            height:0;
-            border-left:20px solid transparent;
-            border-right:20px solid transparent;
-            border-top:40px solid #ff4757;
-            filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));
-            z-index:10
+            position:absolute; top:-20px; left:50%; transform:translateX(-50%);
+            width:0; height:0; border-left:20px solid transparent; border-right:20px solid transparent;
+            border-top:40px solid #ff4757; filter:drop-shadow(0 3px 6px rgba(0,0,0,.3)); z-index:10
         }
         .center-circle{
-            position:absolute;
-            top:50%;
-            left:50%;
-            transform:translate(-50%,-50%);
-            width:60px;
-            height:60px;
-            border-radius:50%;
+            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+            width:60px; height:60px; border-radius:50%;
             background:linear-gradient(135deg,#6ec5ff 0%,#ff75dc 100%);
-            border:5px solid #fff;
-            box-shadow:0 4px 12px rgba(0,0,0,.3);
-            z-index:5
-        }
-        .spin-btn{
-            margin-top:20px;
-            padding:15px 40px;
-            font-size:1.2em;
-            background:linear-gradient(135deg,#381cda 0%,#ce3535 100%);
-            color:#fff;
-            border:none;
-            border-radius:50px;
-            cursor:pointer;
-            box-shadow:0 5px 15px rgba(102,126,234,.4);
-            font-weight:700;
-            transition: all 0.3s;
-        }
-        .spin-btn:hover:not(:disabled){
-            transform: translateY(-2px);
-            box-shadow:0 8px 20px rgba(102,126,234,.6);
-        }
-        .spin-btn:disabled{
-            opacity:.6;
-            cursor:not-allowed;
-            transform:none
-        }
-        .spin-btn.troll-spin {
-            background: linear-gradient(135deg, #ff4757 0%, #ff6348 50%, #ffa502 100%);
-            animation: trollBtnPulse 2s infinite;
-        }
-        @keyframes trollBtnPulse {
-            0%,100% { box-shadow: 0 5px 15px rgba(255,71,87,.4); }
-            50% { box-shadow: 0 5px 25px rgba(255,71,87,.8); }
-        }
-        /* Re-spin button - aparece tras el disparo */
-        .spin-btn.respin-btn {
-            background: linear-gradient(135deg, #ff4757 0%, #ffa502 100%);
-            animation: respinPulse 0.8s infinite alternate;
-            font-size: 1.1em;
-        }
-        @keyframes respinPulse {
-            from { box-shadow: 0 5px 15px rgba(255,71,87,.5); transform: scale(1); }
-            to   { box-shadow: 0 8px 30px rgba(255,71,87,.9); transform: scale(1.04); }
-        }
-        .controls{
-            width:100%;
-        }
-        .input-group{
-            display:flex;
-            gap:10px;
-            margin-bottom:20px
-        }
-        input{
-            flex:1;
-            padding:12px 20px;
-            border:2px solid #e0e0e0;
-            border-radius:25px;
-            font-size:1em
-        }
-        input:focus{
-            outline:none;
-            border-color:#667eea
-        }
-        .add-btn{
-            padding:12px 25px;
-            background:#667eea;
-            color:#fff;
-            border:none;
-            border-radius:25px;
-            cursor:pointer;
-            font-weight:700;
-            transition: all 0.3s;
-        }
-        .add-btn:hover{
-            background:#764ba2;
-            transform: scale(1.05);
-        }
-        .items-list{
-            background:#f8f9fa;
-            border-radius:20px;
-            padding:20px;
-            max-height:300px;
-            overflow-y:auto
-        }
-        .item{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:12px 15px;
-            background:#fff;
-            margin-bottom:10px;
-            border-radius:15px;
-            box-shadow:0 2px 5px rgba(0,0,0,.1);
-            transition: all 0.3s;
-        }
-        .item:hover{
-            transform: translateX(5px);
-            box-shadow:0 4px 8px rgba(0,0,0,.15);
-        }
-        .item-color{
-            width:20px;
-            height:20px;
-            border-radius:50%;
-            margin-right:10px
-        }
-        .item-text{
-            flex:1;
-            font-weight:500
-        }
-        .delete-btn{
-            background:#ff4757;
-            color:#fff;
-            border:none;
-            padding:8px 12px;
-            border-radius:10px;
-            cursor:pointer;
-            transition: all 0.3s;
-        }
-        .delete-btn:hover{
-            background:#ff3838;
-            transform: scale(1.1);
-        }
-        .winner-modal{
-            display:none;
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,.8);
-            justify-content:center;
-            align-items:center;
-            z-index:1000;
-            animation: fadeIn 0.3s;
-        }
-        .winner-modal.show{display:flex}
-        .winner-content{
-            background:#fff;
-            padding:50px;
-            border-radius:30px;
-            text-align:center;
-            box-shadow:0 20px 60px rgba(0,0,0,.3);
-            animation: slideUp 0.5s;
-        }
-        .winner-content h2{
-            color:#667eea;
-            font-size:2em;
-            margin-bottom:20px
-        }
-        .winner-text{
-            font-size:2.5em;
-            color:#ff4757;
-            font-weight:800;
-            margin:20px 0
-        }
-        .close-btn{
-            margin-top:20px;
-            padding:12px 30px;
-            background:#667eea;
-            color:#fff;
-            border:none;
-            border-radius:25px;
-            cursor:pointer;
-            font-size:1.1em;
-            transition: all 0.3s;
-        }
-        .close-btn:hover{
-            background:#764ba2;
-            transform: scale(1.05);
-        }
-        .winner-content.troll-winner h2 {
-            color: #ff4757;
-        }
-        .winner-content.troll-winner .winner-text {
-            animation: trollWinnerAnim 0.5s infinite alternate;
-        }
-        @keyframes trollWinnerAnim {
-            from { transform: scale(1) rotate(-2deg); }
-            to { transform: scale(1.05) rotate(2deg); }
+            border:5px solid #fff; box-shadow:0 4px 12px rgba(0,0,0,.3); z-index:5
         }
 
-        .flying-name {
-            position: fixed;
-            font-size: 1.6em;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
-            background: linear-gradient(135deg, #ff4757, #ffa502);
-            padding: 10px 20px;
-            border-radius: 20px;
-            pointer-events: none;
-            z-index: 2000;
-            white-space: nowrap;
-            box-shadow: 0 4px 15px rgba(255,71,87,0.5);
-        }
-        @keyframes flyOff {
-            0%   { opacity: 1; transform: translate(0,0) rotate(0deg) scale(1); }
-            30%  { opacity: 1; transform: translate(var(--fx1), var(--fy1)) rotate(var(--fr1)) scale(1.2); }
-            70%  { opacity: 0.7; transform: translate(var(--fx2), var(--fy2)) rotate(var(--fr2)) scale(0.9); }
-            100% { opacity: 0; transform: translate(var(--fx3), var(--fy3)) rotate(var(--fr3)) scale(0.3); }
-        }
-
-        .shoot-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 1500;
-            pointer-events: none;
-        }
-        .shoot-overlay.show { display: block; }
-        .bullet {
-            position: absolute;
-            font-size: 2em;
-            animation: bulletFly 0.4s forwards;
-        }
-        @keyframes bulletFly {
-            from { transform: translateX(0) scale(1); opacity: 1; }
-            to { transform: translateX(300px) scale(0.3); opacity: 0; }
-        }
-        .shoot-text {
+        /* ===== FLECHAS LATERALES (triple eliminación) ===== */
+        .side-arrow {
             position: absolute;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 3em;
-            font-weight: 900;
-            color: #ff4757;
-            text-shadow: 0 0 20px rgba(255,71,87,0.8);
-            animation: bangAnim 0.6s forwards;
+            transform: translateY(-50%);
+            font-size: 2.8em;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 20;
+            filter: drop-shadow(0 0 8px rgba(255,71,87,0.9));
+            transition: opacity 0.3s;
         }
+        .side-arrow.left  { left: -60px; animation: none; }
+        .side-arrow.right { right: -60px; animation: none; }
+        .side-arrow.show  {
+            opacity: 1;
+            animation: arrowPulse 0.5s infinite alternate;
+        }
+        @keyframes arrowPulse {
+            from { transform: translateY(-50%) scale(1);   filter: drop-shadow(0 0 6px rgba(255,71,87,0.8)); }
+            to   { transform: translateY(-50%) scale(1.25); filter: drop-shadow(0 0 16px rgba(255,71,87,1)); }
+        }
+
+        .spin-btn{
+            margin-top:20px; padding:15px 40px; font-size:1.2em;
+            background:linear-gradient(135deg,#381cda 0%,#ce3535 100%);
+            color:#fff; border:none; border-radius:50px; cursor:pointer;
+            box-shadow:0 5px 15px rgba(102,126,234,.4); font-weight:700; transition:all 0.3s;
+        }
+        .spin-btn:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 8px 20px rgba(102,126,234,.6); }
+        .spin-btn:disabled{ opacity:.6; cursor:not-allowed; transform:none }
+        .spin-btn.troll-spin{ background:linear-gradient(135deg,#ff4757 0%,#ff6348 50%,#ffa502 100%); animation:trollBtnPulse 2s infinite; }
+        @keyframes trollBtnPulse {
+            0%,100%{ box-shadow:0 5px 15px rgba(255,71,87,.4); }
+            50%    { box-shadow:0 5px 25px rgba(255,71,87,.8); }
+        }
+        .spin-btn.respin-btn{ background:linear-gradient(135deg,#ff4757 0%,#ffa502 100%); animation:respinPulse 0.8s infinite alternate; font-size:1.1em; }
+        @keyframes respinPulse {
+            from{ box-shadow:0 5px 15px rgba(255,71,87,.5); transform:scale(1); }
+            to  { box-shadow:0 8px 30px rgba(255,71,87,.9); transform:scale(1.04); }
+        }
+        .controls{ width:100%; }
+        .input-group{ display:flex; gap:10px; margin-bottom:20px }
+        input{ flex:1; padding:12px 20px; border:2px solid #e0e0e0; border-radius:25px; font-size:1em }
+        input:focus{ outline:none; border-color:#667eea }
+        .add-btn{ padding:12px 25px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:700; transition:all 0.3s; }
+        .add-btn:hover{ background:#764ba2; transform:scale(1.05); }
+        .items-list{ background:#f8f9fa; border-radius:20px; padding:20px; max-height:300px; overflow-y:auto }
+        .item{ display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:#fff; margin-bottom:10px; border-radius:15px; box-shadow:0 2px 5px rgba(0,0,0,.1); transition:all 0.3s; }
+        .item:hover{ transform:translateX(5px); box-shadow:0 4px 8px rgba(0,0,0,.15); }
+        .item-color{ width:20px; height:20px; border-radius:50%; margin-right:10px }
+        .item-text{ flex:1; font-weight:500 }
+        .delete-btn{ background:#ff4757; color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; transition:all 0.3s; }
+        .delete-btn:hover{ background:#ff3838; transform:scale(1.1); }
+        .winner-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:1000; animation:fadeIn 0.3s; }
+        .winner-modal.show{ display:flex }
+        .winner-content{ background:#fff; padding:50px; border-radius:30px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.3); animation:slideUp 0.5s; }
+        .winner-content h2{ color:#667eea; font-size:2em; margin-bottom:20px }
+        .winner-text{ font-size:2.5em; color:#ff4757; font-weight:800; margin:20px 0 }
+        .close-btn{ margin-top:20px; padding:12px 30px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-size:1.1em; transition:all 0.3s; }
+        .close-btn:hover{ background:#764ba2; transform:scale(1.05); }
+        .winner-content.troll-winner h2{ color:#ff4757; }
+        .winner-content.troll-winner .winner-text{ animation:trollWinnerAnim 0.5s infinite alternate; }
+        @keyframes trollWinnerAnim {
+            from{ transform:scale(1) rotate(-2deg); }
+            to  { transform:scale(1.05) rotate(2deg); }
+        }
+        .flying-name{ position:fixed; font-size:1.6em; font-weight:900; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.7); background:linear-gradient(135deg,#ff4757,#ffa502); padding:10px 20px; border-radius:20px; pointer-events:none; z-index:2000; white-space:nowrap; box-shadow:0 4px 15px rgba(255,71,87,0.5); }
+        @keyframes flyOff {
+            0%  { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+            30% { opacity:1; transform:translate(var(--fx1),var(--fy1)) rotate(var(--fr1)) scale(1.2); }
+            70% { opacity:0.7; transform:translate(var(--fx2),var(--fy2)) rotate(var(--fr2)) scale(0.9); }
+            100%{ opacity:0; transform:translate(var(--fx3),var(--fy3)) rotate(var(--fr3)) scale(0.3); }
+        }
+        .shoot-overlay{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:1500; pointer-events:none; }
+        .shoot-overlay.show{ display:block; }
+        .bullet{ position:absolute; font-size:2em; animation:bulletFly 0.4s forwards; }
+        @keyframes bulletFly {
+            from{ transform:translateX(0) scale(1); opacity:1; }
+            to  { transform:translateX(300px) scale(0.3); opacity:0; }
+        }
+        .shoot-text{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3em; font-weight:900; color:#ff4757; text-shadow:0 0 20px rgba(255,71,87,0.8); animation:bangAnim 0.6s forwards; }
         @keyframes bangAnim {
-            0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
-            50% { transform: translate(-50%,-50%) scale(1.4); opacity: 1; }
-            100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+            0%  { transform:translate(-50%,-50%) scale(0); opacity:0; }
+            50% { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
+            100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
         }
-
-        /* Countdown overlay que aparece antes del re-giro */
-        .countdown-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1400;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .countdown-overlay.show { display: flex; }
-        .countdown-number {
-            font-size: 8em;
-            font-weight: 900;
-            color: #fff;
-            text-shadow: 0 0 40px rgba(255,71,87,0.9);
-            animation: countPop 0.8s ease-out;
-        }
+        .countdown-overlay{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1400; justify-content:center; align-items:center; flex-direction:column; }
+        .countdown-overlay.show{ display:flex; }
+        .countdown-number{ font-size:8em; font-weight:900; color:#fff; text-shadow:0 0 40px rgba(255,71,87,0.9); animation:countPop 0.8s ease-out; }
         @keyframes countPop {
-            0%  { transform: scale(2); opacity: 0; }
-            50% { transform: scale(0.9); opacity: 1; }
-            100%{ transform: scale(1); opacity: 1; }
+            0%  { transform:scale(2); opacity:0; }
+            50% { transform:scale(0.9); opacity:1; }
+            100%{ transform:scale(1); opacity:1; }
         }
-        .countdown-label {
-            font-size: 1.8em;
-            color: #ffa502;
-            font-weight: 800;
-            margin-top: 10px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-        }
-
-        .troll-event-banner {
-            display: none;
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #ff4757, #ffa502);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 20px;
-            font-size: 1.3em;
-            font-weight: 800;
-            z-index: 999;
-            box-shadow: 0 8px 25px rgba(255,71,87,.5);
-            text-align: center;
-            max-width: 90vw;
-            animation: bannerBounce 0.5s;
-        }
-        .troll-event-banner.show { display: block; }
+        .countdown-label{ font-size:1.8em; color:#ffa502; font-weight:800; margin-top:10px; text-shadow:0 2px 8px rgba(0,0,0,0.5); }
+        .troll-event-banner{ display:none; position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,#ff4757,#ffa502); color:white; padding:15px 30px; border-radius:20px; font-size:1.3em; font-weight:800; z-index:999; box-shadow:0 8px 25px rgba(255,71,87,.5); text-align:center; max-width:90vw; animation:bannerBounce 0.5s; }
+        .troll-event-banner.show{ display:block; }
         @keyframes bannerBounce {
-            0% { transform: translateX(-50%) translateY(-30px); opacity:0; }
-            100% { transform: translateX(-50%) translateY(0); opacity:1; }
+            0%  { transform:translateX(-50%) translateY(-30px); opacity:0; }
+            100%{ transform:translateX(-50%) translateY(0); opacity:1; }
         }
-
-        .social-link{
-            position:fixed;
-            top:20px;
-            right:20px;
-            background:rgba(255,255,255,0.95);
-            padding:15px 25px;
-            border-radius:20px;
-            box-shadow:0 4px 15px rgba(0,0,0,.3);
-            text-decoration:none;
-            color:#667eea;
-            font-weight:600;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            z-index:100;
-        }
-        .social-link:hover{
-            transform: translateY(-2px);
-            box-shadow:0 6px 20px rgba(0,0,0,.4);
-            background:#667eea;
-            color:#fff;
-        }
-
-        .mode-buttons {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            z-index: 100;
-        }
-        .mode-btn {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.9em;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 15px rgba(0,0,0,.3);
-        }
-        .mode-btn.normal-btn {
-            background: rgba(255,255,255,0.95);
-            color: #667eea;
-        }
-        .mode-btn.normal-btn:hover, .mode-btn.normal-btn.active {
-            background: #667eea;
-            color: #fff;
-            transform: translateY(-2px);
-        }
-        .mode-btn.troll-btn {
-            background: rgba(255,255,255,0.95);
-            color: #ff4757;
-        }
-        .mode-btn.troll-btn:hover, .mode-btn.troll-btn.active {
-            background: linear-gradient(135deg, #ff4757, #ffa502);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,71,87,.4);
-        }
-
-        .config-btn{
-            position:fixed;
-            top:20px;
-            left:20px;
-            background:rgba(255,255,255,0.95);
-            padding:15px 25px;
-            border-radius:20px;
-            box-shadow:0 4px 15px rgba(0,0,0,.3);
-            border:none;
-            color:#667eea;
-            font-weight:600;
-            cursor:pointer;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-            z-index:100;
-        }
-        .config-btn:hover{
-            transform: translateY(-2px);
-            box-shadow:0 6px 20px rgba(0,0,0,.4);
-            background:#667eea;
-            color:#fff;
-        }
-        .config-modal{
-            display:none;
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0,0,0,.8);
-            justify-content:center;
-            align-items:center;
-            z-index:1000;
-            animation: fadeIn 0.3s;
-        }
-        .config-modal.show{display:flex}
-        .config-content{
-            background:#fff;
-            padding:40px;
-            border-radius:30px;
-            box-shadow:0 20px 60px rgba(0,0,0,.3);
-            max-width:600px;
-            width:90%;
-            max-height:80vh;
-            overflow-y:auto;
-            animation: slideUp 0.5s;
-        }
-        .config-content h2{
-            color:#667eea;
-            font-size:1.8em;
-            margin-bottom:25px;
-            text-align:center;
-        }
-        .config-section{
-            margin-bottom:30px;
-        }
-        .config-section h3{
-            color:#333;
-            font-size:1.3em;
-            margin-bottom:15px;
-        }
-        .color-options{
-            display:grid;
-            grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
-            gap:15px;
-        }
-        .color-option{
-            padding:15px;
-            border-radius:15px;
-            cursor:pointer;
-            text-align:center;
-            font-weight:600;
-            color:#fff;
-            transition: all 0.3s;
-            border:3px solid transparent;
-        }
-        .color-option:hover{
-            transform: scale(1.05);
-            box-shadow:0 4px 12px rgba(0,0,0,.3);
-        }
-        .color-option.active{
-            border-color:#fff;
-            box-shadow:0 0 0 3px #667eea;
-        }
-        .saved-wheels{
-            display:flex;
-            flex-direction:column;
-            gap:10px;
-        }
-        .saved-wheel-item{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:15px;
-            background:#f8f9fa;
-            border-radius:15px;
-            cursor:pointer;
-            transition: all 0.3s;
-        }
-        .saved-wheel-item:hover{
-            background:#e9ecef;
-            transform: translateX(5px);
-        }
-        .saved-wheel-name{
-            font-weight:600;
-            color:#333;
-        }
-        .saved-wheel-count{
-            color:#666;
-            font-size:0.9em;
-        }
-        .saved-wheel-actions{
-            display:flex;
-            gap:10px;
-        }
-        .load-btn, .delete-saved-btn{
-            padding:8px 15px;
-            border:none;
-            border-radius:10px;
-            cursor:pointer;
-            font-weight:600;
-            transition: all 0.3s;
-        }
-        .load-btn{
-            background:#667eea;
-            color:#fff;
-        }
-        .load-btn:hover{
-            background:#764ba2;
-        }
-        .delete-saved-btn{
-            background:#ff4757;
-            color:#fff;
-        }
-        .delete-saved-btn:hover{
-            background:#ff3838;
-        }
-        .save-current{
-            display:flex;
-            gap:10px;
-            margin-top:15px;
-        }
-        .save-current input{
-            flex:1;
-        }
-        .save-current button{
-            padding:12px 20px;
-            background:#667eea;
-            color:#fff;
-            border:none;
-            border-radius:25px;
-            cursor:pointer;
-            font-weight:600;
-        }
-        .save-current button:hover{
-            background:#764ba2;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        @media (max-width:768px){
-            body{padding:20px;justify-content:center}
-            .container{max-width:100%}
-            .wheel-wrapper{width:280px;height:280px}
-            h1{font-size:1.5em}
-            .social-link, .config-btn{
-                top:10px;
-                padding:10px 15px;
-                font-size:0.9em;
-            }
-            .social-link{right:10px}
-            .config-btn{left:10px}
-            .mode-buttons { top: 75px; right: 10px; }
+        .social-link{ position:fixed; top:20px; right:20px; background:rgba(255,255,255,0.95); padding:15px 25px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,.3); text-decoration:none; color:#667eea; font-weight:600; transition:all 0.3s; backdrop-filter:blur(10px); z-index:100; }
+        .social-link:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.4); background:#667eea; color:#fff; }
+        .mode-buttons{ position:fixed; top:80px; right:20px; display:flex; flex-direction:column; gap:8px; z-index:100; }
+        .mode-btn{ padding:10px 18px; border:none; border-radius:15px; cursor:pointer; font-weight:700; font-size:0.9em; transition:all 0.3s; backdrop-filter:blur(10px); box-shadow:0 4px 15px rgba(0,0,0,.3); }
+        .mode-btn.normal-btn{ background:rgba(255,255,255,0.95); color:#667eea; }
+        .mode-btn.normal-btn:hover, .mode-btn.normal-btn.active{ background:#667eea; color:#fff; transform:translateY(-2px); }
+        .mode-btn.troll-btn{ background:rgba(255,255,255,0.95); color:#ff4757; }
+        .mode-btn.troll-btn:hover, .mode-btn.troll-btn.active{ background:linear-gradient(135deg,#ff4757,#ffa502); color:#fff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(255,71,87,.4); }
+        .config-btn{ position:fixed; top:20px; left:20px; background:rgba(255,255,255,0.95); padding:15px 25px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,.3); border:none; color:#667eea; font-weight:600; cursor:pointer; transition:all 0.3s; backdrop-filter:blur(10px); z-index:100; }
+        .config-btn:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.4); background:#667eea; color:#fff; }
+        .config-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:1000; animation:fadeIn 0.3s; }
+        .config-modal.show{ display:flex }
+        .config-content{ background:#fff; padding:40px; border-radius:30px; box-shadow:0 20px 60px rgba(0,0,0,.3); max-width:600px; width:90%; max-height:80vh; overflow-y:auto; animation:slideUp 0.5s; }
+        .config-content h2{ color:#667eea; font-size:1.8em; margin-bottom:25px; text-align:center; }
+        .config-section{ margin-bottom:30px; }
+        .config-section h3{ color:#333; font-size:1.3em; margin-bottom:15px; }
+        .color-options{ display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:15px; }
+        .color-option{ padding:15px; border-radius:15px; cursor:pointer; text-align:center; font-weight:600; color:#fff; transition:all 0.3s; border:3px solid transparent; }
+        .color-option:hover{ transform:scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,.3); }
+        .color-option.active{ border-color:#fff; box-shadow:0 0 0 3px #667eea; }
+        .saved-wheels{ display:flex; flex-direction:column; gap:10px; }
+        .saved-wheel-item{ display:flex; justify-content:space-between; align-items:center; padding:15px; background:#f8f9fa; border-radius:15px; cursor:pointer; transition:all 0.3s; }
+        .saved-wheel-item:hover{ background:#e9ecef; transform:translateX(5px); }
+        .saved-wheel-name{ font-weight:600; color:#333; }
+        .saved-wheel-count{ color:#666; font-size:0.9em; }
+        .saved-wheel-actions{ display:flex; gap:10px; }
+        .load-btn,.delete-saved-btn{ padding:8px 15px; border:none; border-radius:10px; cursor:pointer; font-weight:600; transition:all 0.3s; }
+        .load-btn{ background:#667eea; color:#fff; }
+        .load-btn:hover{ background:#764ba2; }
+        .delete-saved-btn{ background:#ff4757; color:#fff; }
+        .delete-saved-btn:hover{ background:#ff3838; }
+        .save-current{ display:flex; gap:10px; margin-top:15px; }
+        .save-current input{ flex:1; }
+        .save-current button{ padding:12px 20px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:600; }
+        .save-current button:hover{ background:#764ba2; }
+        @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
+        @keyframes slideUp { from{ transform:translateY(50px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+        @media(max-width:768px){
+            body{ padding:20px; justify-content:center }
+            .container{ max-width:100% }
+            .wheel-wrapper{ width:280px; height:280px }
+            h1{ font-size:1.5em }
+            .social-link,.config-btn{ top:10px; padding:10px 15px; font-size:0.9em; }
+            .social-link{ right:10px }
+            .config-btn{ left:10px }
+            .mode-buttons{ top:75px; right:10px; }
+            .side-arrow.left  { left:-45px; font-size:2em; }
+            .side-arrow.right { right:-45px; font-size:2em; }
         }
 
         /* ===== MODALES EVENTOS RAROS ===== */
-        .rare-modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s;
-        }
-        .rare-modal.show { display: flex; }
-        .rare-content {
-            padding: 50px 60px;
-            border-radius: 30px;
-            text-align: center;
-            animation: rareSlideUp 0.6s cubic-bezier(.17,.67,.12,.99);
-            max-width: 480px;
-            width: 90%;
-            position: relative;
-            overflow: hidden;
-        }
-        @keyframes rareSlideUp {
-            from { transform: translateY(60px) scale(0.8); opacity: 0; }
-            to   { transform: translateY(0) scale(1); opacity: 1; }
-        }
-        .rare-content::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: inherit;
-            filter: brightness(0.4);
-            z-index: -1;
-        }
-        .rare-stars {
-            font-size: 2.5em;
-            letter-spacing: 8px;
-            margin-bottom: 15px;
-            animation: starSpin 2s linear infinite;
-        }
-        @keyframes starSpin {
-            0%   { transform: rotate(0deg) scale(1); }
-            50%  { transform: rotate(180deg) scale(1.1); }
-            100% { transform: rotate(360deg) scale(1); }
-        }
-        .rare-badge {
-            font-size: 1em;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            padding: 6px 18px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 18px;
-        }
-        .rare-title {
-            font-size: 2.8em;
-            font-weight: 900;
-            margin-bottom: 10px;
-            line-height: 1.1;
-        }
-        .rare-winner-name {
-            font-size: 2em;
-            font-weight: 800;
-            margin: 15px 0;
-            padding: 10px 20px;
-            border-radius: 15px;
-            display: inline-block;
-        }
-        .rare-desc {
-            font-size: 1.1em;
-            margin-bottom: 25px;
-            opacity: 0.9;
-        }
-        .rare-close-btn {
-            padding: 13px 35px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 800;
-            transition: all 0.3s;
-        }
-        .rare-close-btn:hover { transform: scale(1.06); }
-
-        /* VIP — dorado */
-        .rare-vip { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #3d2000; }
-        .rare-vip .rare-badge { background: #3d2000; color: #ffd700; }
-        .rare-vip .rare-winner-name { background: rgba(0,0,0,0.15); }
-        .rare-vip .rare-close-btn { background: #3d2000; color: #ffd700; }
-
-        /* REVIVIR — verde neón */
-        .rare-revive { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #002b1a; }
-        .rare-revive .rare-badge { background: #002b1a; color: #38ef7d; }
-        .rare-revive .rare-winner-name { background: rgba(0,0,0,0.15); }
-        .rare-revive .rare-close-btn { background: #002b1a; color: #38ef7d; }
-
-        /* SUB — morado Twitch */
-        .rare-sub { background: linear-gradient(135deg, #6441a5 0%, #c471ed 100%); color: #fff; }
-        .rare-sub .rare-badge { background: rgba(255,255,255,0.2); color: #fff; border: 2px solid #fff; }
-        .rare-sub .rare-winner-name { background: rgba(0,0,0,0.2); }
-        .rare-sub .rare-close-btn { background: #fff; color: #6441a5; }
-
-        /* REVIVE ALL — blanco celestial */
-        .rare-revive-all { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 40%, #e8f5e9 100%); color: #003d4d; }
-        .rare-revive-all .rare-badge { background: #003d4d; color: #00e5ff; }
-        .rare-revive-all .rare-winner-name { background: rgba(0,0,0,0.08); font-size: 1.2em; }
-        .rare-revive-all .rare-close-btn { background: #003d4d; color: #00e5ff; }
-
-        /* Partículas flotantes raras */
-        .rare-particles {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .rare-particle {
-            position: absolute;
-            font-size: 1.4em;
-            animation: particleFloat linear infinite;
-            opacity: 0.7;
-        }
-        @keyframes particleFloat {
-            0%   { transform: translateY(100%) rotate(0deg); opacity: 0; }
-            10%  { opacity: 0.7; }
-            90%  { opacity: 0.7; }
-            100% { transform: translateY(-120%) rotate(360deg); opacity: 0; }
-        }
+        .rare-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:2000; animation:fadeIn 0.3s; }
+        .rare-modal.show{ display:flex; }
+        .rare-content{ padding:50px 60px; border-radius:30px; text-align:center; animation:rareSlideUp 0.6s cubic-bezier(.17,.67,.12,.99); max-width:480px; width:90%; position:relative; overflow:hidden; }
+        @keyframes rareSlideUp { from{ transform:translateY(60px) scale(0.8); opacity:0; } to{ transform:translateY(0) scale(1); opacity:1; } }
+        .rare-content::before{ content:''; position:absolute; inset:0; background:inherit; filter:brightness(0.4); z-index:-1; }
+        .rare-stars{ font-size:2.5em; letter-spacing:8px; margin-bottom:15px; animation:starSpin 2s linear infinite; }
+        @keyframes starSpin { 0%{ transform:rotate(0deg) scale(1); } 50%{ transform:rotate(180deg) scale(1.1); } 100%{ transform:rotate(360deg) scale(1); } }
+        .rare-badge{ font-size:1em; font-weight:900; text-transform:uppercase; letter-spacing:4px; padding:6px 18px; border-radius:20px; display:inline-block; margin-bottom:18px; }
+        .rare-title{ font-size:2.8em; font-weight:900; margin-bottom:10px; line-height:1.1; }
+        .rare-winner-name{ font-size:2em; font-weight:800; margin:15px 0; padding:10px 20px; border-radius:15px; display:inline-block; }
+        .rare-desc{ font-size:1.1em; margin-bottom:25px; opacity:0.9; }
+        .rare-close-btn{ padding:13px 35px; border:none; border-radius:25px; cursor:pointer; font-size:1.1em; font-weight:800; transition:all 0.3s; }
+        .rare-close-btn:hover{ transform:scale(1.06); }
+        .rare-vip{ background:linear-gradient(135deg,#f6d365 0%,#fda085 100%); color:#3d2000; }
+        .rare-vip .rare-badge{ background:#3d2000; color:#ffd700; }
+        .rare-vip .rare-winner-name{ background:rgba(0,0,0,0.15); }
+        .rare-vip .rare-close-btn{ background:#3d2000; color:#ffd700; }
+        .rare-revive{ background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%); color:#002b1a; }
+        .rare-revive .rare-badge{ background:#002b1a; color:#38ef7d; }
+        .rare-revive .rare-winner-name{ background:rgba(0,0,0,0.15); }
+        .rare-revive .rare-close-btn{ background:#002b1a; color:#38ef7d; }
+        .rare-sub{ background:linear-gradient(135deg,#6441a5 0%,#c471ed 100%); color:#fff; }
+        .rare-sub .rare-badge{ background:rgba(255,255,255,0.2); color:#fff; border:2px solid #fff; }
+        .rare-sub .rare-winner-name{ background:rgba(0,0,0,0.2); }
+        .rare-sub .rare-close-btn{ background:#fff; color:#6441a5; }
+        .rare-revive-all{ background:linear-gradient(135deg,#e0f7fa 0%,#b2ebf2 40%,#e8f5e9 100%); color:#003d4d; }
+        .rare-revive-all .rare-badge{ background:#003d4d; color:#00e5ff; }
+        .rare-revive-all .rare-winner-name{ background:rgba(0,0,0,0.08); font-size:1.2em; }
+        .rare-revive-all .rare-close-btn{ background:#003d4d; color:#00e5ff; }
+        .rare-particles{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; }
+        .rare-particle{ position:absolute; font-size:1.4em; animation:particleFloat linear infinite; opacity:0.7; }
+        @keyframes particleFloat { 0%{ transform:translateY(100%) rotate(0deg); opacity:0; } 10%{ opacity:0.7; } 90%{ opacity:0.7; } 100%{ transform:translateY(-120%) rotate(360deg); opacity:0; } }
     </style>
 </head>
 <body>
     <button class="config-btn" onclick="openConfig()">⚙️ Configuración</button>
-    
-    <a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">
-        📱 Redes del creador
-    </a>
+    <a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">📱 Redes del creador</a>
 
     <div class="mode-buttons">
         <button class="mode-btn normal-btn active" id="normalModeBtn" onclick="setMode('normal')">🎯 Ruleta Normal</button>
@@ -778,29 +246,29 @@
     <img src="GxoqO02WYAASpT3-removebg-preview.png" style="position:absolute;top:766px;left:1300px;width:300px">
     <img src="cxnnard_goad.png" style="position:absolute;top:803px;left:400px;width:200px">
     <img src="Ilustracion.png" style="position:absolute;top:884px;left:1200px;width:119px">
- 
+
     <div class="container">
         <h1 id="mainTitle"> Ruleta de Matashiro</h1>
- 
         <div class="wheel-container">
-            <div class="wheel-wrapper">
+            <!-- Flechas laterales (ocultas por defecto) -->
+            <div class="wheel-wrapper" id="wheelWrapper">
+                <div class="side-arrow left" id="arrowLeft">💀</div>
+                <div class="side-arrow right" id="arrowRight">💀</div>
                 <div class="pointer"></div>
                 <canvas id="wheelCanvas" width="400" height="400"></canvas>
                 <div class="center-circle"></div>
             </div>
             <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
         </div>
- 
         <div class="controls">
             <div class="input-group">
                 <input id="itemInput" placeholder="Agrega un nombre o número..." onkeypress="if(event.key==='Enter') addItem()">
                 <button class="add-btn" onclick="addItem()">+ Agregar</button>
             </div>
- 
             <div class="items-list" id="itemsList"></div>
         </div>
     </div>
- 
+
     <div class="shoot-overlay" id="shootOverlay"></div>
 
     <!-- Modal VIP -->
@@ -815,7 +283,6 @@
             <button class="rare-close-btn" onclick="closeRareModal('vipModal')">👑 ¡Increíble!</button>
         </div>
     </div>
-
     <!-- Modal REVIVIR -->
     <div class="rare-modal" id="reviveModal">
         <div class="rare-content rare-revive">
@@ -828,7 +295,6 @@
             <button class="rare-close-btn" onclick="closeRareModal('reviveModal')">💚 ¡Regresó!</button>
         </div>
     </div>
-
     <!-- Modal SUB -->
     <div class="rare-modal" id="subModal">
         <div class="rare-content rare-sub">
@@ -841,7 +307,6 @@
             <button class="rare-close-btn" onclick="closeRareModal('subModal')">💜 ¡Wooo!</button>
         </div>
     </div>
-
     <!-- Modal REVIVIR TODOS -->
     <div class="rare-modal" id="reviveAllModal">
         <div class="rare-content rare-revive-all">
@@ -855,7 +320,7 @@
         </div>
     </div>
 
-    <!-- Countdown overlay para el re-giro obligatorio -->
+    <!-- Countdown overlay -->
     <div class="countdown-overlay" id="countdownOverlay">
         <div class="countdown-number" id="countdownNumber">3</div>
         <div class="countdown-label" id="countdownLabel">¡GIRANDO DE NUEVO!</div>
@@ -868,25 +333,23 @@
             <button class="close-btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
- 
+
     <div class="config-modal" id="configModal">
         <div class="config-content">
             <h2>⚙️ Configuración</h2>
-            
             <div class="config-section">
                 <h3>🎨 Color de Fondo</h3>
                 <div class="color-options">
-                    <div class="color-option active" onclick="changeBackground('gradient1')" id="bg-gradient1" style="background:linear-gradient(135deg, #FF0080 0%, #FF8C00 25%, #FFD700 50%, #00D4FF 75%, #8A2BE2 100%)">Arcoíris</div>
-                    <div class="color-option" onclick="changeBackground('gradient2')" id="bg-gradient2" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%)">Púrpura</div>
-                    <div class="color-option" onclick="changeBackground('gradient3')" id="bg-gradient3" style="background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%)">Rosa</div>
-                    <div class="color-option" onclick="changeBackground('gradient4')" id="bg-gradient4" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)">Azul</div>
-                    <div class="color-option" onclick="changeBackground('gradient5')" id="bg-gradient5" style="background:linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)">Verde</div>
-                    <div class="color-option" onclick="changeBackground('gradient6')" id="bg-gradient6" style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%)">Sunset</div>
-                    <div class="color-option" onclick="changeBackground('gradient7')" id="bg-gradient7" style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%)">Océano</div>
-                    <div class="color-option" onclick="changeBackground('gradient8')" id="bg-gradient8" style="background:linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)">Naranja</div>
+                    <div class="color-option active" onclick="changeBackground('gradient1')" id="bg-gradient1" style="background:linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)">Arcoíris</div>
+                    <div class="color-option" onclick="changeBackground('gradient2')" id="bg-gradient2" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)">Púrpura</div>
+                    <div class="color-option" onclick="changeBackground('gradient3')" id="bg-gradient3" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)">Rosa</div>
+                    <div class="color-option" onclick="changeBackground('gradient4')" id="bg-gradient4" style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)">Azul</div>
+                    <div class="color-option" onclick="changeBackground('gradient5')" id="bg-gradient5" style="background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)">Verde</div>
+                    <div class="color-option" onclick="changeBackground('gradient6')" id="bg-gradient6" style="background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)">Sunset</div>
+                    <div class="color-option" onclick="changeBackground('gradient7')" id="bg-gradient7" style="background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)">Océano</div>
+                    <div class="color-option" onclick="changeBackground('gradient8')" id="bg-gradient8" style="background:linear-gradient(135deg,#ff9a56 0%,#ff6a88 100%)">Naranja</div>
                 </div>
             </div>
- 
             <div class="config-section">
                 <h3>💾 Guardar Ruleta Actual</h3>
                 <div class="save-current">
@@ -894,24 +357,19 @@
                     <button onclick="saveCurrentWheel()">Guardar</button>
                 </div>
             </div>
- 
             <div class="config-section">
                 <h3>📚 Ruletas Guardadas</h3>
                 <div class="saved-wheels" id="savedWheelsList"></div>
             </div>
- 
             <button class="close-btn" onclick="closeConfig()">Cerrar</button>
         </div>
     </div>
- 
+
     <script>
-const colors = [
-    '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F',
-    '#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A'
-];
- 
+const colors = ['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A'];
+
 let items = ['Ana','Carlos','María','Pedro','Lucía'];
-let originalItems = [...items]; // rastrea todos los nombres que han existido alguna vez
+let originalItems = [...items];
 let isSpinning = false;
 let currentRotation = 0;
 let lastWinner = null;
@@ -920,28 +378,31 @@ let savedWheels = {};
 let currentMode = 'normal';
 let disappearedName = null;
 
+// ===== FLECHAS LATERALES =====
+function showSideArrows() {
+    document.getElementById('arrowLeft').classList.add('show');
+    document.getElementById('arrowRight').classList.add('show');
+}
+function hideSideArrows() {
+    document.getElementById('arrowLeft').classList.remove('show');
+    document.getElementById('arrowRight').classList.remove('show');
+}
+
 const trollEvents = [
     {
         id: 'swap_adjacent',
         label: '🔀 ¡Dos nombres intercambian posiciones al parar!',
-        apply: function() {
-            if (items.length < 2) return;
-            window._trollSwapAdjacent = true;
-        }
+        apply: function() { if (items.length < 2) return; window._trollSwapAdjacent = true; }
     },
     {
         id: 'shuffle_all',
         label: '🌀 ¡TODOS los nombres cambian de lugar al parar!',
-        apply: function() {
-            window._trollShuffleAll = true;
-        }
+        apply: function() { window._trollShuffleAll = true; }
     },
     {
         id: 'reverse_spin',
         label: '⬅️ ¡La ruleta gira al revés!',
-        apply: function() {
-            window._trollReverseSpin = true;
-        }
+        apply: function() { window._trollReverseSpin = true; }
     },
     {
         id: 'disappear',
@@ -956,173 +417,108 @@ const trollEvents = [
     {
         id: 'name_glitch',
         label: '👾 ¡Los nombres se intercambian de lugar hasta que la ruleta pare!',
-        apply: function() {
-            window._trollShuffleUntilStop = true;
-        }
+        apply: function() { window._trollShuffleUntilStop = true; }
     },
     {
         id: 'glitch_until_stop',
         label: '💀 ¡Los nombres están glitcheados hasta que la ruleta pare!',
-        apply: function() {
-            window._trollGlitchUntilStop = true;
-        }
+        apply: function() { window._trollGlitchUntilStop = true; }
     },
     {
         id: 'shoot_winner',
         label: '🔫 ¡Un nombre le dispara al ganador para salvarse! ¡Hay que girar de nuevo!',
-        apply: function() {
-            if (items.length < 2) return;
-            window._trollShootWinner = true;
-        }
+        apply: function() { if (items.length < 2) return; window._trollShootWinner = true; }
     },
     {
         id: 'triple_eliminate',
         label: '💀 ¡3 personas aleatorias son eliminadas de la ruleta!',
-        apply: function() {
-            if (items.length < 4) return;
-            window._trollTripleEliminate = true;
-        }
-    },
-
+        apply: function() { if (items.length < 4) return; window._trollTripleEliminate = true; }
+    }
 ];
 
 const canvas = document.getElementById('wheelCanvas');
 const ctx = canvas.getContext('2d');
- 
+
 function loadData() {
     const saved = localStorage.getItem('matashiroWheels');
     if (saved) savedWheels = JSON.parse(saved);
     const savedBg = localStorage.getItem('matashiroBg');
-    if (savedBg) {
-        currentBackground = savedBg;
-        applyBackground(savedBg);
-    }
+    if (savedBg) { currentBackground = savedBg; applyBackground(savedBg); }
 }
- 
 function saveData() {
     localStorage.setItem('matashiroWheels', JSON.stringify(savedWheels));
     localStorage.setItem('matashiroBg', currentBackground);
 }
- 
 const backgrounds = {
-    gradient1: 'linear-gradient(135deg, #FF0080 0%, #FF8C00 25%, #FFD700 50%, #00D4FF 75%, #8A2BE2 100%)',
-    gradient2: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-    gradient3: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
-    gradient4: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
-    gradient5: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
-    gradient6: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-    gradient7: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
-    gradient8: 'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)'
+    gradient1:'linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)',
+    gradient2:'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',
+    gradient3:'linear-gradient(135deg,#f093fb 0%,#f5576c 100%)',
+    gradient4:'linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)',
+    gradient5:'linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)',
+    gradient6:'linear-gradient(135deg,#fa709a 0%,#fee140 100%)',
+    gradient7:'linear-gradient(135deg,#30cfd0 0%,#330867 100%)',
+    gradient8:'linear-gradient(135deg,#ff9a56 0%,#ff6a88 100%)'
 };
- 
-function applyBackground(bgKey) {
-    document.body.style.background = backgrounds[bgKey];
-    document.body.style.backgroundSize = '400% 400%';
-}
- 
+function applyBackground(bgKey) { document.body.style.background = backgrounds[bgKey]; document.body.style.backgroundSize = '400% 400%'; }
 function changeBackground(bgKey) {
-    currentBackground = bgKey;
-    applyBackground(bgKey);
-    saveData();
+    currentBackground = bgKey; applyBackground(bgKey); saveData();
     document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
     document.getElementById('bg-' + bgKey).classList.add('active');
 }
 
-// ===== MODE SWITCHING =====
 function setMode(mode) {
     currentMode = mode;
     const title = document.getElementById('mainTitle');
     const spinBtn = document.getElementById('spinBtn');
     const normalBtn = document.getElementById('normalModeBtn');
     const trollBtn = document.getElementById('trollModeBtn');
-
     if (mode === 'normal') {
-        title.textContent = ' Ruleta de Matashiro';
-        title.className = '';
-        title.style.color = '#667eea';
-        spinBtn.textContent = '¡GIRAR!';
-        spinBtn.className = 'spin-btn';
-        normalBtn.classList.add('active');
-        trollBtn.classList.remove('active');
+        title.textContent = ' Ruleta de Matashiro'; title.className = ''; title.style.color = '#667eea';
+        spinBtn.textContent = '¡GIRAR!'; spinBtn.className = 'spin-btn';
+        normalBtn.classList.add('active'); trollBtn.classList.remove('active');
     } else {
-        title.textContent = '😈 Ruleta TROLL 😈';
-        title.className = 'troll-title';
-        spinBtn.textContent = '😈 ¡GIRAR (si te atreves)!';
-        spinBtn.className = 'spin-btn troll-spin';
-        trollBtn.classList.add('active');
-        normalBtn.classList.remove('active');
+        title.textContent = '😈 Ruleta TROLL 😈'; title.className = 'troll-title';
+        spinBtn.textContent = '😈 ¡GIRAR (si te atreves)!'; spinBtn.className = 'spin-btn troll-spin';
+        trollBtn.classList.add('active'); normalBtn.classList.remove('active');
     }
-
-    canvas.style.transition = 'none';
-    currentRotation = 0;
-    canvas.style.transform = 'rotate(0deg)';
+    canvas.style.transition = 'none'; currentRotation = 0; canvas.style.transform = 'rotate(0deg)';
     drawWheel();
 }
 
-// ===== TROLL HELPERS =====
 function showTrollBanner(text, duration) {
     const banner = document.getElementById('trollEventBanner');
-    banner.textContent = text;
-    banner.classList.add('show');
+    banner.textContent = text; banner.classList.add('show');
     setTimeout(() => banner.classList.remove('show'), duration || 3000);
 }
 
 function shuffleItemsContinuously(realItems, stopSignal) {
     const interval = setInterval(() => {
-        if (stopSignal.stop) {
-            clearInterval(interval);
-            items = [...realItems];
-            drawWheel();
-            updateItemsList();
-            return;
-        }
-        // Fisher-Yates shuffle de una copia
+        if (stopSignal.stop) { clearInterval(interval); items = [...realItems]; drawWheel(); updateItemsList(); return; }
         const shuffled = [...realItems];
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-        }
-        items = shuffled;
-        drawWheel();
+        for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
+        items = shuffled; drawWheel();
     }, 120);
 }
 
-// ===== COUNTDOWN ANTES DEL RE-GIRO =====
 function showCountdown(label, callback) {
     const overlay = document.getElementById('countdownOverlay');
-    const numEl   = document.getElementById('countdownNumber');
-    const lblEl   = document.getElementById('countdownLabel');
+    const numEl = document.getElementById('countdownNumber');
+    const lblEl = document.getElementById('countdownLabel');
     lblEl.textContent = label || '¡GIRANDO DE NUEVO!';
-
-    let count = 3;
-    numEl.textContent = count;
-    overlay.classList.add('show');
-
-    // Fuerza re-trigger de la animación en cada número
+    let count = 3; numEl.textContent = count; overlay.classList.add('show');
     function tick() {
-        numEl.style.animation = 'none';
-        void numEl.offsetWidth; // reflow
-        numEl.style.animation = 'countPop 0.8s ease-out';
-        numEl.textContent = count;
-
-        if (count <= 0) {
-            overlay.classList.remove('show');
-            callback();
-            return;
-        }
-        count--;
-        setTimeout(tick, 900);
+        numEl.style.animation = 'none'; void numEl.offsetWidth;
+        numEl.style.animation = 'countPop 0.8s ease-out'; numEl.textContent = count;
+        if (count <= 0) { overlay.classList.remove('show'); callback(); return; }
+        count--; setTimeout(tick, 900);
     }
     tick();
 }
 
-// ===== EVENTOS RAROS =====
 function spawnParticles(containerId, emojis) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
+    const container = document.getElementById(containerId); container.innerHTML = '';
     for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div');
-        p.className = 'rare-particle';
+        const p = document.createElement('div'); p.className = 'rare-particle';
         p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
         p.style.left = (Math.random() * 90) + '%';
         p.style.animationDuration = (2 + Math.random() * 3) + 's';
@@ -1140,344 +536,182 @@ function showRareEvent(type, winnerName) {
         document.getElementById('reviveWinnerName').textContent = '💚 ' + winnerName + ' 💚';
         spawnParticles('reviveParticles', ['💚','🌱','🔄','✨','⚡']);
         document.getElementById('reviveModal').classList.add('show');
-        if (!items.includes(winnerName)) {
-            items.push(winnerName);
-            drawWheel();
-            updateItemsList();
-        }
+        if (!items.includes(winnerName)) { items.push(winnerName); drawWheel(); updateItemsList(); }
     } else if (type === 'sub') {
         document.getElementById('subWinnerName').textContent = '💜 ' + winnerName + ' 💜';
         spawnParticles('subParticles', ['💜','🎮','🎁','✨','⭐']);
         document.getElementById('subModal').classList.add('show');
     } else if (type === 'revive_all') {
-        // Agregar de vuelta todos los que no están ya en la ruleta
         const revived = [];
-        originalItems.forEach(name => {
-            if (!items.includes(name)) {
-                items.push(name);
-                revived.push(name);
-            }
-        });
-        drawWheel();
-        updateItemsList();
+        originalItems.forEach(name => { if (!items.includes(name)) { items.push(name); revived.push(name); } });
+        drawWheel(); updateItemsList();
         const count = revived.length;
-        document.getElementById('reviveAllCount').textContent =
-            count > 0
-                ? `💫 ${count} participante${count > 1 ? 's' : ''} volvió${count > 1 ? 'ron' : ''} a la ruleta 💫`
-                : '🌈 ¡Ya estaban todos en la ruleta!';
+        document.getElementById('reviveAllCount').textContent = count > 0
+            ? `💫 ${count} participante${count > 1 ? 's' : ''} volvió${count > 1 ? 'ron' : ''} a la ruleta 💫`
+            : '🌈 ¡Ya estaban todos en la ruleta!';
         spawnParticles('reviveAllParticles', ['✨','🌟','💫','🌈','🎉','💥']);
         document.getElementById('reviveAllModal').classList.add('show');
     }
 }
 
-function closeRareModal(id) {
-    document.getElementById(id).classList.remove('show');
-}
+function closeRareModal(id) { document.getElementById(id).classList.remove('show'); }
 
-// Chequea si algún evento raro se activa (independiente del troll)
-// Retorna el tipo disparado o null
 function checkRareEvents(winnerName) {
     const roll = Math.random();
-    if (roll < 0.001) {   // 0.1% — revivir todos
-        showRareEvent('revive_all', winnerName);
-        return 'revive_all';
-    }
-    if (roll < 0.006) {   // 0.5% VIP
-        showRareEvent('vip', winnerName);
-        return 'vip';
-    }
-    if (roll < 0.011) {   // 0.5% SUB
-        showRareEvent('sub', winnerName);
-        return 'sub';
-    }
-    if (roll < 0.016) {   // 0.5% REVIVIR uno
-        showRareEvent('revive', winnerName);
-        return 'revive';
-    }
+    if (roll < 0.001) { showRareEvent('revive_all', winnerName); return 'revive_all'; }
+    if (roll < 0.006) { showRareEvent('vip', winnerName); return 'vip'; }
+    if (roll < 0.011) { showRareEvent('sub', winnerName); return 'sub'; }
+    if (roll < 0.016) { showRareEvent('revive', winnerName); return 'revive'; }
     return null;
 }
 
-
 function runTrollEvents(callback) {
-    if (Math.random() > 0.60) {
-        callback();
-        return;
-    }
+    if (Math.random() > 0.60) { callback(); return; }
+    window._trollReverseSpin = false; window._trollGlitch = false; window._trollShootWinner = false;
+    window._trollFlyAway = false; window._trollGlitchUntilStop = false; window._trollShuffleUntilStop = false;
+    window._trollSwapAdjacent = false; window._trollShuffleAll = false; window._trollTripleEliminate = false;
 
-    window._trollReverseSpin = false;
-    window._trollGlitch = false;
-    window._trollShootWinner = false;
-    window._trollFlyAway = false;
-    window._trollGlitchUntilStop = false;
-    window._trollShuffleUntilStop = false;
-    window._trollSwapAdjacent = false;
-    window._trollShuffleAll = false;
-    window._trollTripleEliminate = false;
-
-    // Eventos con probabilidad propia, separados del pool normal
     const specialIds = ['shoot_winner', 'triple_eliminate'];
-    const normalEvents  = trollEvents.filter(e => !specialIds.includes(e.id));
-    const shootEvent    = trollEvents.find(e => e.id === 'shoot_winner');
-    const tripleEvent   = trollEvents.find(e => e.id === 'triple_eliminate');
+    const normalEvents = trollEvents.filter(e => !specialIds.includes(e.id));
+    const shootEvent = trollEvents.find(e => e.id === 'shoot_winner');
+    const tripleEvent = trollEvents.find(e => e.id === 'triple_eliminate');
 
     let event;
     const r = Math.random();
-    if (shootEvent && r < 0.35) {
-        event = shootEvent;
-    } else if (tripleEvent && r < 0.45) {   // siguiente 10% (0.35–0.45)
-        event = tripleEvent;
-    } else {
-        event = normalEvents[Math.floor(Math.random() * normalEvents.length)];
-    }
+    if (shootEvent && r < 0.35) { event = shootEvent; }
+    else if (tripleEvent && r < 0.45) { event = tripleEvent; }
+    else { event = normalEvents[Math.floor(Math.random() * normalEvents.length)]; }
+
     event.apply();
-
     showTrollBanner('🔥 EVENTO TROLL: ' + event.label, 4000);
-
-    if (window._trollGlitch) {
-        // legacy — no longer used
-    } else {
-        drawWheel();
-        updateItemsList();
-    }
-
+    drawWheel(); updateItemsList();
     callback();
 }
 
-// ===== SAVE/LOAD =====
 function saveCurrentWheel() {
     const nameInput = document.getElementById('wheelNameInput');
     const name = nameInput.value.trim();
     if (!name) { alert('Por favor ingresa un nombre para la ruleta'); return; }
     if (items.length === 0) { alert('La ruleta está vacía. Agrega elementos primero.'); return; }
-    savedWheels[name] = [...items];
-    saveData();
-    nameInput.value = '';
-    updateSavedWheelsList();
-    alert('¡Ruleta guardada exitosamente!');
+    savedWheels[name] = [...items]; saveData(); nameInput.value = '';
+    updateSavedWheelsList(); alert('¡Ruleta guardada exitosamente!');
 }
- 
 function loadWheel(name) {
-    if (savedWheels[name]) {
-        items = [...savedWheels[name]];
-        drawWheel();
-        updateItemsList();
-        closeConfig();
-    }
+    if (savedWheels[name]) { items = [...savedWheels[name]]; drawWheel(); updateItemsList(); closeConfig(); }
 }
- 
 function deleteSavedWheel(name) {
-    if (confirm(`¿Estás seguro de eliminar la ruleta "${name}"?`)) {
-        delete savedWheels[name];
-        saveData();
-        updateSavedWheelsList();
-    }
+    if (confirm(`¿Estás seguro de eliminar la ruleta "${name}"?`)) { delete savedWheels[name]; saveData(); updateSavedWheelsList(); }
 }
- 
 function updateSavedWheelsList() {
     const list = document.getElementById('savedWheelsList');
     const wheelNames = Object.keys(savedWheels);
-    if (wheelNames.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px">No hay ruletas guardadas</p>';
-        return;
-    }
+    if (wheelNames.length === 0) { list.innerHTML = '<p style="text-align:center;color:#999;padding:20px">No hay ruletas guardadas</p>'; return; }
     list.innerHTML = '';
     wheelNames.forEach(name => {
-        const div = document.createElement('div');
-        div.className = 'saved-wheel-item';
-        div.innerHTML = `
-            <div>
-                <div class="saved-wheel-name">${name}</div>
-                <div class="saved-wheel-count">${savedWheels[name].length} elementos</div>
-            </div>
-            <div class="saved-wheel-actions">
-                <button class="load-btn" onclick="loadWheel('${name}')">Cargar</button>
-                <button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button>
-            </div>
-        `;
+        const div = document.createElement('div'); div.className = 'saved-wheel-item';
+        div.innerHTML = `<div><div class="saved-wheel-name">${name}</div><div class="saved-wheel-count">${savedWheels[name].length} elementos</div></div><div class="saved-wheel-actions"><button class="load-btn" onclick="loadWheel('${name}')">Cargar</button><button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button></div>`;
         list.appendChild(div);
     });
 }
- 
-function openConfig() {
-    document.getElementById('configModal').classList.add('show');
-    updateSavedWheelsList();
-}
- 
-function closeConfig() {
-    document.getElementById('configModal').classList.remove('show');
-}
- 
+function openConfig() { document.getElementById('configModal').classList.add('show'); updateSavedWheelsList(); }
+function closeConfig() { document.getElementById('configModal').classList.remove('show'); }
+
 function drawWheel(){
-    const centerX = canvas.width/2;
-    const centerY = canvas.height/2;
-    const radius = 180;
- 
+    const centerX = canvas.width/2, centerY = canvas.height/2, radius = 180;
     ctx.clearRect(0,0,canvas.width,canvas.height);
- 
-    if(items.length === 0){
-        ctx.font = '18px Arial';
-        ctx.fillStyle = '#999';
-        ctx.textAlign = 'center';
-        ctx.fillText('Agrega elementos para comenzar', centerX, centerY);
-        return;
-    }
- 
+    if(items.length === 0){ ctx.font='18px Arial'; ctx.fillStyle='#999'; ctx.textAlign='center'; ctx.fillText('Agrega elementos para comenzar',centerX,centerY); return; }
     const sliceAngle = (2*Math.PI)/items.length;
- 
-    items.forEach((item,index)=>{
-        const startAngle = index * sliceAngle;
-        const endAngle = startAngle + sliceAngle;
- 
-        ctx.beginPath();
-        ctx.moveTo(centerX,centerY);
-        ctx.arc(centerX,centerY,radius,startAngle,endAngle);
-        ctx.closePath();
-        ctx.fillStyle = colors[index % colors.length];
-        ctx.fill();
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 3;
-        ctx.stroke();
- 
-        ctx.save();
-        ctx.translate(centerX,centerY);
-        ctx.rotate(startAngle + sliceAngle/2);
-        ctx.textAlign = 'center';
-        ctx.fillStyle = '#fff';
-        ctx.font = 'bold 16px Arial';
-        ctx.shadowColor = 'rgba(0,0,0,0.4)';
-        ctx.shadowBlur = 3;
-        ctx.fillText(item, radius * 0.65, 5);
-        ctx.restore();
+    items.forEach((item,index) => {
+        const startAngle = index * sliceAngle, endAngle = startAngle + sliceAngle;
+        ctx.beginPath(); ctx.moveTo(centerX,centerY); ctx.arc(centerX,centerY,radius,startAngle,endAngle); ctx.closePath();
+        ctx.fillStyle = colors[index % colors.length]; ctx.fill(); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.stroke();
+        ctx.save(); ctx.translate(centerX,centerY); ctx.rotate(startAngle + sliceAngle/2);
+        ctx.textAlign='center'; ctx.fillStyle='#fff'; ctx.font='bold 16px Arial';
+        ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=3;
+        ctx.fillText(item, radius * 0.65, 5); ctx.restore();
     });
 }
- 
+
 function updateItemsList(){
-    const list = document.getElementById('itemsList');
-    list.innerHTML = '';
-    items.forEach((item,index)=>{
-        const div = document.createElement('div');
-        div.className = 'item';
-        div.innerHTML = `
-            <div style="display:flex;align-items:center">
-                <div class="item-color" style="background:${colors[index % colors.length]}"></div>
-                <div class="item-text">${item}</div>
-            </div>
-            <button class="delete-btn" onclick="deleteItem(${index})">Eliminar</button>
-        `;
+    const list = document.getElementById('itemsList'); list.innerHTML = '';
+    items.forEach((item,index) => {
+        const div = document.createElement('div'); div.className = 'item';
+        div.innerHTML = `<div style="display:flex;align-items:center"><div class="item-color" style="background:${colors[index % colors.length]}"></div><div class="item-text">${item}</div></div><button class="delete-btn" onclick="deleteItem(${index})">Eliminar</button>`;
         list.appendChild(div);
     });
 }
- 
+
 function addItem(){
-    const input = document.getElementById('itemInput');
-    const v = input.value.trim();
-    if(!v) return;
-    items.push(v);
-    if (!originalItems.includes(v)) originalItems.push(v);
-    input.value = '';
-    drawWheel();
-    updateItemsList();
+    const input = document.getElementById('itemInput'); const v = input.value.trim(); if(!v) return;
+    items.push(v); if (!originalItems.includes(v)) originalItems.push(v);
+    input.value = ''; drawWheel(); updateItemsList();
 }
- 
-function deleteItem(i){
-    items.splice(i,1);
-    drawWheel();
-    updateItemsList();
-}
+function deleteItem(i){ items.splice(i,1); drawWheel(); updateItemsList(); }
 
 function calcRotationForWinner(winnerIndex, numItems, baseRotation, fullSpins, reverse) {
     const sliceDeg = 360 / numItems;
     const centerAngle = (winnerIndex + 0.5) * sliceDeg;
     let target = 270 - centerAngle;
     target = ((target % 360) + 360) % 360;
-
     if (!reverse) {
         let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
         if (total <= baseRotation) total += 360;
-        total += fullSpins * 360;
-        return total;
+        total += fullSpins * 360; return total;
     } else {
         let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
         if (total >= baseRotation) total -= 360;
-        total -= fullSpins * 360;
-        return total;
+        total -= fullSpins * 360; return total;
     }
 }
 
-// ===== SPIN =====
 function spin() {
     if (isSpinning || items.length === 0) return;
-
-    if (disappearedName !== null) {
-        items.push(disappearedName);
-        disappearedName = null;
-        drawWheel();
-        updateItemsList();
-    }
-
-    if (currentMode === 'troll') {
-        spinTroll();
-    } else {
-        spinNormal();
-    }
+    if (disappearedName !== null) { items.push(disappearedName); disappearedName = null; drawWheel(); updateItemsList(); }
+    if (currentMode === 'troll') { spinTroll(); } else { spinNormal(); }
 }
 
 function spinNormal() {
-    isSpinning = true;
-    const spinBtn = document.getElementById('spinBtn');
-    spinBtn.disabled = true;
-
+    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
     const spinDuration = 5000;
     let winnerIndex = Math.floor(Math.random() * items.length);
     if (items.length > 1 && items[winnerIndex] === lastWinner) {
-        do { winnerIndex = Math.floor(Math.random() * items.length); }
-        while (items[winnerIndex] === lastWinner);
+        do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
     }
     const winner = items[winnerIndex];
     const fullSpins = 5 + Math.floor(Math.random() * 3);
     const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, false);
-
     canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
     canvas.style.transform = `rotate(${totalRotation}deg)`;
-
     setTimeout(() => {
-        lastWinner = winner;
-        currentRotation = totalRotation;
+        lastWinner = winner; currentRotation = totalRotation;
         const rare = checkRareEvents(winner);
         if (!rare) showWinner(winner, false);
-        isSpinning = false;
-        spinBtn.disabled = false;
+        isSpinning = false; spinBtn.disabled = false;
     }, spinDuration + 100);
 }
 
 function spinTroll() {
-    isSpinning = true;
-    const spinBtn = document.getElementById('spinBtn');
-    spinBtn.disabled = true;
-
-    window._trollReverseSpin = false;
-    window._trollGlitch = false;
-    window._trollShootWinner = false;
-    window._trollGlitchUntilStop = false;
-    window._trollShuffleUntilStop = false;
-    window._trollSwapAdjacent = false;
-    window._trollShuffleAll = false;
-    window._trollTripleEliminate = false;
+    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
+    window._trollReverseSpin = false; window._trollGlitch = false; window._trollShootWinner = false;
+    window._trollGlitchUntilStop = false; window._trollShuffleUntilStop = false;
+    window._trollSwapAdjacent = false; window._trollShuffleAll = false; window._trollTripleEliminate = false;
 
     runTrollEvents(() => {
-        const isReverse          = !!window._trollReverseSpin;
-        const doShoot            = !!window._trollShootWinner;
-        const doGlitchUntilStop  = !!window._trollGlitchUntilStop;
-        const doShuffleUntilStop = !!window._trollShuffleUntilStop;
-        const doSwapAdjacent     = !!window._trollSwapAdjacent;
-        const doShuffleAll       = !!window._trollShuffleAll;
-        const doTripleEliminate  = !!window._trollTripleEliminate;
+        const isReverse         = !!window._trollReverseSpin;
+        const doShoot           = !!window._trollShootWinner;
+        const doGlitchUntilStop = !!window._trollGlitchUntilStop;
+        const doShuffleUntilStop= !!window._trollShuffleUntilStop;
+        const doSwapAdjacent    = !!window._trollSwapAdjacent;
+        const doShuffleAll      = !!window._trollShuffleAll;
+        const doTripleEliminate = !!window._trollTripleEliminate;
         const spinDuration = 5000;
+
+        // Mostrar flechas SOLO si es triple eliminación
+        if (doTripleEliminate) showSideArrows();
 
         let winnerIndex = Math.floor(Math.random() * items.length);
         if (items.length > 1 && items[winnerIndex] === lastWinner) {
-            do { winnerIndex = Math.floor(Math.random() * items.length); }
-            while (items[winnerIndex] === lastWinner);
+            do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
         }
         const winner = items[winnerIndex];
         const fullSpins = 5 + Math.floor(Math.random() * 3);
@@ -1486,188 +720,123 @@ function spinTroll() {
         canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
         canvas.style.transform = `rotate(${totalRotation}deg)`;
 
-        // Glitch continuo durante el giro
         let glitchInterval = null;
         const realItems = [...items];
         if (doGlitchUntilStop) {
             const glitchChars = '!@#$%&*?¿¡~^░▒▓';
             glitchInterval = setInterval(() => {
-                items = realItems.map(name =>
-                    name.split('').map(c => Math.random() > 0.45
-                        ? glitchChars[Math.floor(Math.random() * glitchChars.length)]
-                        : c
-                    ).join('')
-                );
+                items = realItems.map(name => name.split('').map(c => Math.random() > 0.45 ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c).join(''));
                 drawWheel();
             }, 80);
         }
-
-        // Shuffle continuo durante el giro
         let shuffleSignal = { stop: false };
-        if (doShuffleUntilStop) {
-            shuffleItemsContinuously(realItems, shuffleSignal);
-        }
+        if (doShuffleUntilStop) { shuffleItemsContinuously(realItems, shuffleSignal); }
 
         setTimeout(() => {
-            // Detener glitch y restaurar nombres reales
-            if (glitchInterval) {
-                clearInterval(glitchInterval);
-                glitchInterval = null;
-                items = realItems;
-                drawWheel();
-                updateItemsList();
-            }
-
-            // Detener shuffle y restaurar nombres reales
-            if (doShuffleUntilStop) {
-                shuffleSignal.stop = true;
-                // shuffleItemsContinuously se encarga de restaurar items en su próximo tick
-            }
-
-            // Swap de dos nombres adyacentes al parar
+            if (glitchInterval) { clearInterval(glitchInterval); glitchInterval = null; items = realItems; drawWheel(); updateItemsList(); }
+            if (doShuffleUntilStop) { shuffleSignal.stop = true; }
             if (doSwapAdjacent && items.length >= 2) {
                 let i = Math.floor(Math.random() * (items.length - 1));
                 let temp = items[i]; items[i] = items[i+1]; items[i+1] = temp;
-                drawWheel();
-                updateItemsList();
+                drawWheel(); updateItemsList();
             }
-
-            // Shuffle completo de todos los nombres al parar
             if (doShuffleAll) {
-                for (let i = items.length - 1; i > 0; i--) {
-                    const j = Math.floor(Math.random() * (i + 1));
-                    [items[i], items[j]] = [items[j], items[i]];
-                }
-                drawWheel();
-                updateItemsList();
+                for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
+                drawWheel(); updateItemsList();
             }
 
-            // Eliminar 3 personas aleatorias al parar
+            // ===== TRIPLE ELIMINACIÓN CON FLECHAS Y DELAY 4s =====
             if (doTripleEliminate && items.length >= 4) {
                 const eliminated = [];
                 for (let e = 0; e < 3 && items.length > 1; e++) {
                     const idx = Math.floor(Math.random() * items.length);
-                    eliminated.push(items[idx]);
-                    items.splice(idx, 1);
+                    eliminated.push(items[idx]); items.splice(idx, 1);
                 }
-                drawWheel();
-                updateItemsList();
-                showTrollBanner(`💀 ¡${eliminated.join(', ')} fueron eliminados!`, 4000);
+                drawWheel(); updateItemsList();
+                showTrollBanner(`💀 ¡${eliminated.join(', ')} fueron eliminados!`, 5000);
+
+                // Esperar 4 segundos con flechas visibles, luego ocultarlas y mostrar ganador
+                setTimeout(() => {
+                    hideSideArrows();
+                    lastWinner = winner; currentRotation = totalRotation;
+                    if (doShoot && items.length >= 2) {
+                        handleShoot(winner, winnerIndex, spinBtn);
+                    } else {
+                        const rare = checkRareEvents(winner);
+                        if (!rare) showWinner(winner, true);
+                        isSpinning = false; spinBtn.disabled = false;
+                    }
+                }, 4000);
+                return; // salir del setTimeout normal
             }
 
-            lastWinner = winner;
-            currentRotation = totalRotation;
+            lastWinner = winner; currentRotation = totalRotation;
 
             if (doShoot && items.length >= 2) {
-                // Elegir un tirador aleatorio (distinto al ganador)
-                let shooterIndex;
-                do { shooterIndex = Math.floor(Math.random() * items.length); }
-                while (shooterIndex === winnerIndex);
-                const shooter = items[shooterIndex];
-
-                // 1) Animación de disparo
-                playShootAnimation(shooter, winner, () => {
-                    // 2) Eliminar al ganador de la lista
-                    items.splice(winnerIndex, 1);
-                    drawWheel();
-                    updateItemsList();
-
-                    // 3) Reiniciar la rotación del canvas para el re-giro
-                    currentRotation = 0;
-                    canvas.style.transition = 'none';
-                    canvas.style.transform = 'rotate(0deg)';
-
-                    isSpinning = false;
-                    spinBtn.disabled = false;
-
-                    // 4) Banner + countdown automático → re-giro
-                    showTrollBanner(`🔫 ¡${shooter} eliminó a ${winner}! ¡La ruleta gira de nuevo sin ${winner}!`, 4500);
-
-                    showCountdown('🔄 ¡GIRANDO DE NUEVO SIN EL ELIMINADO!', () => {
-                        // 5) Giro automático sin más eventos troll
-                        doAutoRespin();
-                    });
-                });
-
+                handleShoot(winner, winnerIndex, spinBtn);
             } else {
                 const rare = checkRareEvents(winner);
                 if (!rare) showWinner(winner, true);
-                isSpinning = false;
-                spinBtn.disabled = false;
+                isSpinning = false; spinBtn.disabled = false;
             }
         }, spinDuration + 100);
     });
 }
 
-// Re-giro automático tras el disparo (sin eventos troll)
+// Función auxiliar para el disparo (evita duplicar código)
+function handleShoot(winner, winnerIndex, spinBtn) {
+    let shooterIndex;
+    do { shooterIndex = Math.floor(Math.random() * items.length); } while (shooterIndex === winnerIndex);
+    const shooter = items[shooterIndex];
+    playShootAnimation(shooter, winner, () => {
+        items.splice(winnerIndex, 1); drawWheel(); updateItemsList();
+        currentRotation = 0; canvas.style.transition = 'none'; canvas.style.transform = 'rotate(0deg)';
+        isSpinning = false; spinBtn.disabled = false;
+        showTrollBanner(`🔫 ¡${shooter} eliminó a ${winner}! ¡La ruleta gira de nuevo sin ${winner}!`, 4500);
+        showCountdown('🔄 ¡GIRANDO DE NUEVO SIN EL ELIMINADO!', () => { doAutoRespin(); });
+    });
+}
+
 function doAutoRespin() {
     if (items.length === 0) return;
-
-    isSpinning = true;
-    const spinBtn = document.getElementById('spinBtn');
-    spinBtn.disabled = true;
-
+    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
     const spinDuration = 5000;
-
     let winnerIndex = Math.floor(Math.random() * items.length);
     if (items.length > 1 && lastWinner && items[winnerIndex] === lastWinner) {
-        do { winnerIndex = Math.floor(Math.random() * items.length); }
-        while (items[winnerIndex] === lastWinner);
+        do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
     }
     const winner = items[winnerIndex];
     const fullSpins = 5 + Math.floor(Math.random() * 3);
     const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, false);
-
     canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
     canvas.style.transform = `rotate(${totalRotation}deg)`;
-
     setTimeout(() => {
-        lastWinner = winner;
-        currentRotation = totalRotation;
+        lastWinner = winner; currentRotation = totalRotation;
         const rare = checkRareEvents(winner);
         if (!rare) showWinner(winner, true);
-        isSpinning = false;
-        spinBtn.disabled = false;
+        isSpinning = false; spinBtn.disabled = false;
     }, spinDuration + 100);
 }
 
 function playShootAnimation(shooter, target, callback) {
     const overlay = document.getElementById('shootOverlay');
-    overlay.innerHTML = `
-        <div class="shoot-text">💥 ¡BANG! 💥<br><span style="font-size:0.5em">¡${shooter} eliminó a ${target}!</span></div>
-        <div class="bullet" style="top:45%; left:10%;">🔫💨</div>
-    `;
+    overlay.innerHTML = `<div class="shoot-text">💥 ¡BANG! 💥<br><span style="font-size:0.5em">¡${shooter} eliminó a ${target}!</span></div><div class="bullet" style="top:45%;left:10%;">🔫💨</div>`;
     overlay.classList.add('show');
-    setTimeout(() => {
-        overlay.classList.remove('show');
-        overlay.innerHTML = '';
-        callback();
-    }, 1800);
+    setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 1800);
 }
- 
+
 function showWinner(name, isTroll){
     const winnerText = document.getElementById('winnerText');
-    winnerText.textContent = name;
-    winnerText.className = 'winner-text';
+    winnerText.textContent = name; winnerText.className = 'winner-text';
     const content = document.getElementById('winnerContent');
     const title = document.getElementById('winnerTitle');
-    if (isTroll) {
-        content.classList.add('troll-winner');
-        title.textContent = '😈 ¡El troll eligió! 😈';
-    } else {
-        content.classList.remove('troll-winner');
-        title.textContent = '🎉¡Tenemos un ganador!🎉';
-    }
+    if (isTroll) { content.classList.add('troll-winner'); title.textContent = '😈 ¡El troll eligió! 😈'; }
+    else { content.classList.remove('troll-winner'); title.textContent = '🎉¡Tenemos un ganador!🎉'; }
     document.getElementById('winnerModal').classList.add('show');
 }
- 
-function closeModal(){
-    document.getElementById('winnerModal').classList.remove('show');
-}
- 
-loadData();
-drawWheel();
-updateItemsList();
+function closeModal(){ document.getElementById('winnerModal').classList.remove('show'); }
+
+loadData(); drawWheel(); updateItemsList();
     </script>
 </body>
 </html>
