@@ -38,6 +38,15 @@
             font-size:2em;
             text-shadow:2px 2px 4px rgba(0,0,0,.1)
         }
+        /* TROLL MODE title */
+        h1.troll-title {
+            color: #ff4757;
+            animation: trollPulse 1s infinite alternate;
+        }
+        @keyframes trollPulse {
+            from { text-shadow: 2px 2px 4px rgba(255,71,87,0.3); }
+            to { text-shadow: 0 0 20px rgba(255,71,87,0.9), 0 0 40px rgba(255,71,87,0.5); }
+        }
         .wheel-container{
             position:relative;
             display:flex;
@@ -102,6 +111,15 @@
             opacity:.6;
             cursor:not-allowed;
             transform:none
+        }
+        /* TROLL spin button */
+        .spin-btn.troll-spin {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6348 50%, #ffa502 100%);
+            animation: trollBtnPulse 2s infinite;
+        }
+        @keyframes trollBtnPulse {
+            0%,100% { box-shadow: 0 5px 15px rgba(255,71,87,.4); }
+            50% { box-shadow: 0 5px 25px rgba(255,71,87,.8); }
         }
         .controls{
             width:100%;
@@ -214,16 +232,6 @@
             font-weight:800;
             margin:20px 0
         }
-        .troll-event-text{
-            font-size:1.2em;
-            color:#ff8c00;
-            font-weight:700;
-            margin:10px 0;
-            padding:10px 20px;
-            background:#fff8f0;
-            border-radius:15px;
-            border:2px dashed #ff8c00;
-        }
         .close-btn{
             margin-top:20px;
             padding:12px 30px;
@@ -239,6 +247,101 @@
             background:#764ba2;
             transform: scale(1.05);
         }
+        /* TROLL winner modal */
+        .winner-content.troll-winner h2 {
+            color: #ff4757;
+        }
+        .winner-content.troll-winner .winner-text {
+            animation: trollWinnerAnim 0.5s infinite alternate;
+        }
+        @keyframes trollWinnerAnim {
+            from { transform: scale(1) rotate(-2deg); }
+            to { transform: scale(1.05) rotate(2deg); }
+        }
+
+        /* Nombre saliendo volando */
+        .flying-name {
+            position: fixed;
+            font-size: 1.6em;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+            background: linear-gradient(135deg, #ff4757, #ffa502);
+            padding: 10px 20px;
+            border-radius: 20px;
+            pointer-events: none;
+            z-index: 2000;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(255,71,87,0.5);
+        }
+        @keyframes flyOff {
+            0%   { opacity: 1; transform: translate(0,0) rotate(0deg) scale(1); }
+            30%  { opacity: 1; transform: translate(var(--fx1), var(--fy1)) rotate(var(--fr1)) scale(1.2); }
+            70%  { opacity: 0.7; transform: translate(var(--fx2), var(--fy2)) rotate(var(--fr2)) scale(0.9); }
+            100% { opacity: 0; transform: translate(var(--fx3), var(--fy3)) rotate(var(--fr3)) scale(0.3); }
+        }
+
+        /* Shoot event overlay */
+        .shoot-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1500;
+            pointer-events: none;
+        }
+        .shoot-overlay.show { display: block; }
+        .bullet {
+            position: absolute;
+            font-size: 2em;
+            animation: bulletFly 0.4s forwards;
+        }
+        @keyframes bulletFly {
+            from { transform: translateX(0) scale(1); opacity: 1; }
+            to { transform: translateX(300px) scale(0.3); opacity: 0; }
+        }
+        .shoot-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3em;
+            font-weight: 900;
+            color: #ff4757;
+            text-shadow: 0 0 20px rgba(255,71,87,0.8);
+            animation: bangAnim 0.6s forwards;
+        }
+        @keyframes bangAnim {
+            0% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%,-50%) scale(1.4); opacity: 1; }
+            100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+        }
+
+        /* Troll event notification */
+        .troll-event-banner {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #ff4757, #ffa502);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 20px;
+            font-size: 1.3em;
+            font-weight: 800;
+            z-index: 999;
+            box-shadow: 0 8px 25px rgba(255,71,87,.5);
+            text-align: center;
+            max-width: 90vw;
+            animation: bannerBounce 0.5s;
+        }
+        .troll-event-banner.show { display: block; }
+        @keyframes bannerBounce {
+            0% { transform: translateX(-50%) translateY(-30px); opacity:0; }
+            100% { transform: translateX(-50%) translateY(0); opacity:1; }
+        }
+
         .social-link{
             position:fixed;
             top:20px;
@@ -261,81 +364,46 @@
             color:#fff;
         }
 
-        /* MODE BUTTONS */
-        .mode-buttons{
-            position:fixed;
-            top:70px;
-            right:20px;
-            display:flex;
-            flex-direction:column;
-            gap:8px;
-            z-index:100;
+        /* Mode buttons below social link */
+        .mode-buttons {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 100;
         }
-        .mode-btn{
-            padding:10px 20px;
-            border-radius:15px;
-            border:none;
-            font-weight:700;
-            cursor:pointer;
-            font-size:0.95em;
+        .mode-btn {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9em;
             transition: all 0.3s;
             backdrop-filter: blur(10px);
-            box-shadow:0 4px 15px rgba(0,0,0,.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,.3);
         }
-        .mode-btn-normal{
-            background:rgba(255,255,255,0.95);
-            color:#667eea;
+        .mode-btn.normal-btn {
+            background: rgba(255,255,255,0.95);
+            color: #667eea;
         }
-        .mode-btn-normal:hover, .mode-btn-normal.active{
-            background:#667eea;
-            color:#fff;
+        .mode-btn.normal-btn:hover, .mode-btn.normal-btn.active {
+            background: #667eea;
+            color: #fff;
             transform: translateY(-2px);
         }
-        .mode-btn-troll{
-            background:rgba(255,255,255,0.95);
-            color:#ff4757;
-        }
-        .mode-btn-troll:hover, .mode-btn-troll.active{
-            background:linear-gradient(135deg,#ff4757,#ff8c00);
-            color:#fff;
-            transform: translateY(-2px);
-        }
-
-        /* TROLL MODE STYLES */
-        body.troll-mode .container{
-            animation: trollShake 0.5s infinite;
-            border: 3px solid #ff4757;
-        }
-        body.troll-mode h1{
+        .mode-btn.troll-btn {
+            background: rgba(255,255,255,0.95);
             color: #ff4757;
-            animation: trollText 1s infinite;
         }
-        body.troll-mode #wheelCanvas{
-            filter: hue-rotate(180deg);
+        .mode-btn.troll-btn:hover, .mode-btn.troll-btn.active {
+            background: linear-gradient(135deg, #ff4757, #ffa502);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,71,87,.4);
         }
-        @keyframes trollShake {
-            0%,100%{transform:translateX(0)}
-            10%,50%,90%{transform:translateX(-2px)}
-            30%,70%{transform:translateX(2px)}
-        }
-        @keyframes trollText {
-            0%,100%{color:#ff4757}
-            50%{color:#ff8c00}
-        }
-
-        .troll-badge{
-            display:none;
-            text-align:center;
-            margin-bottom:10px;
-            padding:8px 20px;
-            background:linear-gradient(135deg,#ff4757,#ff8c00);
-            color:#fff;
-            border-radius:20px;
-            font-weight:700;
-            font-size:0.95em;
-            letter-spacing:1px;
-        }
-        body.troll-mode .troll-badge{display:block}
 
         .config-btn{
             position:fixed;
@@ -513,26 +581,14 @@
             .container{max-width:100%}
             .wheel-wrapper{width:280px;height:280px}
             h1{font-size:1.5em}
-            .social-link{
+            .social-link, .config-btn{
                 top:10px;
-                right:10px;
                 padding:10px 15px;
                 font-size:0.9em;
             }
-            .config-btn{
-                top:10px;
-                left:10px;
-                padding:10px 15px;
-                font-size:0.9em;
-            }
-            .mode-buttons{
-                top:60px;
-                right:10px;
-            }
-            .mode-btn{
-                padding:8px 14px;
-                font-size:0.85em;
-            }
+            .social-link{right:10px}
+            .config-btn{left:10px}
+            .mode-buttons { top: 75px; right: 10px; }
         }
     </style>
 </head>
@@ -543,50 +599,53 @@
         📱 Redes del creador
     </a>
 
-    <!-- BOTONES DE MODO -->
+    <!-- Mode buttons below social link -->
     <div class="mode-buttons">
-        <button class="mode-btn mode-btn-normal active" id="btnNormal" onclick="setMode('normal')">🎯 Ruleta Normal</button>
-        <button class="mode-btn mode-btn-troll" id="btnTroll" onclick="setMode('troll')">😈 Ruleta Troll</button>
+        <button class="mode-btn normal-btn active" id="normalModeBtn" onclick="setMode('normal')">🎯 Ruleta Normal</button>
+        <button class="mode-btn troll-btn" id="trollModeBtn" onclick="setMode('troll')">😈 Ruleta Troll</button>
     </div>
-    
+
+    <!-- Troll event banner -->
+    <div class="troll-event-banner" id="trollEventBanner"></div>
+
     <img src="Captura_de_pantalla_2025-11-27_184757-removebg-preview.png" style="position:absolute;top:600px;left:1580px;width:300px">
     <img src="GxUMxn0WMAESagQ-removebg-preview.png" style="position:absolute;top:666px;left:3px;width:400px">
     <img src="GxoqO02WYAASpT3-removebg-preview.png" style="position:absolute;top:766px;left:1300px;width:300px">
     <img src="cxnnard_goad.png" style="position:absolute;top:803px;left:400px;width:200px">
     <img src="Ilustracion.png" style="position:absolute;top:884px;left:1200px;width:119px">
-
+ 
     <div class="container">
-        <div class="troll-badge">😈 MODO TROLL ACTIVADO 😈</div>
         <h1 id="mainTitle"> Ruleta de Matashiro</h1>
-
+ 
         <div class="wheel-container">
             <div class="wheel-wrapper">
-                <div class="pointer" id="pointerEl"></div>
+                <div class="pointer"></div>
                 <canvas id="wheelCanvas" width="400" height="400"></canvas>
                 <div class="center-circle"></div>
             </div>
             <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
         </div>
-
+ 
         <div class="controls">
             <div class="input-group">
                 <input id="itemInput" placeholder="Agrega un nombre o número..." onkeypress="if(event.key==='Enter') addItem()">
                 <button class="add-btn" onclick="addItem()">+ Agregar</button>
             </div>
-
+ 
             <div class="items-list" id="itemsList"></div>
         </div>
     </div>
+ 
+    <div class="shoot-overlay" id="shootOverlay"></div>
 
     <div class="winner-modal" id="winnerModal">
-        <div class="winner-content">
+        <div class="winner-content" id="winnerContent">
             <h2 id="winnerTitle">🎉¡Tenemos un ganador!🎉</h2>
-            <div class="troll-event-text" id="trollEventText" style="display:none"></div>
             <div class="winner-text" id="winnerText"></div>
             <button class="close-btn" onclick="closeModal()">Cerrar</button>
         </div>
     </div>
-
+ 
     <div class="config-modal" id="configModal">
         <div class="config-content">
             <h2>⚙️ Configuración</h2>
@@ -604,7 +663,7 @@
                     <div class="color-option" onclick="changeBackground('gradient8')" id="bg-gradient8" style="background:linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)">Naranja</div>
                 </div>
             </div>
-
+ 
             <div class="config-section">
                 <h3>💾 Guardar Ruleta Actual</h3>
                 <div class="save-current">
@@ -612,165 +671,116 @@
                     <button onclick="saveCurrentWheel()">Guardar</button>
                 </div>
             </div>
-
+ 
             <div class="config-section">
                 <h3>📚 Ruletas Guardadas</h3>
                 <div class="saved-wheels" id="savedWheelsList"></div>
             </div>
-
+ 
             <button class="close-btn" onclick="closeConfig()">Cerrar</button>
         </div>
     </div>
-
+ 
     <script>
 const colors = [
     '#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F',
     '#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A'
 ];
-
+ 
 let items = ['Ana','Carlos','María','Pedro','Lucía'];
 let isSpinning = false;
-let currentRotation = 0;
+let currentRotation = 0;  // tracks total degrees rotated (for CSS transform continuity)
 let lastWinner = null;
 let currentBackground = 'gradient1';
 let savedWheels = {};
-let currentMode = 'normal'; // 'normal' o 'troll'
-let trollDirection = 1; // 1 normal, -1 invertido
+let currentMode = 'normal'; // 'normal' or 'troll'
+let disappearedName = null; // stores a name removed by the disappear troll event
 
-const canvas = document.getElementById('wheelCanvas');
-const ctx = canvas.getContext('2d');
-
-// =====================
-// TROLL EVENTS (35% chance)
-// =====================
+// Troll events list (35% chance one triggers during a spin)
 const trollEvents = [
     {
         id: 'swap_adjacent',
-        label: '🔀 ¡INTERCAMBIO! Los dos primeros se cambian de lugar',
-        action: () => {
-            if(items.length >= 2){
-                [items[0], items[1]] = [items[1], items[0]];
-                drawWheel(); updateItemsList();
-            }
+        label: '🔀 ¡Dos nombres intercambian posiciones!',
+        apply: function() {
+            if (items.length < 2) return;
+            let i = Math.floor(Math.random() * (items.length - 1));
+            let temp = items[i];
+            items[i] = items[i+1];
+            items[i+1] = temp;
         }
     },
     {
         id: 'shuffle_all',
-        label: '🌀 ¡CAOS TOTAL! Todos los nombres se mezclaron',
-        action: () => {
-            for(let i = items.length - 1; i > 0; i--){
+        label: '🌀 ¡TODOS los nombres cambian de lugar!',
+        apply: function() {
+            for (let i = items.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [items[i], items[j]] = [items[j], items[i]];
             }
-            drawWheel(); updateItemsList();
         }
     },
     {
         id: 'reverse_spin',
-        label: '↩️ ¡LA RULETA GIRA AL REVÉS! (por esta ronda)',
-        action: () => {
-            trollDirection = -1;
-            setTimeout(() => { trollDirection = 1; }, 1);
+        label: '⬅️ ¡La ruleta gira al revés!',
+        apply: function() {
+            window._trollReverseSpin = true;
         }
     },
     {
-        id: 'random_winner',
-        label: '🎲 ¡TRAMPA! El ganador fue elegido AL AZAR (ignorando la física)',
-        action: () => {}
-    },
-    {
-        id: 'duplicate',
-        label: '👯 ¡CLONADO! El ganador aparece dos veces ahora',
-        action: (winner) => {
-            items.push(winner + ' (clon)');
-            drawWheel(); updateItemsList();
+        id: 'disappear',
+        label: '💨 ¡Un nombre desaparece misteriosamente... pero vuelve!',
+        apply: function() {
+            if (items.length <= 2) return;
+            let i = Math.floor(Math.random() * items.length);
+            disappearedName = items[i]; // save it so it returns next round
+            items.splice(i, 1);
         }
     },
     {
-        id: 'rename_winner',
-        label: '✏️ ¡NOMBRE CAMBIADO! Al ganador le pusieron un apodo',
-        action: (winner) => {
-            const apodos = ['el Troll', 'el Ñoño', 'el Campeón', 'el Pato', 'Master Chief', 'el Capo'];
-            const idx = items.indexOf(winner);
-            if(idx !== -1){
-                items[idx] = winner + ' ' + apodos[Math.floor(Math.random()*apodos.length)];
-                drawWheel(); updateItemsList();
-            }
+        id: 'name_glitch',
+        label: '👾 ¡Los nombres se vuelven locos por un momento!',
+        apply: function() {
+            window._trollGlitch = true;
         }
     },
     {
-        id: 'reverse_list',
-        label: '🔃 ¡AL REVÉS! La lista se invirtió completamente',
-        action: () => {
-            items.reverse();
-            drawWheel(); updateItemsList();
+        id: 'shoot_winner',
+        label: '🔫 ¡Un nombre le dispara al ganador para salvarse!',
+        apply: function() {
+            if (items.length < 2) return;
+            window._trollShootWinner = true;
         }
     },
     {
-        id: 'extra_spin',
-        label: '🎡 ¡GIRA DE NUEVO! Esta vuelta no cuenta, toca otra vez',
-        action: () => {}
+        id: 'fly_away',
+        label: '🚀 ¡Un nombre sale volando de la ruleta!',
+        apply: function() {
+            if (items.length <= 2) return;
+            window._trollFlyAway = true;
+        }
     }
 ];
 
-function maybeApplyTrollEvent(winner, callback) {
-    if(currentMode !== 'troll') { callback(winner, null); return; }
-    const roll = Math.random();
-    if(roll < 0.35) {
-        const event = trollEvents[Math.floor(Math.random() * trollEvents.length)];
-        if(event.id === 'random_winner'){
-            winner = items[Math.floor(Math.random() * items.length)];
-        }
-        if(event.id === 'extra_spin'){
-            callback(winner, event);
-            return;
-        }
-        event.action(winner);
-        callback(winner, event);
-    } else {
-        callback(winner, null);
-    }
-}
-
-// =====================
-// MODE SWITCHING
-// =====================
-function setMode(mode) {
-    currentMode = mode;
-    trollDirection = 1;
-    canvas.style.transition = 'transform 4s cubic-bezier(.17,.67,.12,.99)';
-
-    if(mode === 'troll'){
-        document.body.classList.add('troll-mode');
-        document.getElementById('btnTroll').classList.add('active');
-        document.getElementById('btnNormal').classList.remove('active');
-        document.getElementById('mainTitle').textContent = '😈 Ruleta TROLL de Matashiro';
-        document.getElementById('spinBtn').textContent = '¡GIRAR (si te atreves)!';
-    } else {
-        document.body.classList.remove('troll-mode');
-        document.getElementById('btnNormal').classList.add('active');
-        document.getElementById('btnTroll').classList.remove('active');
-        document.getElementById('mainTitle').textContent = ' Ruleta de Matashiro';
-        document.getElementById('spinBtn').textContent = '¡GIRAR!';
-    }
-    drawWheel();
-}
-
-// =====================
-// ORIGINAL FUNCTIONS (sin cambios)
-// =====================
+const canvas = document.getElementById('wheelCanvas');
+const ctx = canvas.getContext('2d');
+ 
 function loadData() {
     const saved = localStorage.getItem('matashiroWheels');
-    if (saved) savedWheels = JSON.parse(saved);
+    if (saved) {
+        savedWheels = JSON.parse(saved);
+    }
     const savedBg = localStorage.getItem('matashiroBg');
-    if (savedBg) { currentBackground = savedBg; applyBackground(savedBg); }
+    if (savedBg) {
+        currentBackground = savedBg;
+        applyBackground(savedBg);
+    }
 }
-
+ 
 function saveData() {
     localStorage.setItem('matashiroWheels', JSON.stringify(savedWheels));
     localStorage.setItem('matashiroBg', currentBackground);
 }
-
+ 
 const backgrounds = {
     gradient1: 'linear-gradient(135deg, #FF0080 0%, #FF8C00 25%, #FFD700 50%, #00D4FF 75%, #8A2BE2 100%)',
     gradient2: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
@@ -781,12 +791,12 @@ const backgrounds = {
     gradient7: 'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
     gradient8: 'linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%)'
 };
-
+ 
 function applyBackground(bgKey) {
     document.body.style.background = backgrounds[bgKey];
     document.body.style.backgroundSize = '400% 400%';
 }
-
+ 
 function changeBackground(bgKey) {
     currentBackground = bgKey;
     applyBackground(bgKey);
@@ -795,18 +805,117 @@ function changeBackground(bgKey) {
     document.getElementById('bg-' + bgKey).classList.add('active');
 }
 
+// ===== MODE SWITCHING =====
+function setMode(mode) {
+    currentMode = mode;
+    const title = document.getElementById('mainTitle');
+    const spinBtn = document.getElementById('spinBtn');
+    const normalBtn = document.getElementById('normalModeBtn');
+    const trollBtn = document.getElementById('trollModeBtn');
+
+    if (mode === 'normal') {
+        title.textContent = ' Ruleta de Matashiro';
+        title.className = '';
+        title.style.color = '#667eea';
+        spinBtn.textContent = '¡GIRAR!';
+        spinBtn.className = 'spin-btn';
+        normalBtn.classList.add('active');
+        trollBtn.classList.remove('active');
+    } else {
+        title.textContent = '😈 Ruleta TROLL 😈';
+        title.className = 'troll-title';
+        spinBtn.textContent = '😈 ¡GIRAR (si te atreves)!';
+        spinBtn.className = 'spin-btn troll-spin';
+        trollBtn.classList.add('active');
+        normalBtn.classList.remove('active');
+    }
+
+    // Reset rotation and redraw
+    canvas.style.transition = 'none';
+    currentRotation = 0;
+    canvas.style.transform = 'rotate(0deg)';
+    drawWheel();
+}
+
+// ===== TROLL HELPERS =====
+function showTrollBanner(text, duration) {
+    const banner = document.getElementById('trollEventBanner');
+    banner.textContent = text;
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), duration || 3000);
+}
+
+function glitchItems() {
+    // Temporarily scramble displayed text in canvas for 1.5s
+    const origItems = [...items];
+    const glitchChars = '!@#$%&*?¿¡~^';
+    let count = 0;
+    const interval = setInterval(() => {
+        const fakeItems = origItems.map(name => {
+            return name.split('').map(c => Math.random() > 0.5 ? glitchChars[Math.floor(Math.random()*glitchChars.length)] : c).join('');
+        });
+        items = fakeItems;
+        drawWheel();
+        count++;
+        if (count > 8) {
+            clearInterval(interval);
+            items = origItems;
+            drawWheel();
+            updateItemsList();
+        }
+    }, 150);
+}
+
+// ===== TROLL SPIN LOGIC =====
+function runTrollEvents(callback) {
+    // 35% chance any troll event fires
+    if (Math.random() > 0.35) {
+        callback();
+        return;
+    }
+
+    // Reset troll flags
+    window._trollReverseSpin = false;
+    window._trollGlitch = false;
+    window._trollShootWinner = false;
+    window._trollFlyAway = false;
+
+    const event = trollEvents[Math.floor(Math.random() * trollEvents.length)];
+    event.apply();
+
+    // Show banner
+    showTrollBanner('🔥 EVENTO TROLL: ' + event.label, 4000);
+
+    // Handle glitch visual
+    if (window._trollGlitch) {
+        glitchItems();
+    } else {
+        drawWheel();
+        updateItemsList();
+    }
+
+    callback();
+}
+
+// ===== SAVE/LOAD =====
 function saveCurrentWheel() {
     const nameInput = document.getElementById('wheelNameInput');
     const name = nameInput.value.trim();
-    if (!name) { alert('Por favor ingresa un nombre para la ruleta'); return; }
-    if (items.length === 0) { alert('La ruleta está vacía. Agrega elementos primero.'); return; }
+    if (!name) {
+        alert('Por favor ingresa un nombre para la ruleta');
+        return;
+    }
+    if (items.length === 0) {
+        alert('La ruleta está vacía. Agrega elementos primero.');
+        return;
+    }
     savedWheels[name] = [...items];
     saveData();
     nameInput.value = '';
     updateSavedWheelsList();
     alert('¡Ruleta guardada exitosamente!');
 }
-
+ 
 function loadWheel(name) {
     if (savedWheels[name]) {
         items = [...savedWheels[name]];
@@ -815,7 +924,7 @@ function loadWheel(name) {
         closeConfig();
     }
 }
-
+ 
 function deleteSavedWheel(name) {
     if (confirm(`¿Estás seguro de eliminar la ruleta "${name}"?`)) {
         delete savedWheels[name];
@@ -823,7 +932,7 @@ function deleteSavedWheel(name) {
         updateSavedWheelsList();
     }
 }
-
+ 
 function updateSavedWheelsList() {
     const list = document.getElementById('savedWheelsList');
     const wheelNames = Object.keys(savedWheels);
@@ -848,21 +957,23 @@ function updateSavedWheelsList() {
         list.appendChild(div);
     });
 }
-
+ 
 function openConfig() {
     document.getElementById('configModal').classList.add('show');
     updateSavedWheelsList();
 }
-
+ 
 function closeConfig() {
     document.getElementById('configModal').classList.remove('show');
 }
-
+ 
 function drawWheel(){
     const centerX = canvas.width/2;
     const centerY = canvas.height/2;
     const radius = 180;
+ 
     ctx.clearRect(0,0,canvas.width,canvas.height);
+ 
     if(items.length === 0){
         ctx.font = '18px Arial';
         ctx.fillStyle = '#999';
@@ -870,10 +981,13 @@ function drawWheel(){
         ctx.fillText('Agrega elementos para comenzar', centerX, centerY);
         return;
     }
+ 
     const sliceAngle = (2*Math.PI)/items.length;
+ 
     items.forEach((item,index)=>{
         const startAngle = index * sliceAngle;
         const endAngle = startAngle + sliceAngle;
+ 
         ctx.beginPath();
         ctx.moveTo(centerX,centerY);
         ctx.arc(centerX,centerY,radius,startAngle,endAngle);
@@ -883,6 +997,7 @@ function drawWheel(){
         ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 3;
         ctx.stroke();
+ 
         ctx.save();
         ctx.translate(centerX,centerY);
         ctx.rotate(startAngle + sliceAngle/2);
@@ -895,7 +1010,7 @@ function drawWheel(){
         ctx.restore();
     });
 }
-
+ 
 function updateItemsList(){
     const list = document.getElementById('itemsList');
     list.innerHTML = '';
@@ -912,7 +1027,7 @@ function updateItemsList(){
         list.appendChild(div);
     });
 }
-
+ 
 function addItem(){
     const input = document.getElementById('itemInput');
     const v = input.value.trim();
@@ -922,86 +1037,194 @@ function addItem(){
     drawWheel();
     updateItemsList();
 }
-
+ 
 function deleteItem(i){
     items.splice(i,1);
     drawWheel();
     updateItemsList();
 }
 
+// ===== CORE: pick winner index and compute exact rotation to land on it =====
+// The pointer is fixed at the top (270° in canvas coords = 12 o'clock).
+// Slice i starts at angle (i * sliceDeg) degrees from 0° (3 o'clock).
+// We want the CENTER of slice winnerIndex to land under the pointer.
+// Center of slice i in canvas-space = (i + 0.5) * sliceDeg degrees.
+// After rotating the canvas by totalRotation degrees, the canvas-space angle
+// that lines up with the pointer (270°) satisfies:
+//   canvasAngle + totalRotation ≡ 270  (mod 360)
+//   totalRotation ≡ 270 - canvasAngle  (mod 360)
+// We add enough full spins (fullSpins * 360) to guarantee forward motion.
+function calcRotationForWinner(winnerIndex, numItems, baseRotation, fullSpins, reverse) {
+    const sliceDeg = 360 / numItems;
+    // center of the winner slice in canvas-space degrees
+    const centerAngle = (winnerIndex + 0.5) * sliceDeg;
+    // raw target rotation so that centerAngle sits under the 270° pointer
+    let target = 270 - centerAngle; // (mod 360)
+    target = ((target % 360) + 360) % 360;
+
+    if (!reverse) {
+        // We need totalRotation > baseRotation and totalRotation ≡ target (mod 360)
+        // Start from baseRotation, go forward at least fullSpins full circles
+        let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
+        if (total <= baseRotation) total += 360;
+        total += fullSpins * 360;
+        return total;
+    } else {
+        // Reverse: totalRotation < baseRotation
+        let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
+        if (total >= baseRotation) total -= 360;
+        total -= fullSpins * 360;
+        return total;
+    }
+}
+
+// ===== SPIN =====
 function spin() {
     if (isSpinning || items.length === 0) return;
+
+    // If there's a disappeared name waiting to come back, restore it now
+    if (disappearedName !== null) {
+        items.push(disappearedName);
+        disappearedName = null;
+        drawWheel();
+        updateItemsList();
+    }
+
+    if (currentMode === 'troll') {
+        spinTroll();
+    } else {
+        spinNormal();
+    }
+}
+
+function spinNormal() {
     isSpinning = true;
     const spinBtn = document.getElementById('spinBtn');
     spinBtn.disabled = true;
 
     const spinDuration = 5000;
+
+    // Pick winner first
+    let winnerIndex = Math.floor(Math.random() * items.length);
+    if (items.length > 1 && items[winnerIndex] === lastWinner) {
+        do { winnerIndex = Math.floor(Math.random() * items.length); }
+        while (items[winnerIndex] === lastWinner);
+    }
+    const winner = items[winnerIndex];
+
+    const fullSpins = 5 + Math.floor(Math.random() * 3);
+    const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, false);
+
     canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
-
-    const spins = 5 + Math.random()*3;
-    const extra = Math.random() * 360;
-    const degreesToRotate = (spins * 360 + extra) * trollDirection;
-    const totalRotation = currentRotation + degreesToRotate;
-
     canvas.style.transform = `rotate(${totalRotation}deg)`;
 
     setTimeout(() => {
-        const normalized = ((totalRotation % 360) + 360) % 360;
-        const sliceDeg = 360 / items.length;
-        let ang = 270 - normalized;
-        if (ang < 0) ang += 360;
-        let winnerIndex = Math.floor(ang / sliceDeg);
-        let winner = items[winnerIndex];
-
-        if (items.length > 1 && winner === lastWinner) {
-            let newIndex;
-            do { newIndex = Math.floor(Math.random() * items.length); }
-            while (items[newIndex] === lastWinner);
-            winnerIndex = newIndex;
-            winner = items[newIndex];
-        }
-
         lastWinner = winner;
+        showWinner(winner, false);
         currentRotation = totalRotation;
-
-        maybeApplyTrollEvent(winner, (finalWinner, event) => {
-            if(event && event.id === 'extra_spin'){
-                document.getElementById('trollEventText').style.display = 'block';
-                document.getElementById('trollEventText').textContent = event.label;
-                document.getElementById('winnerText').textContent = '¡¡GIRA DE NUEVO!!';
-                document.getElementById('winnerTitle').textContent = '😂 ¡TROLL!';
-                document.getElementById('winnerModal').classList.add('show');
-                isSpinning = false;
-                spinBtn.disabled = false;
-            } else {
-                showWinner(finalWinner, event);
-                isSpinning = false;
-                spinBtn.disabled = false;
-            }
-        });
-
+        isSpinning = false;
+        spinBtn.disabled = false;
     }, spinDuration + 100);
 }
 
-function showWinner(name, trollEvent){
-    const titleEl = document.getElementById('winnerTitle');
-    const trollEventEl = document.getElementById('trollEventText');
-    if(trollEvent && currentMode === 'troll'){
-        titleEl.textContent = '😈 ¡TROLL ACTIVADO!';
-        trollEventEl.style.display = 'block';
-        trollEventEl.textContent = trollEvent.label;
-    } else {
-        titleEl.textContent = '🎉¡Tenemos un ganador!🎉';
-        trollEventEl.style.display = 'none';
-    }
-    document.getElementById('winnerText').textContent = name;
-    document.getElementById('winnerModal').classList.add('show');
+function spinTroll() {
+    isSpinning = true;
+    const spinBtn = document.getElementById('spinBtn');
+    spinBtn.disabled = true;
+
+    // Reset troll flags
+    window._trollReverseSpin = false;
+    window._trollGlitch = false;
+    window._trollShootWinner = false;
+
+    // Run troll events BEFORE the spin starts (they may mutate items[])
+    runTrollEvents(() => {
+        const isReverse = !!window._trollReverseSpin;
+        const doShoot = !!window._trollShootWinner;
+        const spinDuration = 5000;
+
+        // Pick winner from the (possibly mutated) items array
+        let winnerIndex = Math.floor(Math.random() * items.length);
+        if (items.length > 1 && items[winnerIndex] === lastWinner) {
+            do { winnerIndex = Math.floor(Math.random() * items.length); }
+            while (items[winnerIndex] === lastWinner);
+        }
+        const winner = items[winnerIndex];
+
+        const fullSpins = 5 + Math.floor(Math.random() * 3);
+        const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, isReverse);
+
+        canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
+        canvas.style.transform = `rotate(${totalRotation}deg)`;
+
+        setTimeout(() => {
+            lastWinner = winner;
+            currentRotation = totalRotation;
+
+            if (doShoot && items.length >= 2) {
+                // Pick a random shooter (not the winner)
+                let shooterIndex;
+                do { shooterIndex = Math.floor(Math.random() * items.length); }
+                while (shooterIndex === winnerIndex);
+                const shooter = items[shooterIndex];
+
+                // Show shoot animation then reveal new winner
+                showTrollBanner(`🔫 ¡${shooter} le disparó a ${winner}! ¡${winner} eliminado!`, 3500);
+                playShootAnimation(shooter, winner, () => {
+                    // Remove the original winner and pick a new one
+                    items.splice(winnerIndex, 1);
+                    drawWheel();
+                    updateItemsList();
+                    let newIndex = Math.floor(Math.random() * items.length);
+                    const newWinner = items[newIndex];
+                    lastWinner = newWinner;
+                    showWinner(newWinner, true);
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                });
+            } else {
+                showWinner(winner, true);
+                isSpinning = false;
+                spinBtn.disabled = false;
+            }
+        }, spinDuration + 100);
+    });
 }
 
+function playShootAnimation(shooter, target, callback) {
+    const overlay = document.getElementById('shootOverlay');
+    overlay.innerHTML = `
+        <div class="shoot-text">💥 ¡BANG! 💥<br><span style="font-size:0.5em">¡${shooter} eliminó a ${target}!</span></div>
+        <div class="bullet" style="top:45%; left:10%;">🔫💨</div>
+    `;
+    overlay.classList.add('show');
+    setTimeout(() => {
+        overlay.classList.remove('show');
+        overlay.innerHTML = '';
+        callback();
+    }, 1800);
+}
+ 
+function showWinner(name, isTroll){
+    const winnerText = document.getElementById('winnerText');
+    winnerText.textContent = name;
+    winnerText.className = 'winner-text';
+    const content = document.getElementById('winnerContent');
+    const title = document.getElementById('winnerTitle');
+    if (isTroll) {
+        content.classList.add('troll-winner');
+        title.textContent = '😈 ¡El troll eligió! 😈';
+    } else {
+        content.classList.remove('troll-winner');
+        title.textContent = '🎉¡Tenemos un ganador!🎉';
+    }
+    document.getElementById('winnerModal').classList.add('show');
+}
+ 
 function closeModal(){
     document.getElementById('winnerModal').classList.remove('show');
 }
-
+ 
 loadData();
 drawWheel();
 updateItemsList();
