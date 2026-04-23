@@ -626,6 +626,137 @@
             .config-btn{left:10px}
             .mode-buttons { top: 75px; right: 10px; }
         }
+
+        /* ===== MODALES EVENTOS RAROS ===== */
+        .rare-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s;
+        }
+        .rare-modal.show { display: flex; }
+        .rare-content {
+            padding: 50px 60px;
+            border-radius: 30px;
+            text-align: center;
+            animation: rareSlideUp 0.6s cubic-bezier(.17,.67,.12,.99);
+            max-width: 480px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+        @keyframes rareSlideUp {
+            from { transform: translateY(60px) scale(0.8); opacity: 0; }
+            to   { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .rare-content::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: inherit;
+            filter: brightness(0.4);
+            z-index: -1;
+        }
+        .rare-stars {
+            font-size: 2.5em;
+            letter-spacing: 8px;
+            margin-bottom: 15px;
+            animation: starSpin 2s linear infinite;
+        }
+        @keyframes starSpin {
+            0%   { transform: rotate(0deg) scale(1); }
+            50%  { transform: rotate(180deg) scale(1.1); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        .rare-badge {
+            font-size: 1em;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            padding: 6px 18px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+        .rare-title {
+            font-size: 2.8em;
+            font-weight: 900;
+            margin-bottom: 10px;
+            line-height: 1.1;
+        }
+        .rare-winner-name {
+            font-size: 2em;
+            font-weight: 800;
+            margin: 15px 0;
+            padding: 10px 20px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+        .rare-desc {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+        .rare-close-btn {
+            padding: 13px 35px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 800;
+            transition: all 0.3s;
+        }
+        .rare-close-btn:hover { transform: scale(1.06); }
+
+        /* VIP — dorado */
+        .rare-vip { background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: #3d2000; }
+        .rare-vip .rare-badge { background: #3d2000; color: #ffd700; }
+        .rare-vip .rare-winner-name { background: rgba(0,0,0,0.15); }
+        .rare-vip .rare-close-btn { background: #3d2000; color: #ffd700; }
+
+        /* REVIVIR — verde neón */
+        .rare-revive { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: #002b1a; }
+        .rare-revive .rare-badge { background: #002b1a; color: #38ef7d; }
+        .rare-revive .rare-winner-name { background: rgba(0,0,0,0.15); }
+        .rare-revive .rare-close-btn { background: #002b1a; color: #38ef7d; }
+
+        /* SUB — morado Twitch */
+        .rare-sub { background: linear-gradient(135deg, #6441a5 0%, #c471ed 100%); color: #fff; }
+        .rare-sub .rare-badge { background: rgba(255,255,255,0.2); color: #fff; border: 2px solid #fff; }
+        .rare-sub .rare-winner-name { background: rgba(0,0,0,0.2); }
+        .rare-sub .rare-close-btn { background: #fff; color: #6441a5; }
+
+        /* REVIVE ALL — blanco celestial */
+        .rare-revive-all { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 40%, #e8f5e9 100%); color: #003d4d; }
+        .rare-revive-all .rare-badge { background: #003d4d; color: #00e5ff; }
+        .rare-revive-all .rare-winner-name { background: rgba(0,0,0,0.08); font-size: 1.2em; }
+        .rare-revive-all .rare-close-btn { background: #003d4d; color: #00e5ff; }
+
+        /* Partículas flotantes raras */
+        .rare-particles {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .rare-particle {
+            position: absolute;
+            font-size: 1.4em;
+            animation: particleFloat linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes particleFloat {
+            0%   { transform: translateY(100%) rotate(0deg); opacity: 0; }
+            10%  { opacity: 0.7; }
+            90%  { opacity: 0.7; }
+            100% { transform: translateY(-120%) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -671,6 +802,58 @@
     </div>
  
     <div class="shoot-overlay" id="shootOverlay"></div>
+
+    <!-- Modal VIP -->
+    <div class="rare-modal" id="vipModal">
+        <div class="rare-content rare-vip">
+            <div class="rare-particles" id="vipParticles"></div>
+            <div class="rare-stars">⭐👑⭐</div>
+            <div class="rare-badge">✨ ULTRA RARO — 0.5% ✨</div>
+            <div class="rare-title">¡VIP!</div>
+            <div class="rare-winner-name" id="vipWinnerName"></div>
+            <div class="rare-desc">🎖️ ¡Este participante ha obtenido un pase <strong>VIP</strong>!<br>¡Esto solo pasa una vez entre 200 giros!</div>
+            <button class="rare-close-btn" onclick="closeRareModal('vipModal')">👑 ¡Increíble!</button>
+        </div>
+    </div>
+
+    <!-- Modal REVIVIR -->
+    <div class="rare-modal" id="reviveModal">
+        <div class="rare-content rare-revive">
+            <div class="rare-particles" id="reviveParticles"></div>
+            <div class="rare-stars">💚🔄💚</div>
+            <div class="rare-badge">⚡ EVENTO ESPECIAL ⚡</div>
+            <div class="rare-title">¡REVIVIR!</div>
+            <div class="rare-winner-name" id="reviveWinnerName"></div>
+            <div class="rare-desc">🌱 ¡Este participante ha <strong>revivido</strong>!<br>Vuelve a la ruleta como si nada hubiera pasado.</div>
+            <button class="rare-close-btn" onclick="closeRareModal('reviveModal')">💚 ¡Regresó!</button>
+        </div>
+    </div>
+
+    <!-- Modal SUB -->
+    <div class="rare-modal" id="subModal">
+        <div class="rare-content rare-sub">
+            <div class="rare-particles" id="subParticles"></div>
+            <div class="rare-stars">💜🎮💜</div>
+            <div class="rare-badge">✨ ULTRA RARO — 0.5% ✨</div>
+            <div class="rare-title">¡SUB!</div>
+            <div class="rare-winner-name" id="subWinnerName"></div>
+            <div class="rare-desc">🎁 ¡Este participante ha conseguido una <strong>suscripción</strong>!<br>¡Esto solo pasa una vez entre 200 giros!</div>
+            <button class="rare-close-btn" onclick="closeRareModal('subModal')">💜 ¡Wooo!</button>
+        </div>
+    </div>
+
+    <!-- Modal REVIVIR TODOS -->
+    <div class="rare-modal" id="reviveAllModal">
+        <div class="rare-content rare-revive-all">
+            <div class="rare-particles" id="reviveAllParticles"></div>
+            <div class="rare-stars">✨🌟✨</div>
+            <div class="rare-badge">💫 LEGENDARIO — 0.1% 💫</div>
+            <div class="rare-title">¡TODOS REVIVEN!</div>
+            <div class="rare-winner-name" id="reviveAllCount"></div>
+            <div class="rare-desc">🌈 ¡Un milagro! <strong>Todos los eliminados</strong> han vuelto a la ruleta.<br>¡Esto solo pasa una vez entre 1000 giros!</div>
+            <button class="rare-close-btn" onclick="closeRareModal('reviveAllModal')">🌟 ¡Milagro!</button>
+        </div>
+    </div>
 
     <!-- Countdown overlay para el re-giro obligatorio -->
     <div class="countdown-overlay" id="countdownOverlay">
@@ -728,6 +911,7 @@ const colors = [
 ];
  
 let items = ['Ana','Carlos','María','Pedro','Lucía'];
+let originalItems = [...items]; // rastrea todos los nombres que han existido alguna vez
 let isSpinning = false;
 let currentRotation = 0;
 let lastWinner = null;
@@ -739,23 +923,17 @@ let disappearedName = null;
 const trollEvents = [
     {
         id: 'swap_adjacent',
-        label: '🔀 ¡Dos nombres intercambian posiciones!',
+        label: '🔀 ¡Dos nombres intercambian posiciones al parar!',
         apply: function() {
             if (items.length < 2) return;
-            let i = Math.floor(Math.random() * (items.length - 1));
-            let temp = items[i];
-            items[i] = items[i+1];
-            items[i+1] = temp;
+            window._trollSwapAdjacent = true;
         }
     },
     {
         id: 'shuffle_all',
-        label: '🌀 ¡TODOS los nombres cambian de lugar!',
+        label: '🌀 ¡TODOS los nombres cambian de lugar al parar!',
         apply: function() {
-            for (let i = items.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [items[i], items[j]] = [items[j], items[i]];
-            }
+            window._trollShuffleAll = true;
         }
     },
     {
@@ -795,6 +973,14 @@ const trollEvents = [
         apply: function() {
             if (items.length < 2) return;
             window._trollShootWinner = true;
+        }
+    },
+    {
+        id: 'triple_eliminate',
+        label: '💀 ¡3 personas aleatorias son eliminadas de la ruleta!',
+        apply: function() {
+            if (items.length < 4) return;
+            window._trollTripleEliminate = true;
         }
     },
 
@@ -930,9 +1116,90 @@ function showCountdown(label, callback) {
     tick();
 }
 
-// ===== TROLL SPIN LOGIC =====
+// ===== EVENTOS RAROS =====
+function spawnParticles(containerId, emojis) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.className = 'rare-particle';
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        p.style.left = (Math.random() * 90) + '%';
+        p.style.animationDuration = (2 + Math.random() * 3) + 's';
+        p.style.animationDelay = (Math.random() * 2) + 's';
+        container.appendChild(p);
+    }
+}
+
+function showRareEvent(type, winnerName) {
+    if (type === 'vip') {
+        document.getElementById('vipWinnerName').textContent = '🏆 ' + winnerName + ' 🏆';
+        spawnParticles('vipParticles', ['⭐','👑','✨','💛','🥇']);
+        document.getElementById('vipModal').classList.add('show');
+    } else if (type === 'revive') {
+        document.getElementById('reviveWinnerName').textContent = '💚 ' + winnerName + ' 💚';
+        spawnParticles('reviveParticles', ['💚','🌱','🔄','✨','⚡']);
+        document.getElementById('reviveModal').classList.add('show');
+        if (!items.includes(winnerName)) {
+            items.push(winnerName);
+            drawWheel();
+            updateItemsList();
+        }
+    } else if (type === 'sub') {
+        document.getElementById('subWinnerName').textContent = '💜 ' + winnerName + ' 💜';
+        spawnParticles('subParticles', ['💜','🎮','🎁','✨','⭐']);
+        document.getElementById('subModal').classList.add('show');
+    } else if (type === 'revive_all') {
+        // Agregar de vuelta todos los que no están ya en la ruleta
+        const revived = [];
+        originalItems.forEach(name => {
+            if (!items.includes(name)) {
+                items.push(name);
+                revived.push(name);
+            }
+        });
+        drawWheel();
+        updateItemsList();
+        const count = revived.length;
+        document.getElementById('reviveAllCount').textContent =
+            count > 0
+                ? `💫 ${count} participante${count > 1 ? 's' : ''} volvió${count > 1 ? 'ron' : ''} a la ruleta 💫`
+                : '🌈 ¡Ya estaban todos en la ruleta!';
+        spawnParticles('reviveAllParticles', ['✨','🌟','💫','🌈','🎉','💥']);
+        document.getElementById('reviveAllModal').classList.add('show');
+    }
+}
+
+function closeRareModal(id) {
+    document.getElementById(id).classList.remove('show');
+}
+
+// Chequea si algún evento raro se activa (independiente del troll)
+// Retorna el tipo disparado o null
+function checkRareEvents(winnerName) {
+    const roll = Math.random();
+    if (roll < 0.001) {   // 0.1% — revivir todos
+        showRareEvent('revive_all', winnerName);
+        return 'revive_all';
+    }
+    if (roll < 0.006) {   // 0.5% VIP
+        showRareEvent('vip', winnerName);
+        return 'vip';
+    }
+    if (roll < 0.011) {   // 0.5% SUB
+        showRareEvent('sub', winnerName);
+        return 'sub';
+    }
+    if (roll < 0.016) {   // 0.5% REVIVIR uno
+        showRareEvent('revive', winnerName);
+        return 'revive';
+    }
+    return null;
+}
+
+
 function runTrollEvents(callback) {
-    if (Math.random() > 0.40) {
+    if (Math.random() > 0.60) {
         callback();
         return;
     }
@@ -943,8 +1210,25 @@ function runTrollEvents(callback) {
     window._trollFlyAway = false;
     window._trollGlitchUntilStop = false;
     window._trollShuffleUntilStop = false;
+    window._trollSwapAdjacent = false;
+    window._trollShuffleAll = false;
+    window._trollTripleEliminate = false;
 
-    const event = trollEvents[Math.floor(Math.random() * trollEvents.length)];
+    // Eventos con probabilidad propia, separados del pool normal
+    const specialIds = ['shoot_winner', 'triple_eliminate'];
+    const normalEvents  = trollEvents.filter(e => !specialIds.includes(e.id));
+    const shootEvent    = trollEvents.find(e => e.id === 'shoot_winner');
+    const tripleEvent   = trollEvents.find(e => e.id === 'triple_eliminate');
+
+    let event;
+    const r = Math.random();
+    if (shootEvent && r < 0.35) {
+        event = shootEvent;
+    } else if (tripleEvent && r < 0.45) {   // siguiente 10% (0.35–0.45)
+        event = tripleEvent;
+    } else {
+        event = normalEvents[Math.floor(Math.random() * normalEvents.length)];
+    }
     event.apply();
 
     showTrollBanner('🔥 EVENTO TROLL: ' + event.label, 4000);
@@ -1089,6 +1373,7 @@ function addItem(){
     const v = input.value.trim();
     if(!v) return;
     items.push(v);
+    if (!originalItems.includes(v)) originalItems.push(v);
     input.value = '';
     drawWheel();
     updateItemsList();
@@ -1157,8 +1442,9 @@ function spinNormal() {
 
     setTimeout(() => {
         lastWinner = winner;
-        showWinner(winner, false);
         currentRotation = totalRotation;
+        const rare = checkRareEvents(winner);
+        if (!rare) showWinner(winner, false);
         isSpinning = false;
         spinBtn.disabled = false;
     }, spinDuration + 100);
@@ -1174,12 +1460,18 @@ function spinTroll() {
     window._trollShootWinner = false;
     window._trollGlitchUntilStop = false;
     window._trollShuffleUntilStop = false;
+    window._trollSwapAdjacent = false;
+    window._trollShuffleAll = false;
+    window._trollTripleEliminate = false;
 
     runTrollEvents(() => {
         const isReverse          = !!window._trollReverseSpin;
         const doShoot            = !!window._trollShootWinner;
         const doGlitchUntilStop  = !!window._trollGlitchUntilStop;
         const doShuffleUntilStop = !!window._trollShuffleUntilStop;
+        const doSwapAdjacent     = !!window._trollSwapAdjacent;
+        const doShuffleAll       = !!window._trollShuffleAll;
+        const doTripleEliminate  = !!window._trollTripleEliminate;
         const spinDuration = 5000;
 
         let winnerIndex = Math.floor(Math.random() * items.length);
@@ -1232,6 +1524,37 @@ function spinTroll() {
                 // shuffleItemsContinuously se encarga de restaurar items en su próximo tick
             }
 
+            // Swap de dos nombres adyacentes al parar
+            if (doSwapAdjacent && items.length >= 2) {
+                let i = Math.floor(Math.random() * (items.length - 1));
+                let temp = items[i]; items[i] = items[i+1]; items[i+1] = temp;
+                drawWheel();
+                updateItemsList();
+            }
+
+            // Shuffle completo de todos los nombres al parar
+            if (doShuffleAll) {
+                for (let i = items.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [items[i], items[j]] = [items[j], items[i]];
+                }
+                drawWheel();
+                updateItemsList();
+            }
+
+            // Eliminar 3 personas aleatorias al parar
+            if (doTripleEliminate && items.length >= 4) {
+                const eliminated = [];
+                for (let e = 0; e < 3 && items.length > 1; e++) {
+                    const idx = Math.floor(Math.random() * items.length);
+                    eliminated.push(items[idx]);
+                    items.splice(idx, 1);
+                }
+                drawWheel();
+                updateItemsList();
+                showTrollBanner(`💀 ¡${eliminated.join(', ')} fueron eliminados!`, 4000);
+            }
+
             lastWinner = winner;
             currentRotation = totalRotation;
 
@@ -1267,7 +1590,8 @@ function spinTroll() {
                 });
 
             } else {
-                showWinner(winner, true);
+                const rare = checkRareEvents(winner);
+                if (!rare) showWinner(winner, true);
                 isSpinning = false;
                 spinBtn.disabled = false;
             }
@@ -1300,7 +1624,8 @@ function doAutoRespin() {
     setTimeout(() => {
         lastWinner = winner;
         currentRotation = totalRotation;
-        showWinner(winner, true);
+        const rare = checkRareEvents(winner);
+        if (!rare) showWinner(winner, true);
         isSpinning = false;
         spinBtn.disabled = false;
     }, spinDuration + 100);
