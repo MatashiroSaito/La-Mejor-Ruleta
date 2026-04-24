@@ -494,8 +494,6 @@ let currentBg = 'g1';
 let savedWheels = {};
 
 // ===== COLA DE GIROS =====
-// Cada elemento de la cola es el número de giros pendientes.
-// Cuando se presiona GIRAR mientras isSpinning=true, se encola un giro adicional.
 let spinQueue = 0;
 
 // Player database
@@ -750,7 +748,6 @@ function spin() {
   if (currentMode === 'troll' && currentStage === 3) { startDuel(); return; }
 
   if (isSpinning) {
-    // Encolar el giro para ejecutarlo después
     spinQueue++;
     updateQueueIndicator();
     return;
@@ -760,12 +757,10 @@ function spin() {
   else spinNormal();
 }
 
-/* Procesar siguiente giro de la cola (se llama al final de cada giro) */
 function processNextInQueue() {
   if (spinQueue > 0) {
     spinQueue--;
     updateQueueIndicator();
-    // Pequeña pausa antes del siguiente giro para que el jugador pueda ver el resultado
     setTimeout(() => {
       if (currentMode === 'troll') spinTroll();
       else spinNormal();
@@ -779,7 +774,6 @@ function processNextInQueue() {
 function spinNormal() {
   if (items.length === 0) return;
   isSpinning = true;
-  // Botón muestra cuántos en cola, no se deshabilita para poder seguir encolando
   updateSpinBtnLabel();
 
   const winner = pickWinner(items);
@@ -847,7 +841,6 @@ function pickWinner(pool) {
 function updateSpinBtnLabel() {
   const btn = document.getElementById('spinBtn');
   const base = currentStage === 3 ? '😈 ¡DUELO 1v1!' : (currentMode === 'troll' ? '😈 ¡GIRAR!' : '¡GIRAR!');
-  // El botón NUNCA se deshabilita; solo cambia su etiqueta
   btn.disabled = false;
   btn.textContent = base;
 }
@@ -882,26 +875,11 @@ function afterWeaponReveal() {
 
 /* ============================================================
    TROLL RESULT PROCESSING
-   Orden de resolución por ronda (se evalúan en secuencia, el
-   primero que "pega" corta):
-
-   1. 20%  — Fallo global del arma (Etapa 1 y 2)
-   2. 25%  — Escudo (Etapa 1) / 12.5% (Etapa 2)
-   3. 15%  — Revivir a un compañero muerto
-   4.  8%  — Duelo 1v1
-   5.  0.5%— Revivir a TODOS (si se activa, siguiente purga → queda 8)
-   6.  0.5%— Purga masiva hasta límite de etapa
-   7.  2%  — Suspensión 2 meses
-   8. Golpe normal del arma → dentro puede salir:
-        · Fallo de arma propio (según failChance del arma)
-          → 66-75%: sangrado progresivo (15%→25%→33% por ronda)
-        · Impacto → kills, cuchillo media vida, etc.
-        · 20% de arrastrar a alguien al morir
 ============================================================ */
 function processTrollResult(winner) {
   ensurePlayer(winner);
   const p = playerDB[winner];
-  const roll = Math.random(); // un solo dado principal para el orden
+  const roll = Math.random();
 
   // ── 1. 20% Fallo global (ambas etapas) ─────────────────────
   if (Math.random() < 0.20) {
@@ -941,11 +919,10 @@ function processTrollResult(winner) {
     return;
   }
 
-  // ── 5. 0.5% Revivir a TODOS (próxima purga queda en 8) ─────
+  // ── 5. 0.5% Revivir a TODOS ─────────────────────────────────
   if (Math.random() < 0.005 && eliminatedDB.length > 0) {
     const count = eliminatedDB.length;
     reviveAll();
-    // Marcar flag: la próxima purga elimina hasta 8
     trollFlags.nextPurgeTo8 = true;
     showEventModal('🌟', 'LEGENDARIO', '¡TODOS REVIVEN!', `${count} volvieron`,
       'Un milagro ha ocurrido. ¡Todos los eliminados vuelven! (La próxima purga dejará solo 8).',
@@ -955,7 +932,6 @@ function processTrollResult(winner) {
 
   // ── 6. 0.5% Purga masiva ────────────────────────────────────
   if (Math.random() < 0.005) {
-    // Si se activó el flag de revive-all, la purga deja 8 sin importar la etapa
     const limit = trollFlags.nextPurgeTo8 ? 8 : (currentStage === 1 ? 12 : 8);
     trollFlags.nextPurgeTo8 = false;
     if (getActiveItems().length > limit) {
@@ -967,8 +943,8 @@ function processTrollResult(winner) {
     }
   }
 
-  // ── 7. 3% VIP de Twitch ─────────────────────────────────────
-  if (Math.random() < 0.03) {
+  // ── 7. 0.5% VIP de Twitch ─────────────────────────────────────
+  if (Math.random() < 0.001) {
     showEventModal('👑', '¡VIP TWITCH!', '¡VIP GANADO!', winner,
       `¡${winner} gana un VIP en el canal de Twitch! 👑 ¡Felicitaciones!`,
       '#9146ff', '#f0e6ff', () => { finishSpin(); });
@@ -976,8 +952,8 @@ function processTrollResult(winner) {
     return;
   }
 
-  // ── 8. 5% Suscripción de Twitch ──────────────────────────────
-  if (Math.random() < 0.05) {
+  // ── 8. 0.5% Suscripción de Twitch ──────────────────────────────
+  if (Math.random() < 0.005) {
     showEventModal('🎁', '¡SUB TWITCH!', '¡SUSCRIPCIÓN GANADA!', winner,
       `¡${winner} gana una suscripción al canal de Twitch! 🎁 ¡Disfrútala!`,
       '#bf00ff', '#f5e6ff', () => { finishSpin(); });
@@ -996,11 +972,6 @@ const trollFlags = {
 
 /* ============================================================
    WEAPON HIT
-   · Fallo propio del arma (failChance) → sangrado 66-75%
-   · Escudo absorbe
-   · Cuchillo → media vida (mata si queda en 0)
-   · Resto → kills según arma; granada elimina hasta límite de etapa
-   · Al morir → 20% de arrastrar a alguien más
 ============================================================ */
 function applyWeaponHit(winner, callback) {
   ensurePlayer(winner);
@@ -1010,7 +981,6 @@ function applyWeaponHit(winner, callback) {
   // ── Fallo propio del arma ──────────────────────────────────
   if (Math.random() < w.failChance) {
     showBanner(`💨 ${w.name} falló su disparo en ${winner}!`, 3000);
-    // 66-75% → sangrado progresivo
     if (Math.random() < 0.70 && !p.bleeding && p.status === 'alive') {
       p.bleeding = true; p.bleedRound = 0;
       drawWheel(); updateSidePanel();
@@ -1043,13 +1013,11 @@ function applyWeaponHit(winner, callback) {
       showEventModal('🔪', 'CUCHILLO', '¡Media vida!', winner,
         `El cuchillo hirió a ${winner}. Le queda${p.lives} vida(s).`,
         '#bf360c', '#fff', () => {
-          // Puede sangrar aunque no muera
           if (!p.bleeding && p.status === 'alive') checkBleeding(winner);
           callback();
         });
       return;
     } else {
-      // Con 1 vida el cuchillo mata igual (falla no mató pero golpeó al 0)
       eliminatePlayer(winner);
       drawWheel(); updateSidePanel(); updateItemsList();
       showEventModal('🔪', 'ELIMINACIÓN', '¡Eliminado!', winner,
@@ -1061,7 +1029,7 @@ function applyWeaponHit(winner, callback) {
     }
   }
 
-  // ── Kills normales (pistola, escopeta, francotirador, granada) ─
+  // ── Kills normales ─────────────────────────────────────────
   const activeNow = getActiveItems();
   const killed = [winner];
 
@@ -1073,7 +1041,6 @@ function applyWeaponHit(winner, callback) {
   }
 
   if (w.id === 'grenade') {
-    // Granada: elimina hasta el límite de la etapa (o hasta 8 si flag activo)
     const limit = trollFlags.nextPurgeTo8 ? 8 : (currentStage === 1 ? 12 : 8);
     let active = getActiveItems();
     while (active.length > limit) {
@@ -1081,12 +1048,11 @@ function applyWeaponHit(winner, callback) {
       if (!next) break;
       killed.push(next);
       active = active.filter(n => !killed.includes(n));
-      active.unshift(...active); // refresco ficticio para condición de bucle
+      active.unshift(...active);
       active = getActiveItems().filter(n => !killed.includes(n));
     }
   }
 
-  // Animar y matar
   playShootAnim(winner, () => {
     killed.forEach(name => eliminatePlayer(name));
     drawWheel(); updateSidePanel(); updateItemsList();
@@ -1094,12 +1060,11 @@ function applyWeaponHit(winner, callback) {
     const modalTitle = killed.length === 1 ? '¡Eliminado!' : `¡${killed.length} eliminados!`;
     const modalBadge = killed.length === 1 ? 'ELIMINACIÓN' : 'MASACRE';
     const modalDesc  = killed.length === 1
-      ? `${w.name} eliminó a ${winner}. Adiós.`
-      : `${w.name} eliminó a: ${killed.join(', ')}.`;
+      ? `Cxnnard eliminó a ${winner}. Adiós.`
+      : `Cxnnard eliminó a: ${killed.join(', ')}.`;
 
     showEventModal(w.icon, modalBadge, modalTitle, killed.join(', '),
       modalDesc, '#ff4757', '#fff', () => {
-        // 20% — al morir el winner se lleva a alguien
         if (playerDB[winner] && playerDB[winner].status === 'dead') {
           checkDragAlong(winner, callback);
         } else {
@@ -1112,7 +1077,6 @@ function applyWeaponHit(winner, callback) {
 function checkBleeding(name) {
   const p = playerDB[name];
   if (!p || p.status !== 'alive' || p.bleeding) return;
-  // 66-75% → usamos 70% como punto medio del rango
   if (Math.random() < 0.70) {
     p.bleeding = true; p.bleedRound = 0;
     showBanner(`🩸 ${name} está sangrando...`, 2500);
@@ -1137,11 +1101,6 @@ function checkDragAlong(name, callback) {
 
 /* ============================================================
    BLEEDING ROUND PROCESSING
-   Probabilidad de muerte por sangrado:
-     Ronda 1: 15%
-     Ronda 2: 20%
-     Ronda 3: 25%
-     Ronda 4+: 33% (tope)
 ============================================================ */
 function processBleedingRound() {
   const bleedDeaths = [];
@@ -1149,7 +1108,6 @@ function processBleedingRound() {
     const p = playerDB[name];
     if (!p || !p.bleeding || p.status !== 'alive') return;
     p.bleedRound++;
-    // 15% → 20% → 25% → 33% (tope)
     const deathChance = p.bleedRound === 1 ? 0.15
                       : p.bleedRound === 2 ? 0.20
                       : p.bleedRound === 3 ? 0.25
@@ -1292,14 +1250,13 @@ function startDuel() {
 }
 
 /* ============================================================
-   FINISH SPIN — ahora procesa la cola automáticamente
+   FINISH SPIN
 ============================================================ */
 function finishSpin() {
   isSpinning = false;
   updateSpinBtnLabel();
   checkStageTransition();
   drawWheel(); updateSidePanel(); updateItemsList();
-  // Procesar siguiente giro en cola si hay
   processNextInQueue();
 }
 
