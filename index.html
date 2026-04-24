@@ -1,842 +1,1272 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Ruleta de Matashiro</title>
-    <style>
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #FF0080 0%, #FF8C00 25%, #FFD700 50%, #00D4FF 75%, #8A2BE2 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
-            min-height:100vh; display:flex; justify-content:center; align-items:center; padding:40px;
-        }
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .container{
-            background:rgba(255,255,255,0.95); border-radius:30px; padding:40px;
-            box-shadow:0 20px 60px rgba(0,0,0,.5); max-width:500px; width:100%; backdrop-filter:blur(10px);
-        }
-        h1{ text-align:center; color:#667eea; margin-bottom:30px; font-size:2em; text-shadow:2px 2px 4px rgba(0,0,0,.1) }
-        h1.troll-title { color:#ff4757; animation:trollPulse 1s infinite alternate; }
-        @keyframes trollPulse {
-            from { text-shadow:2px 2px 4px rgba(255,71,87,0.3); }
-            to   { text-shadow:0 0 20px rgba(255,71,87,0.9), 0 0 40px rgba(255,71,87,0.5); }
-        }
-        .wheel-container{ position:relative; display:flex; flex-direction:column; align-items:center; margin-bottom:30px; }
-        .wheel-wrapper{ position:relative; width:300px; height:300px; }
-        #wheelCanvas{ width:100%; height:100%; transition:transform 4s cubic-bezier(.17,.67,.12,.99); }
-        .pointer{
-            position:absolute; top:-20px; left:50%; transform:translateX(-50%);
-            width:0; height:0; border-left:20px solid transparent; border-right:20px solid transparent;
-            border-top:40px solid #ff4757; filter:drop-shadow(0 3px 6px rgba(0,0,0,.3)); z-index:10
-        }
-        .center-circle{
-            position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-            width:60px; height:60px; border-radius:50%;
-            background:linear-gradient(135deg,#6ec5ff 0%,#ff75dc 100%);
-            border:5px solid #fff; box-shadow:0 4px 12px rgba(0,0,0,.3); z-index:5
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ruleta de Matashiro — Sistema Troll</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  background:linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%);
+  background-size:400% 400%;
+  animation:gradientShift 15s ease infinite;
+  min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:20px;gap:20px;
+}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-        /* ===== FLECHAS LATERALES (triple eliminación) ===== */
-        .side-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2.8em;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 20;
-            filter: drop-shadow(0 0 8px rgba(255,71,87,0.9));
-            transition: opacity 0.3s;
-        }
-        .side-arrow.left  { left: -60px; animation: none; }
-        .side-arrow.right { right: -60px; animation: none; }
-        .side-arrow.show  {
-            opacity: 1;
-            animation: arrowPulse 0.5s infinite alternate;
-        }
-        @keyframes arrowPulse {
-            from { transform: translateY(-50%) scale(1);   filter: drop-shadow(0 0 6px rgba(255,71,87,0.8)); }
-            to   { transform: translateY(-50%) scale(1.25); filter: drop-shadow(0 0 16px rgba(255,71,87,1)); }
-        }
+/* ===== MAIN CONTAINER ===== */
+.main-container{
+  background:rgba(255,255,255,0.97);border-radius:30px;padding:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:520px;width:100%;
+}
+h1{text-align:center;color:#667eea;margin-bottom:20px;font-size:1.8em}
+h1.troll-title{color:#ff4757;animation:trollPulse 1s infinite alternate}
+@keyframes trollPulse{from{text-shadow:2px 2px 4px rgba(255,71,87,0.3)}to{text-shadow:0 0 20px rgba(255,71,87,0.9)}}
 
-        .spin-btn{
-            margin-top:20px; padding:15px 40px; font-size:1.2em;
-            background:linear-gradient(135deg,#381cda 0%,#ce3535 100%);
-            color:#fff; border:none; border-radius:50px; cursor:pointer;
-            box-shadow:0 5px 15px rgba(102,126,234,.4); font-weight:700; transition:all 0.3s;
-        }
-        .spin-btn:hover:not(:disabled){ transform:translateY(-2px); box-shadow:0 8px 20px rgba(102,126,234,.6); }
-        .spin-btn:disabled{ opacity:.6; cursor:not-allowed; transform:none }
-        .spin-btn.troll-spin{ background:linear-gradient(135deg,#ff4757 0%,#ff6348 50%,#ffa502 100%); animation:trollBtnPulse 2s infinite; }
-        @keyframes trollBtnPulse {
-            0%,100%{ box-shadow:0 5px 15px rgba(255,71,87,.4); }
-            50%    { box-shadow:0 5px 25px rgba(255,71,87,.8); }
-        }
-        .spin-btn.respin-btn{ background:linear-gradient(135deg,#ff4757 0%,#ffa502 100%); animation:respinPulse 0.8s infinite alternate; font-size:1.1em; }
-        @keyframes respinPulse {
-            from{ box-shadow:0 5px 15px rgba(255,71,87,.5); transform:scale(1); }
-            to  { box-shadow:0 8px 30px rgba(255,71,87,.9); transform:scale(1.04); }
-        }
-        .controls{ width:100%; }
-        .input-group{ display:flex; gap:10px; margin-bottom:20px }
-        input{ flex:1; padding:12px 20px; border:2px solid #e0e0e0; border-radius:25px; font-size:1em }
-        input:focus{ outline:none; border-color:#667eea }
-        .add-btn{ padding:12px 25px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:700; transition:all 0.3s; }
-        .add-btn:hover{ background:#764ba2; transform:scale(1.05); }
-        .items-list{ background:#f8f9fa; border-radius:20px; padding:20px; max-height:300px; overflow-y:auto }
-        .item{ display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:#fff; margin-bottom:10px; border-radius:15px; box-shadow:0 2px 5px rgba(0,0,0,.1); transition:all 0.3s; }
-        .item:hover{ transform:translateX(5px); box-shadow:0 4px 8px rgba(0,0,0,.15); }
-        .item-color{ width:20px; height:20px; border-radius:50%; margin-right:10px }
-        .item-text{ flex:1; font-weight:500 }
-        .delete-btn{ background:#ff4757; color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; transition:all 0.3s; }
-        .delete-btn:hover{ background:#ff3838; transform:scale(1.1); }
-        .winner-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:1000; animation:fadeIn 0.3s; }
-        .winner-modal.show{ display:flex }
-        .winner-content{ background:#fff; padding:50px; border-radius:30px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,.3); animation:slideUp 0.5s; }
-        .winner-content h2{ color:#667eea; font-size:2em; margin-bottom:20px }
-        .winner-text{ font-size:2.5em; color:#ff4757; font-weight:800; margin:20px 0 }
-        .close-btn{ margin-top:20px; padding:12px 30px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-size:1.1em; transition:all 0.3s; }
-        .close-btn:hover{ background:#764ba2; transform:scale(1.05); }
-        .winner-content.troll-winner h2{ color:#ff4757; }
-        .winner-content.troll-winner .winner-text{ animation:trollWinnerAnim 0.5s infinite alternate; }
-        @keyframes trollWinnerAnim {
-            from{ transform:scale(1) rotate(-2deg); }
-            to  { transform:scale(1.05) rotate(2deg); }
-        }
-        .flying-name{ position:fixed; font-size:1.6em; font-weight:900; color:#fff; text-shadow:0 2px 8px rgba(0,0,0,0.7); background:linear-gradient(135deg,#ff4757,#ffa502); padding:10px 20px; border-radius:20px; pointer-events:none; z-index:2000; white-space:nowrap; box-shadow:0 4px 15px rgba(255,71,87,0.5); }
-        @keyframes flyOff {
-            0%  { opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
-            30% { opacity:1; transform:translate(var(--fx1),var(--fy1)) rotate(var(--fr1)) scale(1.2); }
-            70% { opacity:0.7; transform:translate(var(--fx2),var(--fy2)) rotate(var(--fr2)) scale(0.9); }
-            100%{ opacity:0; transform:translate(var(--fx3),var(--fy3)) rotate(var(--fr3)) scale(0.3); }
-        }
-        .shoot-overlay{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:1500; pointer-events:none; }
-        .shoot-overlay.show{ display:block; }
-        .bullet{ position:absolute; font-size:2em; animation:bulletFly 0.4s forwards; }
-        @keyframes bulletFly {
-            from{ transform:translateX(0) scale(1); opacity:1; }
-            to  { transform:translateX(300px) scale(0.3); opacity:0; }
-        }
-        .shoot-text{ position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:3em; font-weight:900; color:#ff4757; text-shadow:0 0 20px rgba(255,71,87,0.8); animation:bangAnim 0.6s forwards; }
-        @keyframes bangAnim {
-            0%  { transform:translate(-50%,-50%) scale(0); opacity:0; }
-            50% { transform:translate(-50%,-50%) scale(1.4); opacity:1; }
-            100%{ transform:translate(-50%,-50%) scale(1); opacity:1; }
-        }
-        .countdown-overlay{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); z-index:1400; justify-content:center; align-items:center; flex-direction:column; }
-        .countdown-overlay.show{ display:flex; }
-        .countdown-number{ font-size:8em; font-weight:900; color:#fff; text-shadow:0 0 40px rgba(255,71,87,0.9); animation:countPop 0.8s ease-out; }
-        @keyframes countPop {
-            0%  { transform:scale(2); opacity:0; }
-            50% { transform:scale(0.9); opacity:1; }
-            100%{ transform:scale(1); opacity:1; }
-        }
-        .countdown-label{ font-size:1.8em; color:#ffa502; font-weight:800; margin-top:10px; text-shadow:0 2px 8px rgba(0,0,0,0.5); }
-        .troll-event-banner{ display:none; position:fixed; top:80px; left:50%; transform:translateX(-50%); background:linear-gradient(135deg,#ff4757,#ffa502); color:white; padding:15px 30px; border-radius:20px; font-size:1.3em; font-weight:800; z-index:999; box-shadow:0 8px 25px rgba(255,71,87,.5); text-align:center; max-width:90vw; animation:bannerBounce 0.5s; }
-        .troll-event-banner.show{ display:block; }
-        @keyframes bannerBounce {
-            0%  { transform:translateX(-50%) translateY(-30px); opacity:0; }
-            100%{ transform:translateX(-50%) translateY(0); opacity:1; }
-        }
-        .social-link{ position:fixed; top:20px; right:20px; background:rgba(255,255,255,0.95); padding:15px 25px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,.3); text-decoration:none; color:#667eea; font-weight:600; transition:all 0.3s; backdrop-filter:blur(10px); z-index:100; }
-        .social-link:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.4); background:#667eea; color:#fff; }
-        .mode-buttons{ position:fixed; top:80px; right:20px; display:flex; flex-direction:column; gap:8px; z-index:100; }
-        .mode-btn{ padding:10px 18px; border:none; border-radius:15px; cursor:pointer; font-weight:700; font-size:0.9em; transition:all 0.3s; backdrop-filter:blur(10px); box-shadow:0 4px 15px rgba(0,0,0,.3); }
-        .mode-btn.normal-btn{ background:rgba(255,255,255,0.95); color:#667eea; }
-        .mode-btn.normal-btn:hover, .mode-btn.normal-btn.active{ background:#667eea; color:#fff; transform:translateY(-2px); }
-        .mode-btn.troll-btn{ background:rgba(255,255,255,0.95); color:#ff4757; }
-        .mode-btn.troll-btn:hover, .mode-btn.troll-btn.active{ background:linear-gradient(135deg,#ff4757,#ffa502); color:#fff; transform:translateY(-2px); box-shadow:0 6px 20px rgba(255,71,87,.4); }
-        .config-btn{ position:fixed; top:20px; left:20px; background:rgba(255,255,255,0.95); padding:15px 25px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,.3); border:none; color:#667eea; font-weight:600; cursor:pointer; transition:all 0.3s; backdrop-filter:blur(10px); z-index:100; }
-        .config-btn:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.4); background:#667eea; color:#fff; }
-        .config-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.8); justify-content:center; align-items:center; z-index:1000; animation:fadeIn 0.3s; }
-        .config-modal.show{ display:flex }
-        .config-content{ background:#fff; padding:40px; border-radius:30px; box-shadow:0 20px 60px rgba(0,0,0,.3); max-width:600px; width:90%; max-height:80vh; overflow-y:auto; animation:slideUp 0.5s; }
-        .config-content h2{ color:#667eea; font-size:1.8em; margin-bottom:25px; text-align:center; }
-        .config-section{ margin-bottom:30px; }
-        .config-section h3{ color:#333; font-size:1.3em; margin-bottom:15px; }
-        .color-options{ display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:15px; }
-        .color-option{ padding:15px; border-radius:15px; cursor:pointer; text-align:center; font-weight:600; color:#fff; transition:all 0.3s; border:3px solid transparent; }
-        .color-option:hover{ transform:scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,.3); }
-        .color-option.active{ border-color:#fff; box-shadow:0 0 0 3px #667eea; }
-        .saved-wheels{ display:flex; flex-direction:column; gap:10px; }
-        .saved-wheel-item{ display:flex; justify-content:space-between; align-items:center; padding:15px; background:#f8f9fa; border-radius:15px; cursor:pointer; transition:all 0.3s; }
-        .saved-wheel-item:hover{ background:#e9ecef; transform:translateX(5px); }
-        .saved-wheel-name{ font-weight:600; color:#333; }
-        .saved-wheel-count{ color:#666; font-size:0.9em; }
-        .saved-wheel-actions{ display:flex; gap:10px; }
-        .load-btn,.delete-saved-btn{ padding:8px 15px; border:none; border-radius:10px; cursor:pointer; font-weight:600; transition:all 0.3s; }
-        .load-btn{ background:#667eea; color:#fff; }
-        .load-btn:hover{ background:#764ba2; }
-        .delete-saved-btn{ background:#ff4757; color:#fff; }
-        .delete-saved-btn:hover{ background:#ff3838; }
-        .save-current{ display:flex; gap:10px; margin-top:15px; }
-        .save-current input{ flex:1; }
-        .save-current button{ padding:12px 20px; background:#667eea; color:#fff; border:none; border-radius:25px; cursor:pointer; font-weight:600; }
-        .save-current button:hover{ background:#764ba2; }
-        @keyframes fadeIn { from{ opacity:0; } to{ opacity:1; } }
-        @keyframes slideUp { from{ transform:translateY(50px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
-        @media(max-width:768px){
-            body{ padding:20px; justify-content:center }
-            .container{ max-width:100% }
-            .wheel-wrapper{ width:280px; height:280px }
-            h1{ font-size:1.5em }
-            .social-link,.config-btn{ top:10px; padding:10px 15px; font-size:0.9em; }
-            .social-link{ right:10px }
-            .config-btn{ left:10px }
-            .mode-buttons{ top:75px; right:10px; }
-            .side-arrow.left  { left:-45px; font-size:2em; }
-            .side-arrow.right { right:-45px; font-size:2em; }
-        }
+/* ===== STAGE SELECTOR ===== */
+.stage-selector{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;justify-content:center}
+.stage-btn{
+  padding:8px 16px;border:2px solid #ddd;border-radius:20px;cursor:pointer;
+  font-weight:700;font-size:0.85em;background:#fff;transition:all 0.3s;color:#666;
+}
+.stage-btn:hover{border-color:#667eea;color:#667eea}
+.stage-btn.active{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border-color:transparent}
+.stage-btn.troll-active{background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;border-color:transparent}
 
-        /* ===== MODALES EVENTOS RAROS ===== */
-        .rare-modal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); justify-content:center; align-items:center; z-index:2000; animation:fadeIn 0.3s; }
-        .rare-modal.show{ display:flex; }
-        .rare-content{ padding:50px 60px; border-radius:30px; text-align:center; animation:rareSlideUp 0.6s cubic-bezier(.17,.67,.12,.99); max-width:480px; width:90%; position:relative; overflow:hidden; }
-        @keyframes rareSlideUp { from{ transform:translateY(60px) scale(0.8); opacity:0; } to{ transform:translateY(0) scale(1); opacity:1; } }
-        .rare-content::before{ content:''; position:absolute; inset:0; background:inherit; filter:brightness(0.4); z-index:-1; }
-        .rare-stars{ font-size:2.5em; letter-spacing:8px; margin-bottom:15px; animation:starSpin 2s linear infinite; }
-        @keyframes starSpin { 0%{ transform:rotate(0deg) scale(1); } 50%{ transform:rotate(180deg) scale(1.1); } 100%{ transform:rotate(360deg) scale(1); } }
-        .rare-badge{ font-size:1em; font-weight:900; text-transform:uppercase; letter-spacing:4px; padding:6px 18px; border-radius:20px; display:inline-block; margin-bottom:18px; }
-        .rare-title{ font-size:2.8em; font-weight:900; margin-bottom:10px; line-height:1.1; }
-        .rare-winner-name{ font-size:2em; font-weight:800; margin:15px 0; padding:10px 20px; border-radius:15px; display:inline-block; }
-        .rare-desc{ font-size:1.1em; margin-bottom:25px; opacity:0.9; }
-        .rare-close-btn{ padding:13px 35px; border:none; border-radius:25px; cursor:pointer; font-size:1.1em; font-weight:800; transition:all 0.3s; }
-        .rare-close-btn:hover{ transform:scale(1.06); }
-        .rare-vip{ background:linear-gradient(135deg,#f6d365 0%,#fda085 100%); color:#3d2000; }
-        .rare-vip .rare-badge{ background:#3d2000; color:#ffd700; }
-        .rare-vip .rare-winner-name{ background:rgba(0,0,0,0.15); }
-        .rare-vip .rare-close-btn{ background:#3d2000; color:#ffd700; }
-        .rare-revive{ background:linear-gradient(135deg,#11998e 0%,#38ef7d 100%); color:#002b1a; }
-        .rare-revive .rare-badge{ background:#002b1a; color:#38ef7d; }
-        .rare-revive .rare-winner-name{ background:rgba(0,0,0,0.15); }
-        .rare-revive .rare-close-btn{ background:#002b1a; color:#38ef7d; }
-        .rare-sub{ background:linear-gradient(135deg,#6441a5 0%,#c471ed 100%); color:#fff; }
-        .rare-sub .rare-badge{ background:rgba(255,255,255,0.2); color:#fff; border:2px solid #fff; }
-        .rare-sub .rare-winner-name{ background:rgba(0,0,0,0.2); }
-        .rare-sub .rare-close-btn{ background:#fff; color:#6441a5; }
-        .rare-revive-all{ background:linear-gradient(135deg,#e0f7fa 0%,#b2ebf2 40%,#e8f5e9 100%); color:#003d4d; }
-        .rare-revive-all .rare-badge{ background:#003d4d; color:#00e5ff; }
-        .rare-revive-all .rare-winner-name{ background:rgba(0,0,0,0.08); font-size:1.2em; }
-        .rare-revive-all .rare-close-btn{ background:#003d4d; color:#00e5ff; }
-        .rare-particles{ position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; overflow:hidden; }
-        .rare-particle{ position:absolute; font-size:1.4em; animation:particleFloat linear infinite; opacity:0.7; }
-        @keyframes particleFloat { 0%{ transform:translateY(100%) rotate(0deg); opacity:0; } 10%{ opacity:0.7; } 90%{ opacity:0.7; } 100%{ transform:translateY(-120%) rotate(360deg); opacity:0; } }
-    </style>
+/* ===== STAGE INFO BAR ===== */
+.stage-info{
+  background:linear-gradient(135deg,rgba(102,126,234,0.1),rgba(118,75,162,0.1));
+  border-radius:15px;padding:12px 16px;margin-bottom:20px;
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:0.85em;
+}
+.stage-info-item{display:flex;align-items:center;gap:5px;font-weight:600;color:#555}
+.stage-info-item span.val{color:#667eea}
+.stage-info.troll-info{background:linear-gradient(135deg,rgba(255,71,87,0.1),rgba(255,165,2,0.1))}
+.stage-info.troll-info .stage-info-item span.val{color:#ff4757}
+
+/* ===== WHEEL ===== */
+.wheel-container{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:20px}
+.wheel-wrapper{position:relative;width:300px;height:300px}
+#wheelCanvas{width:100%;height:100%;transition:transform 4s cubic-bezier(.17,.67,.12,.99)}
+.pointer{
+  position:absolute;top:-20px;left:50%;transform:translateX(-50%);
+  width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;
+  border-top:40px solid #ff4757;filter:drop-shadow(0 3px 6px rgba(0,0,0,.3));z-index:10
+}
+.center-circle{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:60px;height:60px;border-radius:50%;
+  background:linear-gradient(135deg,#6ec5ff 0%,#ff75dc 100%);
+  border:5px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.3);z-index:5
+}
+.spin-btn{
+  margin-top:16px;padding:14px 35px;font-size:1.1em;
+  background:linear-gradient(135deg,#381cda 0%,#ce3535 100%);
+  color:#fff;border:none;border-radius:50px;cursor:pointer;
+  box-shadow:0 5px 15px rgba(102,126,234,.4);font-weight:700;transition:all 0.3s;
+}
+.spin-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 20px rgba(102,126,234,.6)}
+.spin-btn:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.spin-btn.troll-spin{background:linear-gradient(135deg,#ff4757 0%,#ff6348 50%,#ffa502 100%);animation:trollBtnPulse 2s infinite}
+@keyframes trollBtnPulse{0%,100%{box-shadow:0 5px 15px rgba(255,71,87,.4)}50%{box-shadow:0 5px 25px rgba(255,71,87,.8)}}
+
+/* ===== WEAPON DISPLAY ===== */
+.weapon-display{
+  display:flex;align-items:center;gap:10px;background:rgba(255,71,87,0.08);
+  border-radius:15px;padding:10px 16px;margin-bottom:12px;font-size:0.9em;
+  border:1px solid rgba(255,71,87,0.2);
+}
+.weapon-icon{font-size:1.8em}
+.weapon-info{flex:1}
+.weapon-name{font-weight:700;color:#ff4757}
+.weapon-stats{font-size:0.8em;color:#888;margin-top:2px}
+
+/* ===== PLAYERS PANEL ===== */
+.side-panel{
+  background:rgba(255,255,255,0.97);border-radius:30px;padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);width:280px;min-width:240px;max-height:90vh;
+  overflow-y:auto;
+}
+.panel-title{font-size:1.1em;font-weight:700;color:#667eea;margin-bottom:14px;text-align:center}
+.panel-section{margin-bottom:18px}
+.panel-section-label{font-size:0.8em;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:8px}
+
+.player-entry{
+  display:flex;align-items:center;gap:8px;padding:8px 12px;
+  background:#fff;border-radius:12px;margin-bottom:6px;
+  box-shadow:0 2px 5px rgba(0,0,0,.08);border:1px solid #f0f0f0;
+  transition:all 0.3s;position:relative;overflow:hidden;
+}
+.player-color{width:14px;height:14px;border-radius:50%;flex-shrink:0}
+.player-name{flex:1;font-weight:600;font-size:0.9em;color:#333}
+.player-lives{display:flex;gap:3px}
+.life-heart{font-size:0.85em}
+.player-status{font-size:0.75em;padding:2px 8px;border-radius:10px;font-weight:600}
+.status-alive{background:#e8f5e9;color:#2e7d32}
+.status-bleeding{background:#fff3e0;color:#e65100;animation:bleedPulse 1s infinite alternate}
+.status-shield{background:#e3f2fd;color:#1565c0}
+.status-suspended{background:#fce4ec;color:#c62828}
+.status-dead{background:#f5f5f5;color:#9e9e9e;text-decoration:line-through}
+@keyframes bleedPulse{from{background:#fff3e0}to{background:#ffccbc}}
+.bleeding-bar{
+  position:absolute;bottom:0;left:0;height:3px;
+  background:linear-gradient(90deg,#ff4757,#ffa502);
+  transition:width 0.5s;border-radius:0 0 12px 12px;
+}
+
+.player-entry.eliminated{opacity:0.5}
+.player-entry.dead-anim{animation:deadFade 0.6s forwards}
+@keyframes deadFade{to{opacity:0.4;transform:translateX(-5px)}}
+
+/* ===== CONTROLS ===== */
+.controls{width:100%}
+.input-group{display:flex;gap:8px;margin-bottom:14px}
+input[type=text]{flex:1;padding:10px 16px;border:2px solid #e0e0e0;border-radius:25px;font-size:0.95em}
+input[type=text]:focus{outline:none;border-color:#667eea}
+.add-btn{padding:10px 20px;background:#667eea;color:#fff;border:none;border-radius:25px;cursor:pointer;font-weight:700;transition:all 0.3s}
+.add-btn:hover{background:#764ba2;transform:scale(1.05)}
+.items-list{background:#f8f9fa;border-radius:16px;padding:14px;max-height:220px;overflow-y:auto}
+.item{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#fff;margin-bottom:6px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,.08)}
+.item-color{width:16px;height:16px;border-radius:50%;margin-right:8px}
+.item-text{flex:1;font-weight:500;font-size:0.9em}
+.delete-btn{background:#ff4757;color:#fff;border:none;padding:5px 10px;border-radius:8px;cursor:pointer;font-size:0.8em}
+
+/* ===== MODALS ===== */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);justify-content:center;align-items:center;z-index:1000;animation:fadeIn 0.3s}
+.modal-overlay.show{display:flex}
+.modal-box{background:#fff;padding:40px;border-radius:25px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUp 0.5s;max-width:420px;width:90%}
+.modal-box h2{color:#667eea;font-size:1.8em;margin-bottom:16px}
+.modal-winner{font-size:2.2em;color:#ff4757;font-weight:800;margin:16px 0}
+.modal-close{margin-top:16px;padding:11px 28px;background:#667eea;color:#fff;border:none;border-radius:22px;cursor:pointer;font-size:1em;transition:all 0.3s}
+.modal-close:hover{background:#764ba2;transform:scale(1.05)}
+
+/* event modals */
+.event-modal{background:#fff;padding:40px 50px;border-radius:25px;text-align:center;max-width:420px;width:90%;animation:slideUp 0.5s}
+.event-icon{font-size:3em;margin-bottom:10px}
+.event-badge{font-size:0.85em;font-weight:800;letter-spacing:3px;text-transform:uppercase;padding:5px 16px;border-radius:15px;display:inline-block;margin-bottom:12px}
+.event-title{font-size:2.4em;font-weight:900;margin-bottom:8px}
+.event-name{font-size:1.8em;font-weight:800;margin:12px 0;padding:8px 20px;border-radius:12px;display:inline-block}
+.event-desc{font-size:1em;margin-bottom:20px;line-height:1.5}
+.event-btn{padding:12px 32px;border:none;border-radius:22px;cursor:pointer;font-size:1em;font-weight:800;transition:all 0.3s}
+.event-btn:hover{transform:scale(1.05)}
+
+/* weapon reveal */
+.weapon-reveal{background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;border-radius:25px;padding:40px 50px;text-align:center;max-width:400px;width:90%;animation:weaponAppear 0.7s cubic-bezier(.17,.67,.12,.99)}
+@keyframes weaponAppear{0%{transform:scale(0.3) rotate(-20deg);opacity:0}60%{transform:scale(1.1) rotate(5deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+.weapon-big-icon{font-size:5em;margin-bottom:12px;animation:weaponBob 2s infinite}
+@keyframes weaponBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.weapon-reveal h2{font-size:1.1em;letter-spacing:4px;text-transform:uppercase;color:#aaa;margin-bottom:8px}
+.weapon-reveal-name{font-size:2.6em;font-weight:900;color:#ffd700;margin-bottom:6px;text-shadow:0 0 20px rgba(255,215,0,0.5)}
+.weapon-reveal-stats{font-size:0.95em;color:#ccc;margin-bottom:20px;line-height:1.6}
+.weapon-reveal-btn{padding:12px 32px;background:linear-gradient(135deg,#ffd700,#ffa500);color:#1a1a2e;border:none;border-radius:22px;cursor:pointer;font-weight:800;font-size:1em;transition:all 0.3s}
+.weapon-reveal-btn:hover{transform:scale(1.05)}
+
+/* 1v1 modal */
+.duel-modal{background:linear-gradient(135deg,#1a1a2e,#2d1b69);color:#fff;border-radius:25px;padding:40px 50px;text-align:center;max-width:440px;width:90%;animation:slideUp 0.5s}
+.duel-scores{display:flex;gap:20px;justify-content:center;align-items:center;margin:20px 0}
+.duel-player-box{background:rgba(255,255,255,0.1);padding:16px 24px;border-radius:16px;min-width:120px}
+.duel-player-name{font-size:1.1em;font-weight:700;margin-bottom:8px}
+.duel-player-score{font-size:2.5em;font-weight:900;color:#ffd700}
+.duel-vs{font-size:1.3em;font-weight:900;color:#aaa}
+.duel-log{background:rgba(0,0,0,0.3);border-radius:12px;padding:10px;max-height:150px;overflow-y:auto;margin:12px 0;text-align:left;font-size:0.85em;line-height:1.8}
+.duel-next-btn{padding:12px 32px;background:linear-gradient(135deg,#ffd700,#ffa500);color:#1a1a2e;border:none;border-radius:22px;cursor:pointer;font-weight:800;font-size:1em;transition:all 0.3s;margin-top:10px}
+.duel-next-btn:hover{transform:scale(1.05)}
+
+/* Revive picker */
+.revive-pick-modal{background:#fff;border-radius:25px;padding:40px;text-align:center;max-width:420px;width:90%;animation:slideUp 0.5s}
+.revive-pick-modal h2{color:#11998e;font-size:1.6em;margin-bottom:16px}
+.revive-options{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto;margin-bottom:16px}
+.revive-option-btn{padding:12px;background:#e8f5e9;border:2px solid #81c784;border-radius:12px;cursor:pointer;font-weight:600;color:#2e7d32;transition:all 0.3s;font-size:1em}
+.revive-option-btn:hover{background:#c8e6c9;transform:scale(1.02)}
+
+/* ===== BANNER ===== */
+.troll-banner{
+  display:none;position:fixed;top:80px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;
+  padding:14px 28px;border-radius:18px;font-size:1.2em;font-weight:800;
+  z-index:999;box-shadow:0 8px 25px rgba(255,71,87,.5);text-align:center;
+  max-width:90vw;animation:bannerIn 0.5s;
+}
+.troll-banner.show{display:block}
+@keyframes bannerIn{0%{transform:translateX(-50%) translateY(-30px);opacity:0}100%{transform:translateX(-50%) translateY(0);opacity:1}}
+
+/* ===== COUNTDOWN ===== */
+.countdown-overlay{
+  display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.6);z-index:1400;justify-content:center;align-items:center;flex-direction:column;
+}
+.countdown-overlay.show{display:flex}
+.countdown-number{font-size:8em;font-weight:900;color:#fff;text-shadow:0 0 40px rgba(255,71,87,0.9);animation:countPop 0.8s ease-out}
+@keyframes countPop{0%{transform:scale(2);opacity:0}50%{transform:scale(0.9);opacity:1}100%{transform:scale(1);opacity:1}}
+.countdown-label{font-size:1.6em;color:#ffa502;font-weight:800;margin-top:8px}
+
+/* ===== SHOOT OVERLAY ===== */
+.shoot-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1500;pointer-events:none}
+.shoot-overlay.show{display:block}
+.bang-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3em;font-weight:900;color:#ff4757;text-shadow:0 0 20px rgba(255,71,87,0.8);animation:bangAnim 0.6s forwards}
+@keyframes bangAnim{0%{transform:translate(-50%,-50%) scale(0);opacity:0}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+/* ===== TOP BUTTONS ===== */
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
+.mode-selector{display:flex;gap:6px}
+.mode-btn{padding:8px 16px;border:2px solid #ddd;border-radius:15px;cursor:pointer;font-weight:700;font-size:0.85em;background:#fff;transition:all 0.3s;color:#666}
+.mode-btn.active-normal{background:#667eea;color:#fff;border-color:transparent}
+.mode-btn.active-troll{background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;border-color:transparent}
+
+/* ===== CONFIG ===== */
+.config-modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);justify-content:center;align-items:center;z-index:1000}
+.config-modal-overlay.show{display:flex}
+.config-box{background:#fff;padding:36px;border-radius:25px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-width:560px;width:90%;max-height:80vh;overflow-y:auto;animation:slideUp 0.5s}
+.config-box h2{color:#667eea;font-size:1.6em;margin-bottom:20px;text-align:center}
+.config-section{margin-bottom:24px}
+.config-section h3{color:#333;font-size:1.1em;margin-bottom:12px}
+.color-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.color-option{padding:12px;border-radius:12px;cursor:pointer;text-align:center;font-weight:600;color:#fff;transition:all 0.3s;border:3px solid transparent;font-size:0.85em}
+.color-option:hover{transform:scale(1.05)}
+.color-option.active{border-color:#fff;box-shadow:0 0 0 3px #667eea}
+.save-current{display:flex;gap:8px;margin-top:10px}
+.save-current button{padding:10px 18px;background:#667eea;color:#fff;border:none;border-radius:22px;cursor:pointer;font-weight:600;white-space:nowrap}
+.saved-wheels{display:flex;flex-direction:column;gap:8px}
+.saved-wheel-item{display:flex;justify-content:space-between;align-items:center;padding:12px;background:#f8f9fa;border-radius:12px;cursor:pointer;transition:all 0.3s}
+.saved-wheel-item:hover{background:#e9ecef}
+.load-btn{padding:7px 14px;background:#667eea;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+.delete-saved-btn{padding:7px 14px;background:#ff4757;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600}
+
+/* ===== MONTH BAN BADGE ===== */
+.month-ban-info{font-size:0.75em;color:#c62828;background:#fce4ec;padding:2px 7px;border-radius:8px;margin-left:4px}
+
+/* ===== INSTAGRAM ===== */
+.social-link{position:fixed;top:16px;right:16px;background:rgba(255,255,255,0.95);padding:10px 18px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,.3);text-decoration:none;color:#667eea;font-weight:600;font-size:0.9em;transition:all 0.3s;z-index:100}
+.social-link:hover{background:#667eea;color:#fff;transform:translateY(-2px)}
+.config-btn{position:fixed;top:16px;left:16px;background:rgba(255,255,255,0.95);padding:10px 18px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,.3);border:none;color:#667eea;font-weight:600;cursor:pointer;font-size:0.9em;transition:all 0.3s;z-index:100}
+.config-btn:hover{background:#667eea;color:#fff;transform:translateY(-2px)}
+
+/* Scroll style */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#f1f1f1;border-radius:3px}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+@media(max-width:860px){
+  body{flex-direction:column;align-items:center;padding:12px}
+  .side-panel{width:100%;max-width:520px;max-height:none}
+  .main-container{max-width:520px}
+}
+@media(max-width:600px){
+  .wheel-wrapper{width:260px;height:260px}
+  h1{font-size:1.4em}
+}
+</style>
 </head>
 <body>
-    <button class="config-btn" onclick="openConfig()">⚙️ Configuración</button>
-    <a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">📱 Redes del creador</a>
 
-    <div class="mode-buttons">
-        <button class="mode-btn normal-btn active" id="normalModeBtn" onclick="setMode('normal')">🎯 Ruleta Normal</button>
-        <button class="mode-btn troll-btn" id="trollModeBtn" onclick="setMode('troll')">😈 Ruleta Troll</button>
+<button class="config-btn" onclick="openConfig()">⚙️ Config</button>
+<a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">📱 Redes</a>
+
+<div class="troll-banner" id="trollBanner"></div>
+
+<!-- ===== MAIN CONTAINER ===== -->
+<div class="main-container">
+  <div class="top-bar">
+    <div class="mode-selector">
+      <button class="mode-btn active-normal" id="btnNormal" onclick="setMode('normal')">🎯 Normal</button>
+      <button class="mode-btn" id="btnTroll" onclick="setMode('troll')">😈 Troll</button>
     </div>
-
-    <div class="troll-event-banner" id="trollEventBanner"></div>
-
-    <img src="Captura_de_pantalla_2025-11-27_184757-removebg-preview.png" style="position:absolute;top:600px;left:1580px;width:300px">
-    <img src="GxUMxn0WMAESagQ-removebg-preview.png" style="position:absolute;top:666px;left:3px;width:400px">
-    <img src="GxoqO02WYAASpT3-removebg-preview.png" style="position:absolute;top:766px;left:1300px;width:300px">
-    <img src="cxnnard_goad.png" style="position:absolute;top:803px;left:400px;width:200px">
-    <img src="Ilustracion.png" style="position:absolute;top:884px;left:1200px;width:119px">
-
-    <div class="container">
-        <h1 id="mainTitle"> Ruleta de Matashiro</h1>
-        <div class="wheel-container">
-            <!-- Flechas laterales (ocultas por defecto) -->
-            <div class="wheel-wrapper" id="wheelWrapper">
-                <div class="side-arrow left" id="arrowLeft">💀</div>
-                <div class="side-arrow right" id="arrowRight">💀</div>
-                <div class="pointer"></div>
-                <canvas id="wheelCanvas" width="400" height="400"></canvas>
-                <div class="center-circle"></div>
-            </div>
-            <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
-        </div>
-        <div class="controls">
-            <div class="input-group">
-                <input id="itemInput" placeholder="Agrega un nombre o número..." onkeypress="if(event.key==='Enter') addItem()">
-                <button class="add-btn" onclick="addItem()">+ Agregar</button>
-            </div>
-            <div class="items-list" id="itemsList"></div>
-        </div>
+    <div class="stage-selector" id="stageSelector" style="display:none">
+      <button class="stage-btn troll-active" id="stageBtn1" onclick="setStage(1)">Etapa 1</button>
+      <button class="stage-btn" id="stageBtn2" onclick="setStage(2)">Etapa 2</button>
+      <button class="stage-btn" id="stageBtn3" onclick="setStage(3)">Etapa 3 (1v1)</button>
     </div>
+  </div>
 
-    <div class="shoot-overlay" id="shootOverlay"></div>
+  <h1 id="mainTitle">🎯 Ruleta de Matashiro</h1>
 
-    <!-- Modal VIP -->
-    <div class="rare-modal" id="vipModal">
-        <div class="rare-content rare-vip">
-            <div class="rare-particles" id="vipParticles"></div>
-            <div class="rare-stars">⭐👑⭐</div>
-            <div class="rare-badge">✨ ULTRA RARO — 0.5% ✨</div>
-            <div class="rare-title">¡VIP!</div>
-            <div class="rare-winner-name" id="vipWinnerName"></div>
-            <div class="rare-desc">🎖️ ¡Este participante ha obtenido un pase <strong>VIP</strong>!<br>¡Esto solo pasa una vez entre 200 giros!</div>
-            <button class="rare-close-btn" onclick="closeRareModal('vipModal')">👑 ¡Increíble!</button>
-        </div>
-    </div>
-    <!-- Modal REVIVIR -->
-    <div class="rare-modal" id="reviveModal">
-        <div class="rare-content rare-revive">
-            <div class="rare-particles" id="reviveParticles"></div>
-            <div class="rare-stars">💚🔄💚</div>
-            <div class="rare-badge">⚡ EVENTO ESPECIAL ⚡</div>
-            <div class="rare-title">¡REVIVIR!</div>
-            <div class="rare-winner-name" id="reviveWinnerName"></div>
-            <div class="rare-desc">🌱 ¡Este participante ha <strong>revivido</strong>!<br>Vuelve a la ruleta como si nada hubiera pasado.</div>
-            <button class="rare-close-btn" onclick="closeRareModal('reviveModal')">💚 ¡Regresó!</button>
-        </div>
-    </div>
-    <!-- Modal SUB -->
-    <div class="rare-modal" id="subModal">
-        <div class="rare-content rare-sub">
-            <div class="rare-particles" id="subParticles"></div>
-            <div class="rare-stars">💜🎮💜</div>
-            <div class="rare-badge">✨ ULTRA RARO — 0.5% ✨</div>
-            <div class="rare-title">¡SUB!</div>
-            <div class="rare-winner-name" id="subWinnerName"></div>
-            <div class="rare-desc">🎁 ¡Este participante ha conseguido una <strong>suscripción</strong>!<br>¡Esto solo pasa una vez entre 200 giros!</div>
-            <button class="rare-close-btn" onclick="closeRareModal('subModal')">💜 ¡Wooo!</button>
-        </div>
-    </div>
-    <!-- Modal REVIVIR TODOS -->
-    <div class="rare-modal" id="reviveAllModal">
-        <div class="rare-content rare-revive-all">
-            <div class="rare-particles" id="reviveAllParticles"></div>
-            <div class="rare-stars">✨🌟✨</div>
-            <div class="rare-badge">💫 LEGENDARIO — 0.1% 💫</div>
-            <div class="rare-title">¡TODOS REVIVEN!</div>
-            <div class="rare-winner-name" id="reviveAllCount"></div>
-            <div class="rare-desc">🌈 ¡Un milagro! <strong>Todos los eliminados</strong> han vuelto a la ruleta.<br>¡Esto solo pasa una vez entre 1000 giros!</div>
-            <button class="rare-close-btn" onclick="closeRareModal('reviveAllModal')">🌟 ¡Milagro!</button>
-        </div>
-    </div>
+  <!-- Stage info bar (troll only) -->
+  <div class="stage-info troll-info" id="stageInfoBar" style="display:none">
+    <div class="stage-info-item">Etapa: <span class="val" id="siEtapa">1</span></div>
+    <div class="stage-info-item">Meta: <span class="val" id="siMeta">≤12</span></div>
+    <div class="stage-info-item">Vidas: <span class="val" id="siVidas">1</span></div>
+    <div class="stage-info-item">Arma: <span class="val" id="siArma">—</span></div>
+    <div class="stage-info-item">Escudo: <span class="val" id="siEscudo">25%</span></div>
+  </div>
 
-    <!-- Countdown overlay -->
-    <div class="countdown-overlay" id="countdownOverlay">
-        <div class="countdown-number" id="countdownNumber">3</div>
-        <div class="countdown-label" id="countdownLabel">¡GIRANDO DE NUEVO!</div>
+  <!-- Weapon display (troll only) -->
+  <div class="weapon-display" id="weaponDisplay" style="display:none">
+    <div class="weapon-icon" id="wIcon">🔫</div>
+    <div class="weapon-info">
+      <div class="weapon-name" id="wName">Sin arma</div>
+      <div class="weapon-stats" id="wStats">—</div>
     </div>
+  </div>
 
-    <div class="winner-modal" id="winnerModal">
-        <div class="winner-content" id="winnerContent">
-            <h2 id="winnerTitle">🎉¡Tenemos un ganador!🎉</h2>
-            <div class="winner-text" id="winnerText"></div>
-            <button class="close-btn" onclick="closeModal()">Cerrar</button>
-        </div>
+  <!-- WHEEL -->
+  <div class="wheel-container">
+    <div class="wheel-wrapper" id="wheelWrapper">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" width="400" height="400"></canvas>
+      <div class="center-circle"></div>
     </div>
+    <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
+  </div>
 
-    <div class="config-modal" id="configModal">
-        <div class="config-content">
-            <h2>⚙️ Configuración</h2>
-            <div class="config-section">
-                <h3>🎨 Color de Fondo</h3>
-                <div class="color-options">
-                    <div class="color-option active" onclick="changeBackground('gradient1')" id="bg-gradient1" style="background:linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)">Arcoíris</div>
-                    <div class="color-option" onclick="changeBackground('gradient2')" id="bg-gradient2" style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%)">Púrpura</div>
-                    <div class="color-option" onclick="changeBackground('gradient3')" id="bg-gradient3" style="background:linear-gradient(135deg,#f093fb 0%,#f5576c 100%)">Rosa</div>
-                    <div class="color-option" onclick="changeBackground('gradient4')" id="bg-gradient4" style="background:linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)">Azul</div>
-                    <div class="color-option" onclick="changeBackground('gradient5')" id="bg-gradient5" style="background:linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)">Verde</div>
-                    <div class="color-option" onclick="changeBackground('gradient6')" id="bg-gradient6" style="background:linear-gradient(135deg,#fa709a 0%,#fee140 100%)">Sunset</div>
-                    <div class="color-option" onclick="changeBackground('gradient7')" id="bg-gradient7" style="background:linear-gradient(135deg,#30cfd0 0%,#330867 100%)">Océano</div>
-                    <div class="color-option" onclick="changeBackground('gradient8')" id="bg-gradient8" style="background:linear-gradient(135deg,#ff9a56 0%,#ff6a88 100%)">Naranja</div>
-                </div>
-            </div>
-            <div class="config-section">
-                <h3>💾 Guardar Ruleta Actual</h3>
-                <div class="save-current">
-                    <input type="text" id="wheelNameInput" placeholder="Nombre de la ruleta...">
-                    <button onclick="saveCurrentWheel()">Guardar</button>
-                </div>
-            </div>
-            <div class="config-section">
-                <h3>📚 Ruletas Guardadas</h3>
-                <div class="saved-wheels" id="savedWheelsList"></div>
-            </div>
-            <button class="close-btn" onclick="closeConfig()">Cerrar</button>
-        </div>
+  <!-- Controls -->
+  <div class="controls">
+    <div class="input-group">
+      <input type="text" id="itemInput" placeholder="Nombre o número..." onkeypress="if(event.key==='Enter')addItem()">
+      <button class="add-btn" onclick="addItem()">+ Agregar</button>
     </div>
+    <div class="items-list" id="itemsList"></div>
+  </div>
+</div>
 
-    <script>
-const colors = ['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A'];
+<!-- ===== SIDE PANEL — PLAYER STATUS ===== -->
+<div class="side-panel" id="sidePanel" style="display:none">
+  <div class="panel-title">⚔️ Estado de Jugadores</div>
 
-let items = ['Ana','Carlos','María','Pedro','Lucía'];
+  <div class="panel-section">
+    <div class="panel-section-label">🟢 En juego</div>
+    <div id="aliveList"></div>
+  </div>
+
+  <div class="panel-section">
+    <div class="panel-section-label">💀 Eliminados</div>
+    <div id="deadList"></div>
+  </div>
+
+  <div class="panel-section">
+    <div class="panel-section-label">🚫 Suspendidos</div>
+    <div id="suspendedList"></div>
+  </div>
+</div>
+
+<!-- ===== SHOOT OVERLAY ===== -->
+<div class="shoot-overlay" id="shootOverlay"></div>
+
+<!-- ===== COUNTDOWN ===== -->
+<div class="countdown-overlay" id="countdownOverlay">
+  <div class="countdown-number" id="countdownNumber">3</div>
+  <div class="countdown-label" id="countdownLabel">¡GIRANDO DE NUEVO!</div>
+</div>
+
+<!-- ===== WINNER MODAL ===== -->
+<div class="modal-overlay" id="winnerModal">
+  <div class="modal-box">
+    <h2 id="winnerTitle">🎉 ¡Ganador!</h2>
+    <div class="modal-winner" id="winnerText"></div>
+    <p id="winnerSubtext" style="color:#888;margin-bottom:10px"></p>
+    <button class="modal-close" onclick="closeModal('winnerModal')">Cerrar</button>
+  </div>
+</div>
+
+<!-- ===== WEAPON REVEAL MODAL ===== -->
+<div class="modal-overlay" id="weaponRevealModal">
+  <div class="weapon-reveal">
+    <div class="weapon-big-icon" id="wrIcon">🔫</div>
+    <h2>Arma de esta ronda</h2>
+    <div class="weapon-reveal-name" id="wrName">Pistola</div>
+    <div class="weapon-reveal-stats" id="wrStats"></div>
+    <button class="weapon-reveal-btn" onclick="closeModal('weaponRevealModal');afterWeaponReveal()">¡A jugar!</button>
+  </div>
+</div>
+
+<!-- ===== EVENT MODAL (genérico) ===== -->
+<div class="modal-overlay" id="eventModal">
+  <div class="event-modal" id="eventModalBox">
+    <div class="event-icon" id="evIcon">⭐</div>
+    <div class="event-badge" id="evBadge">EVENTO</div>
+    <div class="event-title" id="evTitle">Título</div>
+    <div class="event-name" id="evName"></div>
+    <div class="event-desc" id="evDesc"></div>
+    <button class="event-btn" id="evBtn" onclick="closeEventModal()">OK</button>
+  </div>
+</div>
+
+<!-- ===== REVIVE PICKER MODAL ===== -->
+<div class="modal-overlay" id="revivePickModal">
+  <div class="revive-pick-modal">
+    <h2>💚 ¿A quién revivir?</h2>
+    <p style="color:#666;margin-bottom:14px;font-size:0.9em"><span id="reviverName">—</span> puede revivir a un compañero</p>
+    <div class="revive-options" id="reviveOptions"></div>
+    <button class="modal-close" onclick="closeModal('revivePickModal')">Cancelar</button>
+  </div>
+</div>
+
+<!-- ===== 1v1 DUEL MODAL ===== -->
+<div class="modal-overlay" id="duelModal">
+  <div class="duel-modal">
+    <div style="font-size:1.2em;letter-spacing:3px;color:#aaa;margin-bottom:6px">DUELO 1 VS 1</div>
+    <div style="font-size:1.6em;font-weight:900;color:#ffd700;margin-bottom:16px">Primero en 5 pts gana</div>
+    <div class="duel-scores">
+      <div class="duel-player-box">
+        <div class="duel-player-name" id="duelName1">—</div>
+        <div class="duel-player-score" id="duelScore1">0</div>
+      </div>
+      <div class="duel-vs">VS</div>
+      <div class="duel-player-box">
+        <div class="duel-player-name" id="duelName2">—</div>
+        <div class="duel-player-score" id="duelScore2">0</div>
+      </div>
+    </div>
+    <div class="duel-log" id="duelLog"></div>
+    <button class="duel-next-btn" id="duelNextBtn" onclick="duelRound()">Tirar dado 🎲</button>
+  </div>
+</div>
+
+<!-- ===== CONFIG MODAL ===== -->
+<div class="config-modal-overlay" id="configModal">
+  <div class="config-box">
+    <h2>⚙️ Configuración</h2>
+    <div class="config-section">
+      <h3>🎨 Fondo</h3>
+      <div class="color-options">
+        <div class="color-option active" onclick="changeBg('g1')" id="bg-g1" style="background:linear-gradient(135deg,#FF0080,#8A2BE2)">Arcoíris</div>
+        <div class="color-option" onclick="changeBg('g2')" id="bg-g2" style="background:linear-gradient(135deg,#667eea,#764ba2)">Púrpura</div>
+        <div class="color-option" onclick="changeBg('g3')" id="bg-g3" style="background:linear-gradient(135deg,#f093fb,#f5576c)">Rosa</div>
+        <div class="color-option" onclick="changeBg('g4')" id="bg-g4" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">Azul</div>
+        <div class="color-option" onclick="changeBg('g5')" id="bg-g5" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">Verde</div>
+        <div class="color-option" onclick="changeBg('g6')" id="bg-g6" style="background:linear-gradient(135deg,#fa709a,#fee140)">Sunset</div>
+        <div class="color-option" onclick="changeBg('g7')" id="bg-g7" style="background:linear-gradient(135deg,#30cfd0,#330867)">Océano</div>
+        <div class="color-option" onclick="changeBg('g8')" id="bg-g8" style="background:linear-gradient(135deg,#ff9a56,#ff6a88)">Naranja</div>
+      </div>
+    </div>
+    <div class="config-section">
+      <h3>💾 Guardar ruleta</h3>
+      <div class="save-current">
+        <input type="text" id="wheelNameInput" placeholder="Nombre...">
+        <button onclick="saveCurrentWheel()">Guardar</button>
+      </div>
+    </div>
+    <div class="config-section">
+      <h3>📚 Ruletas guardadas</h3>
+      <div class="saved-wheels" id="savedWheelsList"></div>
+    </div>
+    <button class="modal-close" onclick="closeModal('configModal')">Cerrar</button>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONSTANTS & DATA
+============================================================ */
+const COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A','#C5A028','#9B59B6','#E74C3C','#1ABC9C'];
+
+const WEAPONS = [
+  { id:'pistol',   name:'Pistola',       icon:'🔫', prob:0.33, failChance:0.33, kills:1,    desc:'33% de fallar. Si impacta, elimina a 1 persona.' },
+  { id:'shotgun',  name:'Escopeta',      icon:'🪓', prob:0.17, failChance:0.50, kills:3,    desc:'50% de fallar. Si impacta, elimina hasta 3 personas.' },
+  { id:'sniper',   name:'Francotirador', icon:'🎯', prob:0.20, failChance:0.00, kills:1,    desc:'No puede fallar. Elimina a 1 persona con precisión.' },
+  { id:'grenade',  name:'Granada',       icon:'💣', prob:0.05, failChance:0.75, kills:999,  desc:'75% de fallar. Si explota, elimina hasta llegar al límite.' },
+  { id:'knife',    name:'Cuchillo',      icon:'🔪', prob:0.25, failChance:0.50, kills:1,    half:true, desc:'50% de fallar. Quita media vida y puede eliminar.' }
+];
+
+const BG_MAP = {
+  g1:'linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)',
+  g2:'linear-gradient(135deg,#667eea,#764ba2)',
+  g3:'linear-gradient(135deg,#f093fb,#f5576c)',
+  g4:'linear-gradient(135deg,#4facfe,#00f2fe)',
+  g5:'linear-gradient(135deg,#43e97b,#38f9d7)',
+  g6:'linear-gradient(135deg,#fa709a,#fee140)',
+  g7:'linear-gradient(135deg,#30cfd0,#330867)',
+  g8:'linear-gradient(135deg,#ff9a56,#ff6a88)'
+};
+
+/* ============================================================
+   STATE
+============================================================ */
+let items = ['Ana','Carlos','María','Pedro','Lucía','Diego','Sofía','Tomás','Valentina','Nicolás','Laura','Sebastián'];
 let originalItems = [...items];
 let isSpinning = false;
 let currentRotation = 0;
 let lastWinner = null;
-let currentBackground = 'gradient1';
-let savedWheels = {};
 let currentMode = 'normal';
-let disappearedName = null;
+let currentStage = 1;
+let currentBg = 'g1';
+let savedWheels = {};
 
-// ===== FLECHAS LATERALES =====
-function showSideArrows() {
-    document.getElementById('arrowLeft').classList.add('show');
-    document.getElementById('arrowRight').classList.add('show');
+// Player database
+let playerDB = {};
+let eliminatedDB = [];
+let currentWeapon = null;
+let pendingWeaponCallback = null;
+
+// Duel state
+let duelState = null;
+
+/* ============================================================
+   INIT
+============================================================ */
+function initPlayerDB() {
+  playerDB = {};
+  eliminatedDB = [];
+  items.forEach(name => {
+    playerDB[name] = makePlayer(name);
+  });
 }
-function hideSideArrows() {
-    document.getElementById('arrowLeft').classList.remove('show');
-    document.getElementById('arrowRight').classList.remove('show');
+function makePlayer(name) {
+  const lives = currentStage === 2 ? 2 : 1;
+  return { name, lives, maxLives: lives, shield: false, bleeding: false, bleedRound: 0, suspended: false, suspendedUntil: '', status: 'alive' };
+}
+function ensurePlayer(name) {
+  if (!playerDB[name]) playerDB[name] = makePlayer(name);
 }
 
-const trollEvents = [
-    {
-        id: 'swap_adjacent',
-        label: '🔀 ¡Dos nombres intercambian posiciones al parar!',
-        apply: function() { if (items.length < 2) return; window._trollSwapAdjacent = true; }
-    },
-    {
-        id: 'shuffle_all',
-        label: '🌀 ¡TODOS los nombres cambian de lugar al parar!',
-        apply: function() { window._trollShuffleAll = true; }
-    },
-    {
-        id: 'reverse_spin',
-        label: '⬅️ ¡La ruleta gira al revés!',
-        apply: function() { window._trollReverseSpin = true; }
-    },
-    {
-        id: 'disappear',
-        label: '💨 ¡Un nombre desaparece misteriosamente... pero vuelve!',
-        apply: function() {
-            if (items.length <= 2) return;
-            let i = Math.floor(Math.random() * items.length);
-            disappearedName = items[i];
-            items.splice(i, 1);
-        }
-    },
-    {
-        id: 'name_glitch',
-        label: '👾 ¡Los nombres se intercambian de lugar hasta que la ruleta pare!',
-        apply: function() { window._trollShuffleUntilStop = true; }
-    },
-    {
-        id: 'glitch_until_stop',
-        label: '💀 ¡Los nombres están glitcheados hasta que la ruleta pare!',
-        apply: function() { window._trollGlitchUntilStop = true; }
-    },
-    {
-        id: 'shoot_winner',
-        label: '🔫 ¡Un nombre le dispara al ganador para salvarse! ¡Hay que girar de nuevo!',
-        apply: function() { if (items.length < 2) return; window._trollShootWinner = true; }
-    },
-    {
-        id: 'triple_eliminate',
-        label: '💀 ¡3 personas aleatorias son eliminadas de la ruleta!',
-        apply: function() { if (items.length < 4) return; window._trollTripleEliminate = true; }
-    }
-];
+function loadData() {
+  try {
+    const sw = localStorage.getItem('matashiroWheels');
+    if (sw) savedWheels = JSON.parse(sw);
+    const bg = localStorage.getItem('matashiroBg');
+    if (bg) { currentBg = bg; applyBg(bg); }
+    const saved = localStorage.getItem('matashiroItems');
+    if (saved) { items = JSON.parse(saved); originalItems = [...items]; }
+  } catch(e) {}
+}
+function saveData() {
+  localStorage.setItem('matashiroWheels', JSON.stringify(savedWheels));
+  localStorage.setItem('matashiroBg', currentBg);
+  localStorage.setItem('matashiroItems', JSON.stringify(items));
+}
+function applyBg(k) {
+  document.body.style.background = BG_MAP[k] || BG_MAP['g1'];
+  document.body.style.backgroundSize = '400% 400%';
+}
+function changeBg(k) {
+  currentBg = k; applyBg(k); saveData();
+  document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
+  const el = document.getElementById('bg-' + k);
+  if (el) el.classList.add('active');
+}
 
+/* ============================================================
+   MODE & STAGE
+============================================================ */
+function setMode(mode) {
+  currentMode = mode;
+  const title = document.getElementById('mainTitle');
+  const spinBtn = document.getElementById('spinBtn');
+  const btnN = document.getElementById('btnNormal');
+  const btnT = document.getElementById('btnTroll');
+  const stageBar = document.getElementById('stageInfoBar');
+  const stageSelector = document.getElementById('stageSelector');
+  const weaponDisplay = document.getElementById('weaponDisplay');
+  const sidePanel = document.getElementById('sidePanel');
+
+  if (mode === 'normal') {
+    title.textContent = '🎯 Ruleta de Matashiro'; title.className = '';
+    spinBtn.textContent = '¡GIRAR!'; spinBtn.className = 'spin-btn';
+    btnN.className = 'mode-btn active-normal'; btnT.className = 'mode-btn';
+    stageBar.style.display = 'none'; stageSelector.style.display = 'none';
+    weaponDisplay.style.display = 'none'; sidePanel.style.display = 'none';
+  } else {
+    title.textContent = '😈 Ruleta TROLL 😈'; title.className = 'troll-title';
+    spinBtn.textContent = '😈 ¡GIRAR!'; spinBtn.className = 'spin-btn troll-spin';
+    btnN.className = 'mode-btn'; btnT.className = 'mode-btn active-troll';
+    stageBar.style.display = 'flex'; stageSelector.style.display = 'flex';
+    weaponDisplay.style.display = 'flex'; sidePanel.style.display = 'block';
+    initPlayerDB();
+    setStage(currentStage, true);
+  }
+  currentRotation = 0; canvas.style.transition = 'none'; canvas.style.transform = 'rotate(0deg)';
+  drawWheel(); updateItemsList();
+}
+
+function setStage(stage, force) {
+  if (currentStage === stage && !force) return;
+  currentStage = stage;
+  [1,2,3].forEach(s => {
+    const b = document.getElementById('stageBtn' + s);
+    b.className = 'stage-btn' + (s === stage ? ' troll-active' : '');
+  });
+  document.getElementById('siEtapa').textContent = stage;
+  document.getElementById('siMeta').textContent = stage === 1 ? '≤12' : stage === 2 ? '≤8' : '1v1';
+  document.getElementById('siVidas').textContent = stage === 2 ? '2' : '1';
+  document.getElementById('siEscudo').textContent = stage === 1 ? '25%' : stage === 2 ? '12.5%' : '—';
+  if (stage !== 3) {
+    const lv = stage === 2 ? 2 : 1;
+    items.forEach(name => {
+      ensurePlayer(name);
+      if (playerDB[name].status === 'alive') {
+        playerDB[name].maxLives = lv;
+        if (playerDB[name].lives > lv) playerDB[name].lives = lv;
+        if (playerDB[name].lives < 1) playerDB[name].lives = 1;
+      }
+    });
+  }
+  const sb = document.getElementById('spinBtn');
+  sb.textContent = stage === 3 ? '😈 ¡DUELO 1v1!' : '😈 ¡GIRAR!';
+  updateSidePanel();
+}
+
+/* ============================================================
+   WHEEL DRAW
+============================================================ */
 const canvas = document.getElementById('wheelCanvas');
 const ctx = canvas.getContext('2d');
 
-function loadData() {
-    const saved = localStorage.getItem('matashiroWheels');
-    if (saved) savedWheels = JSON.parse(saved);
-    const savedBg = localStorage.getItem('matashiroBg');
-    if (savedBg) { currentBackground = savedBg; applyBackground(savedBg); }
-}
-function saveData() {
-    localStorage.setItem('matashiroWheels', JSON.stringify(savedWheels));
-    localStorage.setItem('matashiroBg', currentBackground);
-}
-const backgrounds = {
-    gradient1:'linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)',
-    gradient2:'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',
-    gradient3:'linear-gradient(135deg,#f093fb 0%,#f5576c 100%)',
-    gradient4:'linear-gradient(135deg,#4facfe 0%,#00f2fe 100%)',
-    gradient5:'linear-gradient(135deg,#43e97b 0%,#38f9d7 100%)',
-    gradient6:'linear-gradient(135deg,#fa709a 0%,#fee140 100%)',
-    gradient7:'linear-gradient(135deg,#30cfd0 0%,#330867 100%)',
-    gradient8:'linear-gradient(135deg,#ff9a56 0%,#ff6a88 100%)'
-};
-function applyBackground(bgKey) { document.body.style.background = backgrounds[bgKey]; document.body.style.backgroundSize = '400% 400%'; }
-function changeBackground(bgKey) {
-    currentBackground = bgKey; applyBackground(bgKey); saveData();
-    document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
-    document.getElementById('bg-' + bgKey).classList.add('active');
+function drawWheel() {
+  const cx = canvas.width / 2, cy = canvas.height / 2, r = 180;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const active = currentMode === 'troll' ? items.filter(n => getPlayerStatus(n) === 'alive') : items;
+  if (active.length === 0) {
+    ctx.font = '16px Arial'; ctx.fillStyle = '#999'; ctx.textAlign = 'center';
+    ctx.fillText('Sin jugadores activos', cx, cy); return;
+  }
+  const sliceAngle = (2 * Math.PI) / active.length;
+  active.forEach((item, i) => {
+    const s = i * sliceAngle, e = s + sliceAngle;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, s, e); ctx.closePath();
+    ctx.fillStyle = COLORS[i % COLORS.length]; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(s + sliceAngle / 2);
+    ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Arial';
+    ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 3;
+    const status = playerDB[item] && playerDB[item].bleeding ? '🩸 ' : '';
+    const shield = playerDB[item] && playerDB[item].shield ? '🛡 ' : '';
+    ctx.fillText(shield + status + item, r * 0.6, 5); ctx.restore();
+  });
 }
 
-function setMode(mode) {
-    currentMode = mode;
-    const title = document.getElementById('mainTitle');
-    const spinBtn = document.getElementById('spinBtn');
-    const normalBtn = document.getElementById('normalModeBtn');
-    const trollBtn = document.getElementById('trollModeBtn');
-    if (mode === 'normal') {
-        title.textContent = ' Ruleta de Matashiro'; title.className = ''; title.style.color = '#667eea';
-        spinBtn.textContent = '¡GIRAR!'; spinBtn.className = 'spin-btn';
-        normalBtn.classList.add('active'); trollBtn.classList.remove('active');
+function getActiveItems() {
+  if (currentMode !== 'troll') return items;
+  return items.filter(n => getPlayerStatus(n) === 'alive');
+}
+function getPlayerStatus(name) {
+  if (!playerDB[name]) return 'alive';
+  return playerDB[name].status;
+}
+
+/* ============================================================
+   ITEMS LIST
+============================================================ */
+function updateItemsList() {
+  const list = document.getElementById('itemsList'); list.innerHTML = '';
+  items.forEach((item, i) => {
+    const div = document.createElement('div'); div.className = 'item';
+    div.innerHTML = `<div style="display:flex;align-items:center"><div class="item-color" style="background:${COLORS[i%COLORS.length]}"></div><div class="item-text">${item}</div></div><button class="delete-btn" onclick="deleteItem(${i})">×</button>`;
+    list.appendChild(div);
+  });
+}
+function addItem() {
+  const inp = document.getElementById('itemInput'); const v = inp.value.trim(); if (!v) return;
+  items.push(v); originalItems.push(v);
+  ensurePlayer(v);
+  inp.value = ''; saveData(); drawWheel(); updateItemsList(); updateSidePanel();
+}
+function deleteItem(i) {
+  items.splice(i, 1); drawWheel(); updateItemsList(); updateSidePanel();
+}
+
+/* ============================================================
+   SIDE PANEL
+============================================================ */
+function updateSidePanel() {
+  if (currentMode !== 'troll') return;
+  const alive = document.getElementById('aliveList');
+  const dead = document.getElementById('deadList');
+  const susp = document.getElementById('suspendedList');
+  alive.innerHTML = ''; dead.innerHTML = ''; susp.innerHTML = '';
+
+  items.forEach((name, i) => {
+    ensurePlayer(name);
+    const p = playerDB[name];
+    const el = buildPlayerEntry(name, i, p);
+    if (p.status === 'suspended') susp.appendChild(el);
+    else if (p.status === 'dead') dead.appendChild(el);
+    else alive.appendChild(el);
+  });
+
+  eliminatedDB.forEach(name => {
+    if (!items.includes(name) && playerDB[name]) {
+      const i = originalItems.indexOf(name);
+      const el = buildPlayerEntry(name, i, playerDB[name]);
+      dead.appendChild(el);
+    }
+  });
+}
+function buildPlayerEntry(name, i, p) {
+  const div = document.createElement('div'); div.className = 'player-entry' + (p.status !== 'alive' ? ' eliminated' : '');
+  const lives = p.maxLives > 0 ? Array.from({length: p.maxLives}, (_, j) => `<span class="life-heart">${j < p.lives ? '❤️' : '🖤'}</span>`).join('') : '';
+  let statusTxt = ''; let statusCls = 'status-alive';
+  if (p.status === 'dead') { statusTxt = 'Eliminado'; statusCls = 'status-dead'; }
+  else if (p.status === 'suspended') { statusTxt = `Susp. hasta ${p.suspendedUntil}`; statusCls = 'status-suspended'; }
+  else if (p.bleeding) { statusTxt = 'Sangrando'; statusCls = 'status-bleeding'; }
+  else if (p.shield) { statusTxt = 'Escudo'; statusCls = 'status-shield'; }
+  else { statusTxt = 'Activo'; statusCls = 'status-alive'; }
+
+  div.innerHTML = `
+    <div class="player-color" style="background:${COLORS[i%COLORS.length]}"></div>
+    <div class="player-name">${name}</div>
+    <div class="player-lives">${lives}</div>
+    <div class="player-status ${statusCls}">${statusTxt}</div>
+    ${p.bleeding ? `<div class="bleeding-bar" style="width:${Math.min(100, p.bleedRound * 15)}%"></div>` : ''}
+  `;
+  return div;
+}
+
+/* ============================================================
+   ROTATION CALC
+============================================================ */
+function calcRotation(winnerIndex, numItems, baseRot, spins) {
+  const sliceDeg = 360 / numItems;
+  const centerAngle = (winnerIndex + 0.5) * sliceDeg;
+  let target = 270 - centerAngle;
+  target = ((target % 360) + 360) % 360;
+  let total = baseRot - (((baseRot % 360) + 360) % 360) + target;
+  if (total <= baseRot) total += 360;
+  total += spins * 360;
+  return total;
+}
+
+/* ============================================================
+   SPIN ENTRY
+============================================================ */
+function spin() {
+  if (isSpinning) return;
+  if (currentMode === 'troll' && currentStage === 3) { startDuel(); return; }
+  if (currentMode === 'troll') spinTroll();
+  else spinNormal();
+}
+
+/* ============================================================
+   NORMAL SPIN
+============================================================ */
+function spinNormal() {
+  if (items.length === 0) return;
+  isSpinning = true; document.getElementById('spinBtn').disabled = true;
+  const winner = pickWinner(items);
+  const winnerIdx = items.indexOf(winner);
+  const spins = 5 + Math.floor(Math.random() * 3);
+  const total = calcRotation(winnerIdx, items.length, currentRotation, spins);
+  canvas.style.transition = 'transform 5000ms cubic-bezier(.17,.67,.12,.99)';
+  canvas.style.transform = `rotate(${total}deg)`;
+  setTimeout(() => {
+    lastWinner = winner; currentRotation = total;
+    showWinner(winner, false);
+    isSpinning = false; document.getElementById('spinBtn').disabled = false;
+  }, 5100);
+}
+
+/* ============================================================
+   TROLL SPIN
+============================================================ */
+function spinTroll() {
+  const active = getActiveItems();
+  if (active.length === 0) { showBanner('¡No hay jugadores activos!', 3000); return; }
+
+  processBleedingRound();
+
+  isSpinning = true; document.getElementById('spinBtn').disabled = true;
+
+  pickWeaponForRound(() => {
+    const activeNow = getActiveItems();
+    if (activeNow.length === 0) { isSpinning = false; document.getElementById('spinBtn').disabled = false; return; }
+
+    const winner = pickWinner(activeNow);
+    const winnerIdx = activeNow.indexOf(winner);
+    const spins = 5 + Math.floor(Math.random() * 3);
+    const total = calcRotation(winnerIdx, activeNow.length, currentRotation, spins);
+
+    canvas.style.transition = 'transform 5000ms cubic-bezier(.17,.67,.12,.99)';
+    canvas.style.transform = `rotate(${total}deg)`;
+
+    setTimeout(() => {
+      lastWinner = winner; currentRotation = total;
+      processTrollResult(winner);
+    }, 5100);
+  });
+}
+
+function pickWinner(pool) {
+  let winner = pool[Math.floor(Math.random() * pool.length)];
+  if (pool.length > 1 && winner === lastWinner) {
+    do { winner = pool[Math.floor(Math.random() * pool.length)]; } while (winner === lastWinner);
+  }
+  return winner;
+}
+
+/* ============================================================
+   WEAPON SYSTEM
+============================================================ */
+function pickWeaponForRound(callback) {
+  const roll = Math.random();
+  let cumul = 0;
+  for (const w of WEAPONS) {
+    cumul += w.prob;
+    if (roll < cumul) { currentWeapon = w; break; }
+  }
+  if (!currentWeapon) currentWeapon = WEAPONS[0];
+
+  document.getElementById('wIcon').textContent = currentWeapon.icon;
+  document.getElementById('wName').textContent = currentWeapon.name;
+  document.getElementById('wStats').textContent = currentWeapon.desc;
+  document.getElementById('siArma').textContent = currentWeapon.name;
+
+  document.getElementById('wrIcon').textContent = currentWeapon.icon;
+  document.getElementById('wrName').textContent = currentWeapon.name;
+  document.getElementById('wrStats').textContent = currentWeapon.desc;
+  pendingWeaponCallback = callback;
+  document.getElementById('weaponRevealModal').classList.add('show');
+}
+
+function afterWeaponReveal() {
+  if (pendingWeaponCallback) { pendingWeaponCallback(); pendingWeaponCallback = null; }
+}
+
+/* ============================================================
+   TROLL RESULT PROCESSING
+============================================================ */
+function processTrollResult(winner) {
+  ensurePlayer(winner);
+  const p = playerDB[winner];
+
+  // 20% — Fallo del arma
+  if (Math.random() < 0.20) {
+    showBanner(`💨 ¡${currentWeapon.name} falló! ${winner} se salva esta vez.`, 3500);
+    showEventModal('💨', 'FALLO DE ARMA', `¡Falló!`, winner, `La ${currentWeapon.name} falló su disparo. ${winner} respira aliviado.`, '#667eea', '#fff', () => { finishSpin(); });
+    return;
+  }
+
+  // Stage-aware shield chance
+  const shieldChance = currentStage === 2 ? 0.125 : 0.25;
+  if (Math.random() < shieldChance) {
+    p.shield = true;
+    showBanner(`🛡️ ¡${winner} obtuvo un ESCUDO!`, 3500);
+    drawWheel(); updateSidePanel();
+    showEventModal('🛡️', 'ESCUDO', `¡Protegido!`, winner, `${winner} ha obtenido un escudo y está protegido por esta ronda.`, '#1565c0', '#e3f2fd', () => { finishSpin(); });
+    return;
+  }
+
+  // 15% — Revivir a un compañero
+  if (Math.random() < 0.15 && eliminatedDB.length > 0) {
+    showBanner(`💚 ¡${winner} puede revivir a alguien!`, 3000);
+    showRevivePicker(winner, () => { finishSpin(); });
+    return;
+  }
+
+  // 9% — Duelo 1v1 (modificado de 20% a 9%)
+  const activeNow = getActiveItems().filter(n => n !== winner);
+  if (Math.random() < 0.09 && activeNow.length > 0) {
+    const opponent = activeNow[Math.floor(Math.random() * activeNow.length)];
+    showBanner(`⚔️ ¡DUELO! ${winner} vs ${opponent}`, 3000);
+    startMiniDuel(winner, opponent, () => { finishSpin(); });
+    return;
+  }
+
+  // 0.5% — Revivir a todos
+  if (Math.random() < 0.005 && eliminatedDB.length > 0) {
+    reviveAll();
+    showEventModal('🌟', 'LEGENDARIO', '¡TODOS REVIVEN!', `${eliminatedDB.length} eliminados`, 'Un milagro ha ocurrido. ¡Todos los eliminados vuelven a la ruleta!', '#11998e', '#e8f5e9', () => { finishSpin(); });
+    return;
+  }
+
+  // 0.5% — Purga masiva
+  if (Math.random() < 0.005) {
+    const limit = currentStage === 1 ? 12 : 8;
+    if (getActiveItems().length > limit) {
+      purgeTo(limit);
+      showEventModal('💥', '0.5% — PURGA', '¡MASACRE!', `Quedan ${limit} jugadores`, `¡La ruleta ha eliminado jugadores hasta quedar en ${limit}!`, '#ff4757', '#fff', () => { finishSpin(); });
+      return;
+    }
+  }
+
+  // 2% — Suspensión
+  if (Math.random() < 0.02) {
+    const now = new Date();
+    const future = new Date(now.setMonth(now.getMonth() + 2));
+    const label = `${future.toLocaleString('es', {month:'long'})} ${future.getFullYear()}`;
+    p.status = 'suspended'; p.suspended = true; p.suspendedUntil = label;
+    removeFromWheel(winner);
+    drawWheel(); updateSidePanel();
+    showEventModal('🚫', 'SUSPENSIÓN 2%', '¡SUSPENDIDO!', winner, `${winner} no puede participar este mes ni el siguiente. Sancionado hasta ${label}.`, '#c62828', '#fce4ec', () => { finishSpin(); });
+    return;
+  }
+
+  // Normal weapon hit
+  applyWeaponHit(winner, () => { finishSpin(); });
+}
+
+/* ============================================================
+   WEAPON HIT
+============================================================ */
+function applyWeaponHit(winner, callback) {
+  ensurePlayer(winner);
+  const p = playerDB[winner];
+  const w = currentWeapon;
+
+  if (Math.random() < w.failChance) {
+    showBanner(`💨 ${w.name} falló su disparo en ${winner}!`, 3000);
+    if (Math.random() < 0.66 && !p.bleeding && p.status === 'alive') {
+      p.bleeding = true; p.bleedRound = 0;
+      drawWheel(); updateSidePanel();
+      showEventModal('🩸', 'SANGRADO', '¡Desangrándose!', winner, `${winner} no murió pero está sangrando. Cada ronda tiene 25-33% de morir sin ser disparado.`, '#e65100', '#fff3e0', callback);
     } else {
-        title.textContent = '😈 Ruleta TROLL 😈'; title.className = 'troll-title';
-        spinBtn.textContent = '😈 ¡GIRAR (si te atreves)!'; spinBtn.className = 'spin-btn troll-spin';
-        trollBtn.classList.add('active'); normalBtn.classList.remove('active');
+      showEventModal('💨', 'FALLO', `${w.name} falló`, winner, `El disparo de ${w.name} no impactó. ${winner} sigue en juego.`, '#667eea', '#fff', callback);
     }
-    canvas.style.transition = 'none'; currentRotation = 0; canvas.style.transform = 'rotate(0deg)';
-    drawWheel();
+    return;
+  }
+
+  if (p.shield) {
+    p.shield = false;
+    drawWheel(); updateSidePanel();
+    showEventModal('🛡️', 'ESCUDO ACTIVADO', '¡Bloqueado!', winner, `El escudo de ${winner} absorbió el impacto. El escudo se ha roto.`, '#1565c0', '#e3f2fd', callback);
+    return;
+  }
+
+  if (w.id === 'knife' && p.lives > 1) {
+    p.lives = Math.ceil(p.lives / 2);
+    if (p.lives <= 0) { eliminatePlayer(winner); }
+    drawWheel(); updateSidePanel();
+    showEventModal('🔪', 'CUCHILLO', '¡Media vida!', winner, `El cuchillo hirió a ${winner}. Le queda ${p.lives} vida(s).`, '#bf360c', '#fff', () => {
+      if (!p.bleeding && p.status === 'alive') checkBleeding(winner);
+      if (p.status === 'dead') checkDragAlong(winner, callback);
+      else callback();
+    });
+    return;
+  }
+
+  const activeNow = getActiveItems();
+  const kills = Math.min(w.kills, activeNow.length);
+  const killed = [winner];
+
+  if (kills > 1) {
+    const others = activeNow.filter(n => n !== winner);
+    for (let i = 0; i < Math.min(kills - 1, others.length); i++) {
+      killed.push(others[i]);
+    }
+  }
+
+  if (w.id === 'grenade') {
+    const limit = currentStage === 1 ? 12 : 8;
+    const active = getActiveItems();
+    while (active.length > limit) { killed.push(active.find(n => !killed.includes(n)) || active[0]); if (killed.length >= active.length) break; }
+  }
+
+  let remaining = [...killed];
+  function killNext() {
+    if (remaining.length === 0) {
+      checkBleeding(winner);
+      if (playerDB[winner] && playerDB[winner].status === 'dead') checkDragAlong(winner, callback);
+      else callback();
+      return;
+    }
+    const name = remaining.shift();
+    eliminatePlayer(name);
+    killNext();
+  }
+
+  playShootAnim(winner, () => {
+    killNext();
+    if (killed.length === 1) {
+      showEventModal(w.icon, 'ELIMINACIÓN', `¡Eliminado!`, winner, `${w.name} eliminó a ${winner}. Adiós.`, '#ff4757', '#fff', () => {
+        drawWheel(); updateSidePanel(); updateItemsList();
+      });
+    } else {
+      showEventModal(w.icon, 'MASACRE', `¡${killed.length} eliminados!`, killed.join(', '), `${w.name} eliminó a ${killed.length} jugadores.`, '#ff4757', '#fff', () => {
+        drawWheel(); updateSidePanel(); updateItemsList();
+      });
+    }
+  });
 }
 
-function showTrollBanner(text, duration) {
-    const banner = document.getElementById('trollEventBanner');
-    banner.textContent = text; banner.classList.add('show');
-    setTimeout(() => banner.classList.remove('show'), duration || 3000);
+function checkBleeding(name) {
+  const p = playerDB[name];
+  if (!p || p.status !== 'alive' || p.bleeding) return;
+  if (Math.random() < 0.66) {
+    p.bleeding = true; p.bleedRound = 0;
+    showBanner(`🩸 ${name} está sangrando...`, 2500);
+    drawWheel(); updateSidePanel();
+  }
 }
 
-function shuffleItemsContinuously(realItems, stopSignal) {
-    const interval = setInterval(() => {
-        if (stopSignal.stop) { clearInterval(interval); items = [...realItems]; drawWheel(); updateItemsList(); return; }
-        const shuffled = [...realItems];
-        for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]; }
-        items = shuffled; drawWheel();
-    }, 120);
+function checkDragAlong(name, callback) {
+  // 20% — se lleva a alguien (modificado de 33% a 20%)
+  if (Math.random() < 0.20) {
+    const active = getActiveItems();
+    if (active.length > 0) {
+      const dragged = active[Math.floor(Math.random() * active.length)];
+      eliminatePlayer(dragged);
+      drawWheel(); updateSidePanel(); updateItemsList();
+      showBanner(`💀 ¡${name} se llevó a ${dragged} con él/ella!`, 3500);
+      showEventModal('💀', 'ARRASTRE', '¡Se lleva a alguien!', dragged, `Al morir, ${name} arrastró a ${dragged} consigo. ¡Dos eliminados!`, '#ff4757', '#fff', callback);
+      return;
+    }
+  }
+  callback();
 }
 
+/* ============================================================
+   BLEEDING ROUND PROCESSING
+============================================================ */
+function processBleedingRound() {
+  items.forEach(name => {
+    const p = playerDB[name];
+    if (!p || !p.bleeding || p.status !== 'alive') return;
+    p.bleedRound++;
+    const deathChance = Math.min(0.33, 0.15 + p.bleedRound * 0.05);
+    if (Math.random() < deathChance) {
+      eliminatePlayer(name);
+      showBanner(`🩸 ¡${name} murió desangrándose!`, 3000);
+    }
+  });
+}
+
+/* ============================================================
+   PURGE
+============================================================ */
+function purgeTo(limit) {
+  const active = getActiveItems();
+  while (active.length > limit) {
+    const victim = active.splice(Math.floor(Math.random() * active.length), 1)[0];
+    eliminatePlayer(victim);
+  }
+  drawWheel(); updateSidePanel(); updateItemsList();
+}
+
+/* ============================================================
+   ELIMINATE / REVIVE
+============================================================ */
+function eliminatePlayer(name) {
+  ensurePlayer(name);
+  const p = playerDB[name];
+  if (p.status !== 'alive') return;
+  p.lives--;
+  if (p.lives <= 0) {
+    p.status = 'dead'; p.lives = 0; p.bleeding = false;
+    if (!eliminatedDB.includes(name)) eliminatedDB.push(name);
+    removeFromWheel(name);
+  }
+}
+function removeFromWheel(name) {
+  const idx = items.indexOf(name);
+  if (idx !== -1) items.splice(idx, 1);
+}
+function revivePlayer(name) {
+  if (!playerDB[name]) return;
+  const p = playerDB[name];
+  p.status = 'alive';
+  p.lives = currentStage === 2 ? 2 : 1;
+  p.maxLives = p.lives;
+  p.bleeding = false; p.bleedRound = 0; p.shield = false;
+  if (!items.includes(name)) items.push(name);
+  if (!originalItems.includes(name)) originalItems.push(name);
+  const idx = eliminatedDB.indexOf(name);
+  if (idx !== -1) eliminatedDB.splice(idx, 1);
+  drawWheel(); updateSidePanel(); updateItemsList();
+}
+function reviveAll() {
+  [...eliminatedDB].forEach(name => revivePlayer(name));
+}
+
+/* ============================================================
+   REVIVE PICKER
+============================================================ */
+function showRevivePicker(reviver, callback) {
+  const dead = eliminatedDB.filter(n => playerDB[n] && playerDB[n].status === 'dead');
+  if (dead.length === 0) { callback(); return; }
+  document.getElementById('reviverName').textContent = reviver;
+  const opts = document.getElementById('reviveOptions'); opts.innerHTML = '';
+  dead.forEach(name => {
+    const btn = document.createElement('button'); btn.className = 'revive-option-btn';
+    btn.textContent = '💚 ' + name;
+    btn.onclick = () => {
+      revivePlayer(name);
+      closeModal('revivePickModal');
+      showBanner(`💚 ¡${name} ha sido revivido por ${reviver}!`, 3000);
+      callback();
+    };
+    opts.appendChild(btn);
+  });
+  document.getElementById('revivePickModal').classList.add('show');
+}
+
+/* ============================================================
+   MINI DUEL (1v1 inside troll spin)
+============================================================ */
+function startMiniDuel(p1, p2, callback) {
+  duelState = { p1, p2, score1: 0, score2: 0, log: [], onFinish: callback };
+  document.getElementById('duelName1').textContent = p1;
+  document.getElementById('duelName2').textContent = p2;
+  document.getElementById('duelScore1').textContent = '0';
+  document.getElementById('duelScore2').textContent = '0';
+  document.getElementById('duelLog').innerHTML = '';
+  document.getElementById('duelNextBtn').textContent = 'Tirar dado 🎲';
+  document.getElementById('duelNextBtn').onclick = duelRound;
+  document.getElementById('duelModal').classList.add('show');
+}
+function duelRound() {
+  if (!duelState) return;
+  const r1 = Math.floor(Math.random() * 6) + 1;
+  const r2 = Math.floor(Math.random() * 6) + 1;
+  let msg = '';
+  if (r1 > r2) { duelState.score1++; msg = `🎲 ${duelState.p1} sacó ${r1} vs ${r2} — ¡Punto para ${duelState.p1}!`; }
+  else if (r2 > r1) { duelState.score2++; msg = `🎲 ${duelState.p2} sacó ${r2} vs ${r1} — ¡Punto para ${duelState.p2}!`; }
+  else { msg = `🎲 Empate ${r1}-${r2}. ¡Nadie anota!`; }
+  duelState.log.push(msg);
+  document.getElementById('duelScore1').textContent = duelState.score1;
+  document.getElementById('duelScore2').textContent = duelState.score2;
+  const logEl = document.getElementById('duelLog');
+  logEl.innerHTML = duelState.log.map(l => `<div>${l}</div>`).join('');
+  logEl.scrollTop = logEl.scrollHeight;
+
+  if (duelState.score1 >= 5 || duelState.score2 >= 5) {
+    const winner = duelState.score1 >= 5 ? duelState.p1 : duelState.p2;
+    const loser  = duelState.score1 >= 5 ? duelState.p2 : duelState.p1;
+    document.getElementById('duelNextBtn').textContent = `✅ Cerrar — ${winner} ganó`;
+    document.getElementById('duelNextBtn').onclick = () => {
+      eliminatePlayer(loser);
+      drawWheel(); updateSidePanel(); updateItemsList();
+      document.getElementById('duelModal').classList.remove('show');
+      showBanner(`⚔️ ¡${winner} ganó el duelo! ¡${loser} eliminado!`, 3500);
+      const cb = duelState.onFinish; duelState = null; if (cb) cb();
+    };
+  }
+}
+
+/* ============================================================
+   STAGE 3 — 1v1
+============================================================ */
+function startDuel() {
+  const active = getActiveItems();
+  if (active.length < 2) { showBanner('Necesitas al menos 2 jugadores para el duelo.', 3000); return; }
+  if (active.length === 2) {
+    startMiniDuel(active[0], active[1], () => {});
+  } else {
+    const idx1 = Math.floor(Math.random() * active.length);
+    let idx2; do { idx2 = Math.floor(Math.random() * active.length); } while (idx2 === idx1);
+    startMiniDuel(active[idx1], active[idx2], () => {});
+  }
+}
+
+/* ============================================================
+   FINISH SPIN
+============================================================ */
+function finishSpin() {
+  isSpinning = false;
+  document.getElementById('spinBtn').disabled = false;
+  checkStageTransition();
+  drawWheel(); updateSidePanel(); updateItemsList();
+}
+
+function checkStageTransition() {
+  const active = getActiveItems().length;
+  if (currentMode !== 'troll') return;
+  if (currentStage === 1 && active <= 12) {
+    showBanner('🏆 ¡Etapa 1 completada! Ya quedan ≤12 jugadores. Puedes pasar a Etapa 2.', 5000);
+  }
+  if (currentStage === 2 && active <= 8) {
+    showBanner('🏆 ¡Etapa 2 completada! Ya quedan ≤8 jugadores. Puedes pasar a Etapa 3.', 5000);
+  }
+}
+
+/* ============================================================
+   SHOOT ANIMATION
+============================================================ */
+function playShootAnim(name, callback) {
+  const overlay = document.getElementById('shootOverlay');
+  overlay.innerHTML = `<div class="bang-text">💥 ¡BANG!<br><span style="font-size:0.5em">${name} impactado</span></div>`;
+  overlay.classList.add('show');
+  setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 1200);
+}
+
+/* ============================================================
+   COUNTDOWN
+============================================================ */
 function showCountdown(label, callback) {
-    const overlay = document.getElementById('countdownOverlay');
-    const numEl = document.getElementById('countdownNumber');
-    const lblEl = document.getElementById('countdownLabel');
-    lblEl.textContent = label || '¡GIRANDO DE NUEVO!';
-    let count = 3; numEl.textContent = count; overlay.classList.add('show');
-    function tick() {
-        numEl.style.animation = 'none'; void numEl.offsetWidth;
-        numEl.style.animation = 'countPop 0.8s ease-out'; numEl.textContent = count;
-        if (count <= 0) { overlay.classList.remove('show'); callback(); return; }
-        count--; setTimeout(tick, 900);
-    }
-    tick();
+  const ov = document.getElementById('countdownOverlay');
+  const numEl = document.getElementById('countdownNumber');
+  document.getElementById('countdownLabel').textContent = label || '¡GIRANDO!';
+  let count = 3; numEl.textContent = count; ov.classList.add('show');
+  function tick() {
+    numEl.style.animation = 'none'; void numEl.offsetWidth; numEl.style.animation = 'countPop 0.8s ease-out';
+    numEl.textContent = count;
+    if (count <= 0) { ov.classList.remove('show'); callback(); return; }
+    count--; setTimeout(tick, 900);
+  }
+  tick();
 }
 
-function spawnParticles(containerId, emojis) {
-    const container = document.getElementById(containerId); container.innerHTML = '';
-    for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div'); p.className = 'rare-particle';
-        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        p.style.left = (Math.random() * 90) + '%';
-        p.style.animationDuration = (2 + Math.random() * 3) + 's';
-        p.style.animationDelay = (Math.random() * 2) + 's';
-        container.appendChild(p);
-    }
+/* ============================================================
+   BANNER
+============================================================ */
+function showBanner(text, duration) {
+  const b = document.getElementById('trollBanner'); b.textContent = text; b.classList.add('show');
+  clearTimeout(b._timeout); b._timeout = setTimeout(() => b.classList.remove('show'), duration || 3000);
 }
 
-function showRareEvent(type, winnerName) {
-    if (type === 'vip') {
-        document.getElementById('vipWinnerName').textContent = '🏆 ' + winnerName + ' 🏆';
-        spawnParticles('vipParticles', ['⭐','👑','✨','💛','🥇']);
-        document.getElementById('vipModal').classList.add('show');
-    } else if (type === 'revive') {
-        document.getElementById('reviveWinnerName').textContent = '💚 ' + winnerName + ' 💚';
-        spawnParticles('reviveParticles', ['💚','🌱','🔄','✨','⚡']);
-        document.getElementById('reviveModal').classList.add('show');
-        if (!items.includes(winnerName)) { items.push(winnerName); drawWheel(); updateItemsList(); }
-    } else if (type === 'sub') {
-        document.getElementById('subWinnerName').textContent = '💜 ' + winnerName + ' 💜';
-        spawnParticles('subParticles', ['💜','🎮','🎁','✨','⭐']);
-        document.getElementById('subModal').classList.add('show');
-    } else if (type === 'revive_all') {
-        const revived = [];
-        originalItems.forEach(name => { if (!items.includes(name)) { items.push(name); revived.push(name); } });
-        drawWheel(); updateItemsList();
-        const count = revived.length;
-        document.getElementById('reviveAllCount').textContent = count > 0
-            ? `💫 ${count} participante${count > 1 ? 's' : ''} volvió${count > 1 ? 'ron' : ''} a la ruleta 💫`
-            : '🌈 ¡Ya estaban todos en la ruleta!';
-        spawnParticles('reviveAllParticles', ['✨','🌟','💫','🌈','🎉','💥']);
-        document.getElementById('reviveAllModal').classList.add('show');
-    }
+/* ============================================================
+   WINNER MODAL
+============================================================ */
+function showWinner(name, isTroll) {
+  document.getElementById('winnerText').textContent = name;
+  document.getElementById('winnerTitle').textContent = isTroll ? '😈 ¡El troll eligió!' : '🎉 ¡Tenemos un ganador!';
+  document.getElementById('winnerSubtext').textContent = '';
+  document.getElementById('winnerModal').classList.add('show');
 }
 
-function closeRareModal(id) { document.getElementById(id).classList.remove('show'); }
-
-function checkRareEvents(winnerName) {
-    const roll = Math.random();
-    if (roll < 0.001) { showRareEvent('revive_all', winnerName); return 'revive_all'; }
-    if (roll < 0.006) { showRareEvent('vip', winnerName); return 'vip'; }
-    if (roll < 0.011) { showRareEvent('sub', winnerName); return 'sub'; }
-    if (roll < 0.016) { showRareEvent('revive', winnerName); return 'revive'; }
-    return null;
+/* ============================================================
+   EVENT MODAL (generic)
+============================================================ */
+function showEventModal(icon, badge, title, name, desc, titleColor, nameBg, callback) {
+  document.getElementById('evIcon').textContent = icon;
+  document.getElementById('evBadge').textContent = badge;
+  document.getElementById('evTitle').textContent = title;
+  document.getElementById('evTitle').style.color = titleColor;
+  document.getElementById('evName').textContent = name;
+  document.getElementById('evName').style.background = nameBg;
+  document.getElementById('evName').style.color = nameBg === '#fff' ? '#333' : '#fff';
+  document.getElementById('evDesc').textContent = desc;
+  document.getElementById('evBtn').style.background = titleColor;
+  document.getElementById('evBtn').style.color = '#fff';
+  document.getElementById('eventModal').classList.add('show');
+  window._eventModalCallback = callback;
 }
-
-function runTrollEvents(callback) {
-    if (Math.random() > 0.60) { callback(); return; }
-    window._trollReverseSpin = false; window._trollGlitch = false; window._trollShootWinner = false;
-    window._trollFlyAway = false; window._trollGlitchUntilStop = false; window._trollShuffleUntilStop = false;
-    window._trollSwapAdjacent = false; window._trollShuffleAll = false; window._trollTripleEliminate = false;
-
-    const specialIds = ['shoot_winner', 'triple_eliminate'];
-    const normalEvents = trollEvents.filter(e => !specialIds.includes(e.id));
-    const shootEvent = trollEvents.find(e => e.id === 'shoot_winner');
-    const tripleEvent = trollEvents.find(e => e.id === 'triple_eliminate');
-
-    let event;
-    const r = Math.random();
-    if (shootEvent && r < 0.35) { event = shootEvent; }
-    else if (tripleEvent && r < 0.45) { event = tripleEvent; }
-    else { event = normalEvents[Math.floor(Math.random() * normalEvents.length)]; }
-
-    event.apply();
-    showTrollBanner('🔥 EVENTO TROLL: ' + event.label, 4000);
-    drawWheel(); updateItemsList();
-    callback();
+function closeEventModal() {
+  document.getElementById('eventModal').classList.remove('show');
+  if (window._eventModalCallback) { const cb = window._eventModalCallback; window._eventModalCallback = null; cb(); }
 }
+document.getElementById('evBtn').onclick = closeEventModal;
 
+/* ============================================================
+   MODALS
+============================================================ */
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+/* ============================================================
+   CONFIG
+============================================================ */
+function openConfig() { updateSavedWheelsList(); document.getElementById('configModal').classList.add('show'); }
 function saveCurrentWheel() {
-    const nameInput = document.getElementById('wheelNameInput');
-    const name = nameInput.value.trim();
-    if (!name) { alert('Por favor ingresa un nombre para la ruleta'); return; }
-    if (items.length === 0) { alert('La ruleta está vacía. Agrega elementos primero.'); return; }
-    savedWheels[name] = [...items]; saveData(); nameInput.value = '';
-    updateSavedWheelsList(); alert('¡Ruleta guardada exitosamente!');
+  const nameIn = document.getElementById('wheelNameInput'); const n = nameIn.value.trim();
+  if (!n) { alert('Ingresa un nombre'); return; }
+  if (items.length === 0) { alert('La ruleta está vacía'); return; }
+  savedWheels[n] = [...items]; saveData(); nameIn.value = ''; updateSavedWheelsList(); alert('¡Guardada!');
 }
 function loadWheel(name) {
-    if (savedWheels[name]) { items = [...savedWheels[name]]; drawWheel(); updateItemsList(); closeConfig(); }
+  if (savedWheels[name]) { items = [...savedWheels[name]]; originalItems = [...items]; initPlayerDB(); drawWheel(); updateItemsList(); updateSidePanel(); closeModal('configModal'); }
 }
 function deleteSavedWheel(name) {
-    if (confirm(`¿Estás seguro de eliminar la ruleta "${name}"?`)) { delete savedWheels[name]; saveData(); updateSavedWheelsList(); }
+  if (confirm(`¿Eliminar "${name}"?`)) { delete savedWheels[name]; saveData(); updateSavedWheelsList(); }
 }
 function updateSavedWheelsList() {
-    const list = document.getElementById('savedWheelsList');
-    const wheelNames = Object.keys(savedWheels);
-    if (wheelNames.length === 0) { list.innerHTML = '<p style="text-align:center;color:#999;padding:20px">No hay ruletas guardadas</p>'; return; }
-    list.innerHTML = '';
-    wheelNames.forEach(name => {
-        const div = document.createElement('div'); div.className = 'saved-wheel-item';
-        div.innerHTML = `<div><div class="saved-wheel-name">${name}</div><div class="saved-wheel-count">${savedWheels[name].length} elementos</div></div><div class="saved-wheel-actions"><button class="load-btn" onclick="loadWheel('${name}')">Cargar</button><button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button></div>`;
-        list.appendChild(div);
-    });
-}
-function openConfig() { document.getElementById('configModal').classList.add('show'); updateSavedWheelsList(); }
-function closeConfig() { document.getElementById('configModal').classList.remove('show'); }
-
-function drawWheel(){
-    const centerX = canvas.width/2, centerY = canvas.height/2, radius = 180;
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(items.length === 0){ ctx.font='18px Arial'; ctx.fillStyle='#999'; ctx.textAlign='center'; ctx.fillText('Agrega elementos para comenzar',centerX,centerY); return; }
-    const sliceAngle = (2*Math.PI)/items.length;
-    items.forEach((item,index) => {
-        const startAngle = index * sliceAngle, endAngle = startAngle + sliceAngle;
-        ctx.beginPath(); ctx.moveTo(centerX,centerY); ctx.arc(centerX,centerY,radius,startAngle,endAngle); ctx.closePath();
-        ctx.fillStyle = colors[index % colors.length]; ctx.fill(); ctx.strokeStyle='#ffffff'; ctx.lineWidth=3; ctx.stroke();
-        ctx.save(); ctx.translate(centerX,centerY); ctx.rotate(startAngle + sliceAngle/2);
-        ctx.textAlign='center'; ctx.fillStyle='#fff'; ctx.font='bold 16px Arial';
-        ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=3;
-        ctx.fillText(item, radius * 0.65, 5); ctx.restore();
-    });
+  const list = document.getElementById('savedWheelsList');
+  const names = Object.keys(savedWheels);
+  if (names.length === 0) { list.innerHTML = '<p style="text-align:center;color:#999;padding:16px">Sin ruletas guardadas</p>'; return; }
+  list.innerHTML = '';
+  names.forEach(name => {
+    const div = document.createElement('div'); div.className = 'saved-wheel-item';
+    div.innerHTML = `<div><strong>${name}</strong><span style="color:#999;font-size:0.85em;margin-left:8px">${savedWheels[name].length} items</span></div><div style="display:flex;gap:6px"><button class="load-btn" onclick="loadWheel('${name}')">Cargar</button><button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button></div>`;
+    list.appendChild(div);
+  });
 }
 
-function updateItemsList(){
-    const list = document.getElementById('itemsList'); list.innerHTML = '';
-    items.forEach((item,index) => {
-        const div = document.createElement('div'); div.className = 'item';
-        div.innerHTML = `<div style="display:flex;align-items:center"><div class="item-color" style="background:${colors[index % colors.length]}"></div><div class="item-text">${item}</div></div><button class="delete-btn" onclick="deleteItem(${index})">Eliminar</button>`;
-        list.appendChild(div);
-    });
-}
-
-function addItem(){
-    const input = document.getElementById('itemInput'); const v = input.value.trim(); if(!v) return;
-    items.push(v); if (!originalItems.includes(v)) originalItems.push(v);
-    input.value = ''; drawWheel(); updateItemsList();
-}
-function deleteItem(i){ items.splice(i,1); drawWheel(); updateItemsList(); }
-
-function calcRotationForWinner(winnerIndex, numItems, baseRotation, fullSpins, reverse) {
-    const sliceDeg = 360 / numItems;
-    const centerAngle = (winnerIndex + 0.5) * sliceDeg;
-    let target = 270 - centerAngle;
-    target = ((target % 360) + 360) % 360;
-    if (!reverse) {
-        let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
-        if (total <= baseRotation) total += 360;
-        total += fullSpins * 360; return total;
-    } else {
-        let total = baseRotation - (((baseRotation % 360) + 360) % 360) + target;
-        if (total >= baseRotation) total -= 360;
-        total -= fullSpins * 360; return total;
-    }
-}
-
-function spin() {
-    if (isSpinning || items.length === 0) return;
-    if (disappearedName !== null) { items.push(disappearedName); disappearedName = null; drawWheel(); updateItemsList(); }
-    if (currentMode === 'troll') { spinTroll(); } else { spinNormal(); }
-}
-
-function spinNormal() {
-    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
-    const spinDuration = 5000;
-    let winnerIndex = Math.floor(Math.random() * items.length);
-    if (items.length > 1 && items[winnerIndex] === lastWinner) {
-        do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
-    }
-    const winner = items[winnerIndex];
-    const fullSpins = 5 + Math.floor(Math.random() * 3);
-    const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, false);
-    canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
-    canvas.style.transform = `rotate(${totalRotation}deg)`;
-    setTimeout(() => {
-        lastWinner = winner; currentRotation = totalRotation;
-        const rare = checkRareEvents(winner);
-        if (!rare) showWinner(winner, false);
-        isSpinning = false; spinBtn.disabled = false;
-    }, spinDuration + 100);
-}
-
-function spinTroll() {
-    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
-    window._trollReverseSpin = false; window._trollGlitch = false; window._trollShootWinner = false;
-    window._trollGlitchUntilStop = false; window._trollShuffleUntilStop = false;
-    window._trollSwapAdjacent = false; window._trollShuffleAll = false; window._trollTripleEliminate = false;
-
-    runTrollEvents(() => {
-        const isReverse         = !!window._trollReverseSpin;
-        const doShoot           = !!window._trollShootWinner;
-        const doGlitchUntilStop = !!window._trollGlitchUntilStop;
-        const doShuffleUntilStop= !!window._trollShuffleUntilStop;
-        const doSwapAdjacent    = !!window._trollSwapAdjacent;
-        const doShuffleAll      = !!window._trollShuffleAll;
-        const doTripleEliminate = !!window._trollTripleEliminate;
-        const spinDuration = 5000;
-
-        // Mostrar flechas SOLO si es triple eliminación
-        if (doTripleEliminate) showSideArrows();
-
-        let winnerIndex = Math.floor(Math.random() * items.length);
-        if (items.length > 1 && items[winnerIndex] === lastWinner) {
-            do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
-        }
-        const winner = items[winnerIndex];
-        const fullSpins = 5 + Math.floor(Math.random() * 3);
-        const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, isReverse);
-
-        canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
-        canvas.style.transform = `rotate(${totalRotation}deg)`;
-
-        let glitchInterval = null;
-        const realItems = [...items];
-        if (doGlitchUntilStop) {
-            const glitchChars = '!@#$%&*?¿¡~^░▒▓';
-            glitchInterval = setInterval(() => {
-                items = realItems.map(name => name.split('').map(c => Math.random() > 0.45 ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c).join(''));
-                drawWheel();
-            }, 80);
-        }
-        let shuffleSignal = { stop: false };
-        if (doShuffleUntilStop) { shuffleItemsContinuously(realItems, shuffleSignal); }
-
-        setTimeout(() => {
-            if (glitchInterval) { clearInterval(glitchInterval); glitchInterval = null; items = realItems; drawWheel(); updateItemsList(); }
-            if (doShuffleUntilStop) { shuffleSignal.stop = true; }
-            if (doSwapAdjacent && items.length >= 2) {
-                let i = Math.floor(Math.random() * (items.length - 1));
-                let temp = items[i]; items[i] = items[i+1]; items[i+1] = temp;
-                drawWheel(); updateItemsList();
-            }
-            if (doShuffleAll) {
-                for (let i = items.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [items[i], items[j]] = [items[j], items[i]]; }
-                drawWheel(); updateItemsList();
-            }
-
-            // ===== TRIPLE ELIMINACIÓN CON FLECHAS Y DELAY 4s =====
-            if (doTripleEliminate && items.length >= 4) {
-                const eliminated = [];
-                for (let e = 0; e < 3 && items.length > 1; e++) {
-                    const idx = Math.floor(Math.random() * items.length);
-                    eliminated.push(items[idx]); items.splice(idx, 1);
-                }
-                drawWheel(); updateItemsList();
-                showTrollBanner(`💀 ¡${eliminated.join(', ')} fueron eliminados!`, 5000);
-
-                // Esperar 4 segundos con flechas visibles, luego ocultarlas y mostrar ganador
-                setTimeout(() => {
-                    hideSideArrows();
-                    lastWinner = winner; currentRotation = totalRotation;
-                    if (doShoot && items.length >= 2) {
-                        handleShoot(winner, winnerIndex, spinBtn);
-                    } else {
-                        const rare = checkRareEvents(winner);
-                        if (!rare) showWinner(winner, true);
-                        isSpinning = false; spinBtn.disabled = false;
-                    }
-                }, 4000);
-                return; // salir del setTimeout normal
-            }
-
-            lastWinner = winner; currentRotation = totalRotation;
-
-            if (doShoot && items.length >= 2) {
-                handleShoot(winner, winnerIndex, spinBtn);
-            } else {
-                const rare = checkRareEvents(winner);
-                if (!rare) showWinner(winner, true);
-                isSpinning = false; spinBtn.disabled = false;
-            }
-        }, spinDuration + 100);
-    });
-}
-
-// Función auxiliar para el disparo (evita duplicar código)
-function handleShoot(winner, winnerIndex, spinBtn) {
-    let shooterIndex;
-    do { shooterIndex = Math.floor(Math.random() * items.length); } while (shooterIndex === winnerIndex);
-    const shooter = items[shooterIndex];
-    playShootAnimation(shooter, winner, () => {
-        items.splice(winnerIndex, 1); drawWheel(); updateItemsList();
-        currentRotation = 0; canvas.style.transition = 'none'; canvas.style.transform = 'rotate(0deg)';
-        isSpinning = false; spinBtn.disabled = false;
-        showTrollBanner(`🔫 ¡${shooter} eliminó a ${winner}! ¡La ruleta gira de nuevo sin ${winner}!`, 4500);
-        showCountdown('🔄 ¡GIRANDO DE NUEVO SIN EL ELIMINADO!', () => { doAutoRespin(); });
-    });
-}
-
-function doAutoRespin() {
-    if (items.length === 0) return;
-    isSpinning = true; const spinBtn = document.getElementById('spinBtn'); spinBtn.disabled = true;
-    const spinDuration = 5000;
-    let winnerIndex = Math.floor(Math.random() * items.length);
-    if (items.length > 1 && lastWinner && items[winnerIndex] === lastWinner) {
-        do { winnerIndex = Math.floor(Math.random() * items.length); } while (items[winnerIndex] === lastWinner);
-    }
-    const winner = items[winnerIndex];
-    const fullSpins = 5 + Math.floor(Math.random() * 3);
-    const totalRotation = calcRotationForWinner(winnerIndex, items.length, currentRotation, fullSpins, false);
-    canvas.style.transition = `transform ${spinDuration}ms cubic-bezier(.17,.67,.12,.99)`;
-    canvas.style.transform = `rotate(${totalRotation}deg)`;
-    setTimeout(() => {
-        lastWinner = winner; currentRotation = totalRotation;
-        const rare = checkRareEvents(winner);
-        if (!rare) showWinner(winner, true);
-        isSpinning = false; spinBtn.disabled = false;
-    }, spinDuration + 100);
-}
-
-function playShootAnimation(shooter, target, callback) {
-    const overlay = document.getElementById('shootOverlay');
-    overlay.innerHTML = `<div class="shoot-text">💥 ¡BANG! 💥<br><span style="font-size:0.5em">¡${shooter} eliminó a ${target}!</span></div><div class="bullet" style="top:45%;left:10%;">🔫💨</div>`;
-    overlay.classList.add('show');
-    setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 1800);
-}
-
-function showWinner(name, isTroll){
-    const winnerText = document.getElementById('winnerText');
-    winnerText.textContent = name; winnerText.className = 'winner-text';
-    const content = document.getElementById('winnerContent');
-    const title = document.getElementById('winnerTitle');
-    if (isTroll) { content.classList.add('troll-winner'); title.textContent = '😈 ¡El troll eligió! 😈'; }
-    else { content.classList.remove('troll-winner'); title.textContent = '🎉¡Tenemos un ganador!🎉'; }
-    document.getElementById('winnerModal').classList.add('show');
-}
-function closeModal(){ document.getElementById('winnerModal').classList.remove('show'); }
-
-loadData(); drawWheel(); updateItemsList();
-    </script>
+/* ============================================================
+   BOOT
+============================================================ */
+loadData();
+initPlayerDB();
+drawWheel();
+updateItemsList();
+</script>
 </body>
 </html>
