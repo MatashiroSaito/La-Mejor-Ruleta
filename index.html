@@ -633,9 +633,6 @@ function playGrenadeExplosionSound() {
   } catch(e) { console.warn('Audio error (grenade):', e); }
 }
 
-/* ============================================================
-   SONIDO: PISTOLA (disparo + impacto)
-============================================================ */
 function playPistolShotSound() {
   try {
     const ctx = getAudioCtx();
@@ -643,7 +640,6 @@ function playPistolShotSound() {
     master.gain.value = 0.6;
     master.connect(ctx.destination);
     const now = ctx.currentTime;
-    // Estampido seco
     const bang = ctx.createOscillator();
     const bg = ctx.createGain();
     bang.connect(bg); bg.connect(master);
@@ -654,10 +650,8 @@ function playPistolShotSound() {
     bg.gain.linearRampToValueAtTime(0.9, now + 0.003);
     bg.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
     bang.start(now); bang.stop(now + 0.10);
-    // Ruido del disparo
     playNoise(1.1, now, 0.07, ctx, master, 600, 'bandpass');
     playNoise(0.5, now, 0.12, ctx, master, 150, 'lowpass');
-    // Silbido de la bala
     const whistle = ctx.createOscillator();
     const wg = ctx.createGain();
     whistle.connect(wg); wg.connect(master);
@@ -667,15 +661,11 @@ function playPistolShotSound() {
     wg.gain.setValueAtTime(0.08, now + 0.01);
     wg.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
     whistle.start(now + 0.01); whistle.stop(now + 0.20);
-    // Eco corto
     playNoise(0.25, now + 0.12, 0.10, ctx, master, 300, 'lowpass');
     playTone(55, 'sine', 0.3, now, 0.18, ctx, master);
   } catch(e) { console.warn('Audio error (pistol):', e); }
 }
 
-/* ============================================================
-   SONIDO: CUCHILLO — corte (mata o hiere)
-============================================================ */
 function playKnifeSlashSound() {
   try {
     const ctx = getAudioCtx();
@@ -683,7 +673,6 @@ function playKnifeSlashSound() {
     master.gain.value = 0.55;
     master.connect(ctx.destination);
     const now = ctx.currentTime;
-    // Swoosh metálico
     const swBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.14), ctx.sampleRate);
     const swData = swBuf.getChannelData(0);
     for (let i = 0; i < swData.length; i++) swData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.025));
@@ -696,15 +685,11 @@ function playKnifeSlashSound() {
     swG.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
     swSrc.connect(swF); swF.connect(swG); swG.connect(master);
     swSrc.start(now); swSrc.stop(now + 0.15);
-    // Tono metálico agudo
     playTone(3200, 'sine', 0.15, now, 0.06, ctx, master);
     playTone(2100, 'sine', 0.10, now + 0.02, 0.08, ctx, master);
   } catch(e) { console.warn('Audio error (knife slash):', e); }
 }
 
-/* ============================================================
-   SONIDO: SANGRADO — goteo dramático
-============================================================ */
 function playBleedingSound() {
   try {
     const ctx = getAudioCtx();
@@ -712,7 +697,6 @@ function playBleedingSound() {
     master.gain.value = 0.45;
     master.connect(ctx.destination);
     const now = ctx.currentTime;
-    // Tres gotas con intervalo irregular
     [0, 0.18, 0.42].forEach((delay, i) => {
       const dropBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.04), ctx.sampleRate);
       const data = dropBuf.getChannelData(0);
@@ -726,10 +710,8 @@ function playBleedingSound() {
       g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.038);
       src.connect(f); f.connect(g); g.connect(master);
       src.start(now + delay); src.stop(now + delay + 0.05);
-      // Mini tono grave de impacto
       playTone(180 - i * 20, 'sine', 0.18 - i * 0.03, now + delay, 0.07, ctx, master);
     });
-    // Pulso grave de corazón lento
     playTone(60, 'sine', 0.12, now + 0.05, 0.25, ctx, master);
   } catch(e) { console.warn('Audio error (bleeding):', e); }
 }
@@ -786,7 +768,7 @@ function initPlayerDB() {
   items.forEach(name => { playerDB[name] = makePlayer(name); });
 }
 function makePlayer(name) {
-  const lives = currentStage === 2 ? 2 : 1;
+  const lives = currentStage === 3 ? 1 : 2;
   return { name, lives, maxLives: lives, shield: false, bleeding: false, bleedRound: 0, status: 'alive' };
 }
 function ensurePlayer(name) {
@@ -854,10 +836,10 @@ function setStage(stage, force) {
   [1,2,3].forEach(s => { const b = document.getElementById('stageBtn' + s); b.className = 'stage-btn' + (s === stage ? ' troll-active' : ''); });
   document.getElementById('siEtapa').textContent = stage;
   document.getElementById('siMeta').textContent = stage === 1 ? '≤12' : stage === 2 ? '≤8' : '1v1';
-  document.getElementById('siVidas').textContent = stage === 2 ? '2' : '1';
+  document.getElementById('siVidas').textContent = stage === 3 ? '1' : '2';
   document.getElementById('siEscudo').textContent = stage === 1 ? '20%' : stage === 2 ? '18.5%' : '—';
   if (stage !== 3) {
-    const lv = stage === 2 ? 2 : 1;
+    const lv = stage === 3 ? 1 : 2;
     items.forEach(name => {
       ensurePlayer(name);
       if (playerDB[name].status === 'alive') {
@@ -1076,7 +1058,10 @@ function processTrollResult(winner) {
   }
 
   const activeNow = getActiveItems().filter(n => n !== winner);
-  if (!isGrenade && Math.random() < (currentStage === 1 ? 0.02 : 0.08) && activeNow.length > 0) {
+  // ============================================================
+  // DUELO ESPONTÁNEO: 5% en Etapa 1, 8% en Etapa 2
+  // ============================================================
+  if (!isGrenade && Math.random() < (currentStage === 1 ? 0.05 : 0.08) && activeNow.length > 0) {
     const opponent = activeNow[Math.floor(Math.random() * activeNow.length)];
     showBanner(`⚔️ ¡DUELO! ${winner} vs ${opponent}`, 3000);
     startMiniDuel(winner, opponent, () => { finishSpin(); });
@@ -1269,7 +1254,7 @@ function removeFromWheel(name) { const idx = items.indexOf(name); if (idx !== -1
 function revivePlayer(name) {
   if (!playerDB[name]) return;
   const p = playerDB[name];
-  p.status = 'alive'; p.lives = currentStage === 2 ? 2 : 1; p.maxLives = p.lives;
+  p.status = 'alive'; p.lives = currentStage === 3 ? 1 : 2; p.maxLives = p.lives;
   p.bleeding = false; p.bleedRound = 0; p.shield = false;
   if (!items.includes(name)) items.push(name);
   if (!originalItems.includes(name)) originalItems.push(name);
