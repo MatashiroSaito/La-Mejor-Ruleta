@@ -118,6 +118,50 @@ input[type=text]:focus{outline:none;border-color:#667eea}
 .shoot-overlay.show{display:block}
 .bang-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3em;font-weight:900;color:#ff4757;text-shadow:0 0 20px rgba(255,71,87,0.8);animation:bangAnim 0.6s forwards}
 @keyframes bangAnim{0%{transform:translate(-50%,-50%) scale(0);opacity:0}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
+
+/* ============================================================
+   SHOTGUN ANIMATION STYLES
+============================================================ */
+.shotgun-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1550;pointer-events:none;overflow:hidden}
+.shotgun-overlay.show{display:block}
+/* Dark red vignette */
+.shotgun-vignette{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,transparent 30%,rgba(120,0,0,0.0) 60%);animation:shotgunVig 2.2s forwards}
+@keyframes shotgunVig{0%{background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0) 60%)}15%{background:radial-gradient(ellipse at center,transparent 15%,rgba(140,0,0,0.85) 55%)}60%{background:radial-gradient(ellipse at center,transparent 20%,rgba(80,0,0,0.6) 60%)}100%{background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0) 60%)}}
+/* Central muzzle flash */
+.shotgun-flash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ffe066 30%,#ff8800 60%,transparent 80%);animation:shotgunFlash 0.35s forwards}
+@keyframes shotgunFlash{0%{width:0;height:0;opacity:0}10%{width:380px;height:380px;opacity:1}40%{width:500px;height:500px;opacity:0.7}100%{width:600px;height:600px;opacity:0}}
+/* Smoke cloud */
+.shotgun-smoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;background:radial-gradient(circle,rgba(200,200,200,0.9) 0%,rgba(150,150,150,0.5) 50%,transparent 80%);animation:shotgunSmoke 1.8s ease-out forwards}
+@keyframes shotgunSmoke{0%{width:0;height:0;opacity:0}20%{width:200px;height:200px;opacity:0.85}60%{width:480px;height:380px;opacity:0.55}100%{width:700px;height:550px;opacity:0;transform:translate(-50%,-58%)}}
+/* Buckshot pellets */
+.shotgun-pellet{position:absolute;top:50%;left:50%;width:10px;height:10px;border-radius:50%;background:#ffd700;box-shadow:0 0 8px #ff8800;animation:pelletFly 0.55s ease-out forwards}
+@keyframes pelletFly{0%{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translate(var(--px),var(--py)) scale(0.3);opacity:0}}
+/* Casing eject */
+.shotgun-casing{position:absolute;top:50%;left:50%;width:8px;height:22px;background:linear-gradient(180deg,#e8c040,#b8960a);border-radius:3px 3px 1px 1px;animation:casingEject 0.9s ease-in forwards}
+@keyframes casingEject{0%{transform:translate(-50%,-50%) rotate(0deg) translate(0,0);opacity:1}60%{opacity:1}100%{transform:translate(-50%,-50%) rotate(var(--cr)) translate(var(--cx),var(--cy));opacity:0}}
+/* BIG BOOM text */
+.shotgun-boom{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:5.5em;font-weight:900;color:#ff2020;text-shadow:0 0 30px #ff8800,0 0 60px #ff4400,4px 4px 0 #000;letter-spacing:4px;white-space:nowrap;animation:shotgunBoom 1.2s ease-out forwards}
+@keyframes shotgunBoom{0%{transform:translate(-50%,-50%) scale(0.2) rotate(-10deg);opacity:0}15%{transform:translate(-50%,-50%) scale(1.3) rotate(3deg);opacity:1}35%{transform:translate(-50%,-50%) scale(1.0) rotate(0deg);opacity:1}80%{transform:translate(-50%,-50%) scale(1.1) rotate(0deg);opacity:0.8}100%{transform:translate(-50%,-50%) scale(1.2) rotate(0deg);opacity:0}}
+/* Victim name tag */
+.shotgun-victim{position:absolute;top:62%;left:50%;transform:translateX(-50%);background:rgba(20,0,0,0.88);color:#ff4444;font-family:'Courier New',monospace;font-size:1.5em;font-weight:900;letter-spacing:5px;text-transform:uppercase;padding:10px 28px;border-radius:10px;border:2px solid rgba(255,50,50,0.7);text-shadow:0 0 12px rgba(255,0,0,0.9);white-space:nowrap;animation:victimTag 1.8s forwards}
+@keyframes victimTag{0%{opacity:0;transform:translateX(-50%) translateY(20px)}20%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}
+/* Screen crack lines */
+.shotgun-crack{position:absolute;top:0;left:0;width:100%;height:100%;animation:crackFade 1.8s forwards}
+@keyframes crackFade{0%{opacity:0}10%{opacity:1}70%{opacity:0.8}100%{opacity:0}}
+.shotgun-crack svg{width:100%;height:100%}
+/* Pellet impact sparks */
+.pellet-spark{position:absolute;animation:sparkBurst 0.7s ease-out forwards}
+@keyframes sparkBurst{0%{transform:scale(0);opacity:1}100%{transform:scale(2.5);opacity:0}}
+/* Shell eject smoke trail */
+.shotgun-recoil{position:absolute;top:0;left:0;width:100%;height:100%;animation:recoilShake 0.5s ease-out forwards}
+@keyframes recoilShake{0%{transform:translate(0,0) rotate(0deg)}8%{transform:translate(-15px,-10px) rotate(-1.5deg)}16%{transform:translate(14px,8px) rotate(1deg)}25%{transform:translate(-10px,6px) rotate(-0.8deg)}35%{transform:translate(8px,-5px) rotate(0.5deg)}50%{transform:translate(-5px,3px) rotate(-0.3deg)}70%{transform:translate(3px,-2px) rotate(0.1deg)}100%{transform:translate(0,0) rotate(0deg)}}
+/* Multiple victims badge */
+.shotgun-multikill{position:absolute;top:28%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ff4500,#ff8c00);color:#fff;font-size:1.3em;font-weight:900;letter-spacing:3px;padding:8px 24px;border-radius:30px;border:3px solid #ffd700;text-shadow:1px 1px 3px rgba(0,0,0,0.5);white-space:nowrap;animation:multikillBadge 2s forwards}
+@keyframes multikillBadge{0%{opacity:0;transform:translateX(-50%) scale(0.5)}18%{opacity:1;transform:translateX(-50%) scale(1.15)}30%{transform:translateX(-50%) scale(1.0)}80%{opacity:1}100%{opacity:0}}
+/* ============================================================
+   END SHOTGUN STYLES
+============================================================ */
+
 .sniper-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1600;pointer-events:none;overflow:hidden;}
 .sniper-overlay.show{display:block}
 .sniper-vignette{position:absolute;top:0;left:0;width:100%;height:100%;animation:vignetteIn 0.7s ease-out forwards;}
@@ -260,6 +304,8 @@ input[type=text]:focus{outline:none;border-color:#667eea}
 </div>
 
 <div class="shoot-overlay" id="shootOverlay"></div>
+<!-- NEW: Shotgun overlay container -->
+<div class="shotgun-overlay" id="shotgunOverlay"></div>
 <div class="sniper-overlay" id="sniperOverlay"></div>
 <div class="explosion-overlay" id="explosionOverlay"></div>
 <div class="countdown-overlay" id="countdownOverlay">
@@ -477,6 +523,82 @@ function stopWheelSpinSound() {
     try { node.stop && node.stop(); node.disconnect && node.disconnect(); } catch(e) {}
   });
   wheelSpinSoundNodes = [];
+}
+
+/* ============================================================
+   SONIDO: ESCOPETA
+============================================================ */
+function playShotgunBlastSound() {
+  try {
+    const ctx = getAudioCtx();
+    const master = ctx.createGain();
+    master.gain.value = 0.80;
+    master.connect(ctx.destination);
+    const now = ctx.currentTime;
+
+    // Deep body boom — characteristic shotgun low-end punch
+    const boom = ctx.createOscillator();
+    const boomGain = ctx.createGain();
+    boom.connect(boomGain); boomGain.connect(master);
+    boom.type = 'sawtooth';
+    boom.frequency.setValueAtTime(95, now);
+    boom.frequency.exponentialRampToValueAtTime(28, now + 0.22);
+    boomGain.gain.setValueAtTime(0, now);
+    boomGain.gain.linearRampToValueAtTime(1.1, now + 0.003);
+    boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    boom.start(now); boom.stop(now + 0.24);
+
+    // Sub bass thud
+    playTone(42, 'sine', 0.9, now, 0.40, ctx, master);
+    playTone(55, 'sine', 0.6, now, 0.28, ctx, master);
+
+    // Wide noise burst — shotgun spread
+    playNoise(2.2, now, 0.18, ctx, master, 350, 'lowpass');
+    playNoise(1.4, now, 0.30, ctx, master, 140, 'lowpass');
+    playNoise(0.8, now + 0.002, 0.055, ctx, master, 7000, 'highpass');
+
+    // Crack / initial attack transient
+    const crack = ctx.createOscillator();
+    const crackGain = ctx.createGain();
+    crack.connect(crackGain); crackGain.connect(master);
+    crack.type = 'square';
+    crack.frequency.setValueAtTime(200, now);
+    crack.frequency.exponentialRampToValueAtTime(50, now + 0.06);
+    crackGain.gain.setValueAtTime(0, now);
+    crackGain.gain.linearRampToValueAtTime(0.75, now + 0.002);
+    crackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+    crack.start(now); crack.stop(now + 0.07);
+
+    // Pellet scatter sound — multiple small pops
+    for (let i = 0; i < 6; i++) {
+      const delay = now + 0.01 + i * 0.008 + Math.random() * 0.01;
+      playNoise(0.28 - i * 0.03, delay, 0.025, ctx, master, 2500 + Math.random() * 2000, 'bandpass');
+    }
+
+    // Mechanical chamber chunk
+    playNoise(0.55, now + 0.28, 0.035, ctx, master, 3200);
+    playTone(180, 'square', 0.22, now + 0.28, 0.03, ctx, master);
+
+    // Reverb tail / room bounce
+    [0.38, 0.58, 0.78].forEach((delay, i) => {
+      const v = 0.30 / (i + 1);
+      playNoise(v, now + delay, 0.12 + i * 0.04, ctx, master, 280 - i * 40, 'lowpass');
+      playTone(35 + i * 5, 'sine', v * 0.4, now + delay, 0.18 + i * 0.06, ctx, master);
+    });
+
+    // High shell eject metallic ring
+    const ring = ctx.createOscillator();
+    const ringGain = ctx.createGain();
+    ring.connect(ringGain); ringGain.connect(master);
+    ring.type = 'sine';
+    ring.frequency.setValueAtTime(2800, now + 0.09);
+    ring.frequency.exponentialRampToValueAtTime(900, now + 0.55);
+    ringGain.gain.setValueAtTime(0, now + 0.09);
+    ringGain.gain.linearRampToValueAtTime(0.10, now + 0.12);
+    ringGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
+    ring.start(now + 0.09); ring.stop(now + 0.57);
+
+  } catch(e) { console.warn('Audio error (shotgun):', e); }
 }
 
 /* ============================================================
@@ -1058,9 +1180,6 @@ function processTrollResult(winner) {
   }
 
   const activeNow = getActiveItems().filter(n => n !== winner);
-  // ============================================================
-  // DUELO ESPONTÁNEO: 5% en Etapa 1, 8% en Etapa 2
-  // ============================================================
   if (!isGrenade && Math.random() < (currentStage === 1 ? 0.05 : 0.08) && activeNow.length > 0) {
     const opponent = activeNow[Math.floor(Math.random() * activeNow.length)];
     showBanner(`⚔️ ¡DUELO! ${winner} vs ${opponent}`, 3000);
@@ -1170,9 +1289,35 @@ function applyWeaponHit(winner, callback) {
     return;
   }
 
+  // SHOTGUN — use cinematic animation
+  if (w.id === 'shotgun') {
+    const activeNow = getActiveItems();
+    const killed = [winner];
+    const others = activeNow.filter(n => n !== winner);
+    for (let i = 0; i < Math.min(w.kills - 1, others.length); i++) killed.push(others[i]);
+    playShotgunAnim(killed, () => {
+      killed.forEach(name => eliminatePlayer(name));
+      drawWheel(); updateSidePanel(); updateItemsList();
+      const anyDead = killed.some(n => playerDB[n] && playerDB[n].status === 'dead');
+      const allDead = killed.every(n => playerDB[n] && playerDB[n].status === 'dead');
+      const resultLines = killed.map(name => {
+        const pp = playerDB[name];
+        return pp && pp.status === 'dead' ? `💀 ${name} eliminado` : `❤️ ${name} perdió una vida (le queda ${pp ? pp.lives : '?'})`;
+      });
+      const badge = killed.length >= 3 ? 'TRIPLE KILL 🎯' : killed.length === 2 ? 'DOBLE KILL' : 'ELIMINACIÓN';
+      const title = killed.length >= 3 ? '¡TRIPLE KILL!' : killed.length === 2 ? '¡Doble baja!' : '¡Eliminado!';
+      showEventModal(w.icon, badge, title, killed.join(', '),
+        resultLines.join(' | '), anyDead ? '#ff4757' : '#e65100', '#fff', () => {
+          if (playerDB[winner] && playerDB[winner].status === 'dead') checkDragAlong(winner, callback);
+          else callback();
+        });
+    });
+    return;
+  }
+
   const activeNow = getActiveItems();
   const killed = [winner];
-  if (w.kills > 1 && w.id !== 'grenade') {
+  if (w.kills > 1) {
     const others = activeNow.filter(n => n !== winner);
     for (let i = 0; i < Math.min(w.kills - 1, others.length); i++) killed.push(others[i]);
   }
@@ -1345,7 +1490,7 @@ function checkStageTransition() {
 }
 
 /* ============================================================
-   SHOOT ANIMATION
+   SHOOT ANIMATION (pistola genérica)
 ============================================================ */
 function playShootAnim(name, callback) {
   if (currentWeapon && currentWeapon.id === 'grenade') { playExplosionAnim(name, callback); return; }
@@ -1354,6 +1499,125 @@ function playShootAnim(name, callback) {
   overlay.innerHTML = `<div class="bang-text">💥 ¡BANG!<br><span style="font-size:0.5em">${name} impactado</span></div>`;
   overlay.classList.add('show');
   setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 1200);
+}
+
+/* ============================================================
+   SHOTGUN ANIMATION  🪓💥
+============================================================ */
+function playShotgunAnim(victims, callback) {
+  playShotgunBlastSound();
+  const overlay = document.getElementById('shotgunOverlay');
+  overlay.innerHTML = '';
+
+  // Vignette
+  const vig = document.createElement('div');
+  vig.className = 'shotgun-vignette';
+  overlay.appendChild(vig);
+
+  // Screen crack SVG overlay
+  const crackDiv = document.createElement('div');
+  crackDiv.className = 'shotgun-crack';
+  crackDiv.innerHTML = `<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <line x1="400" y1="300" x2="220" y2="80"  stroke="rgba(255,50,50,0.55)" stroke-width="2.5"/>
+    <line x1="400" y1="300" x2="600" y2="50"  stroke="rgba(255,50,50,0.45)" stroke-width="1.8"/>
+    <line x1="400" y1="300" x2="100" y2="350" stroke="rgba(255,50,50,0.50)" stroke-width="2"/>
+    <line x1="400" y1="300" x2="700" y2="420" stroke="rgba(255,50,50,0.40)" stroke-width="1.5"/>
+    <line x1="400" y1="300" x2="300" y2="550" stroke="rgba(255,50,50,0.45)" stroke-width="2"/>
+    <line x1="400" y1="300" x2="650" y2="560" stroke="rgba(255,50,50,0.35)" stroke-width="1.5"/>
+    <line x1="220" y1="80"  x2="150" y2="20"  stroke="rgba(255,50,50,0.35)" stroke-width="1.5"/>
+    <line x1="220" y1="80"  x2="280" y2="10"  stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
+    <line x1="600" y1="50"  x2="680" y2="10"  stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
+    <line x1="100" y1="350" x2="30"  y2="280" stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
+    <line x1="700" y1="420" x2="790" y2="380" stroke="rgba(255,50,50,0.28)" stroke-width="1"/>
+  </svg>`;
+  overlay.appendChild(crackDiv);
+
+  // Muzzle flash
+  const flash = document.createElement('div');
+  flash.className = 'shotgun-flash';
+  overlay.appendChild(flash);
+
+  // Smoke
+  const smoke = document.createElement('div');
+  smoke.className = 'shotgun-smoke';
+  overlay.appendChild(smoke);
+
+  // Boom text
+  const boom = document.createElement('div');
+  boom.className = 'shotgun-boom';
+  boom.textContent = victims.length >= 3 ? '🪓 TRIPLE KILL!' : victims.length === 2 ? '🪓 DOBLE KILL!' : '🪓 ¡BOOM!';
+  overlay.appendChild(boom);
+
+  // Multi-kill badge (if 2+)
+  if (victims.length >= 2) {
+    const badge = document.createElement('div');
+    badge.className = 'shotgun-multikill';
+    badge.textContent = victims.length >= 3 ? `💀 ${victims.length} BAJAS` : '💀 DOBLE BAJA';
+    overlay.appendChild(badge);
+  }
+
+  // Victim name tags (staggered)
+  victims.forEach((name, i) => {
+    const tag = document.createElement('div');
+    tag.className = 'shotgun-victim';
+    tag.style.top = (55 + i * 10) + '%';
+    tag.style.animationDelay = (i * 0.12) + 's';
+    tag.textContent = '💀 ' + name;
+    overlay.appendChild(tag);
+  });
+
+  // Buckshot pellets (8 pellets in spread pattern)
+  const pelletAngles = [-40, -28, -16, -6, 6, 16, 28, 40];
+  pelletAngles.forEach((angleDeg, i) => {
+    const pellet = document.createElement('div');
+    pellet.className = 'shotgun-pellet';
+    const rad = (angleDeg - 90) * Math.PI / 180;
+    const dist = 200 + Math.random() * 120;
+    pellet.style.setProperty('--px', Math.cos(rad) * dist + 'px');
+    pellet.style.setProperty('--py', Math.sin(rad) * dist + 'px');
+    pellet.style.animationDelay = (i * 0.018) + 's';
+    pellet.style.animationDuration = (0.45 + Math.random() * 0.15) + 's';
+    overlay.appendChild(pellet);
+  });
+
+  // Shell casings (2 casings ejecting to the right)
+  [-18, 18].forEach((cr, i) => {
+    const casing = document.createElement('div');
+    casing.className = 'shotgun-casing';
+    casing.style.setProperty('--cr', cr + 'deg');
+    casing.style.setProperty('--cx', (100 + i * 30) + 'px');
+    casing.style.setProperty('--cy', (-80 - i * 20) + 'px');
+    casing.style.animationDelay = (0.05 + i * 0.08) + 's';
+    overlay.appendChild(casing);
+  });
+
+  // Pellet impact sparks at random screen positions
+  for (let i = 0; i < 5; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'pellet-spark';
+    spark.style.left = (20 + Math.random() * 60) + '%';
+    spark.style.top  = (20 + Math.random() * 60) + '%';
+    spark.style.width = (30 + Math.random() * 40) + 'px';
+    spark.style.height = spark.style.width;
+    spark.style.borderRadius = '50%';
+    spark.style.background = `radial-gradient(circle,#fff 0%,#ffd700 40%,#ff4500 70%,transparent 100%)`;
+    spark.style.animationDelay = (0.05 + i * 0.06) + 's';
+    overlay.appendChild(spark);
+  }
+
+  overlay.classList.add('show');
+
+  // Screen shake
+  document.body.classList.add('shaking');
+  setTimeout(() => document.body.classList.remove('shaking'), 800);
+
+  // Cleanup
+  const ANIM_DURATION = 2400;
+  setTimeout(() => {
+    overlay.classList.remove('show');
+    overlay.innerHTML = '';
+    callback();
+  }, ANIM_DURATION);
 }
 
 /* ============================================================
