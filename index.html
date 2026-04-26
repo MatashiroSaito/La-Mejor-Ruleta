@@ -8,6 +8,124 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%);background-size:400% 400%;animation:gradientShift 15s ease infinite;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:20px;gap:20px;}
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* ============================================================
+   PANTALLA DE INICIO
+============================================================ */
+#startScreen{
+  position:fixed;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(135deg,#0a0a1a 0%,#1a0a2e 40%,#0d1a2e 70%,#0a1a0a 100%);
+  display:flex;flex-direction:column;justify-content:center;align-items:center;
+  z-index:9999;
+  animation:gradientShiftDark 12s ease infinite;
+  background-size:400% 400%;
+}
+@keyframes gradientShiftDark{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+.start-stars{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  overflow:hidden;pointer-events:none;
+}
+.start-star{
+  position:absolute;border-radius:50%;background:#fff;
+  animation:starTwinkle var(--dur,2s) infinite alternate;
+  opacity:0;
+}
+@keyframes starTwinkle{0%{opacity:0;transform:scale(0.5)}100%{opacity:var(--op,0.9);transform:scale(1)}}
+
+.start-logo-ring{
+  width:130px;height:130px;border-radius:50%;
+  background:linear-gradient(135deg,#8A2BE2,#FF0080,#FF8C00,#FFD700);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:28px;
+  animation:rotateLogo 8s linear infinite;
+  position:relative;
+  box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3);
+}
+@keyframes rotateLogo{0%{box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3)}50%{box-shadow:0 0 80px rgba(255,0,128,0.6),0 0 140px rgba(255,140,0,0.4)}100%{box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3)}}
+
+.start-logo-inner{
+  width:108px;height:108px;border-radius:50%;
+  background:#0a0a1a;
+  display:flex;align-items:center;justify-content:center;
+  font-size:52px;
+  animation:spinInner 6s ease-in-out infinite alternate;
+}
+@keyframes spinInner{0%{transform:rotate(-8deg) scale(1)}100%{transform:rotate(8deg) scale(1.05)}}
+
+.start-welcome{
+  font-size:1em;letter-spacing:6px;text-transform:uppercase;
+  color:rgba(255,255,255,0.55);font-weight:400;
+  margin-bottom:10px;
+  animation:fadeInUp 0.8s 0.2s both;
+}
+.start-title{
+  font-size:3.8em;font-weight:900;text-align:center;
+  background:linear-gradient(90deg,#FF0080,#FF8C00,#FFD700,#00D4FF,#8A2BE2);
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:titleShine 3s linear infinite, fadeInUp 0.8s 0.4s both;
+  line-height:1.1;margin-bottom:12px;
+}
+@keyframes titleShine{0%{background-position:0% center}100%{background-position:200% center}}
+.start-subtitle{
+  font-size:1.05em;color:rgba(255,255,255,0.6);
+  text-align:center;margin-bottom:44px;letter-spacing:1px;
+  animation:fadeInUp 0.8s 0.6s both;
+}
+@keyframes fadeInUp{0%{opacity:0;transform:translateY(24px)}100%{opacity:1;transform:translateY(0)}}
+
+.start-btn{
+  padding:18px 56px;font-size:1.2em;font-weight:800;
+  border:none;border-radius:50px;cursor:pointer;
+  background:linear-gradient(135deg,#8A2BE2,#FF0080);
+  color:#fff;letter-spacing:2px;text-transform:uppercase;
+  box-shadow:0 8px 32px rgba(138,43,226,0.5),0 2px 8px rgba(255,0,128,0.3);
+  transition:all 0.3s ease;
+  animation:fadeInUp 0.8s 0.8s both, btnPulse 2.5s 1.6s ease-in-out infinite;
+  position:relative;overflow:hidden;
+}
+.start-btn::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.2),transparent);
+  animation:btnShimmer 2.5s 1.6s infinite;
+}
+@keyframes btnShimmer{0%{left:-100%}100%{left:100%}}
+@keyframes btnPulse{0%,100%{box-shadow:0 8px 32px rgba(138,43,226,0.5),0 2px 8px rgba(255,0,128,0.3)}50%{box-shadow:0 12px 48px rgba(138,43,226,0.7),0 4px 16px rgba(255,0,128,0.5)}}
+.start-btn:hover{transform:translateY(-3px) scale(1.04);box-shadow:0 16px 48px rgba(138,43,226,0.7)!important}
+.start-btn:active{transform:translateY(0) scale(0.98)}
+
+.start-footer{
+  position:absolute;bottom:24px;
+  color:rgba(255,255,255,0.25);font-size:0.8em;letter-spacing:2px;
+  animation:fadeInUp 0.8s 1.2s both;
+}
+
+.start-particles{
+  position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;
+}
+.particle{
+  position:absolute;border-radius:50%;
+  animation:particleFloat var(--dur,8s) var(--delay,0s) ease-in-out infinite;
+}
+@keyframes particleFloat{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:0.6}
+  100%{transform:translateY(-100px) scale(1);opacity:0}
+}
+
+/* Transición de salida */
+#startScreen.exiting{animation:screenExit 0.7s ease-in forwards}
+@keyframes screenExit{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
+
+/* ============================================================
+   RESTO DEL SITIO (oculto hasta que se entre)
+============================================================ */
+#appRoot{display:none;width:100%;flex-direction:row;justify-content:center;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+#appRoot.visible{display:flex}
+
 .main-container{background:rgba(255,255,255,0.97);border-radius:30px;padding:30px;box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:520px;width:100%;}
 h1{text-align:center;color:#667eea;margin-bottom:20px;font-size:1.8em}
 h1.troll-title{color:#ff4757;animation:trollPulse 1s infinite alternate}
@@ -118,50 +236,31 @@ input[type=text]:focus{outline:none;border-color:#667eea}
 .shoot-overlay.show{display:block}
 .bang-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:3em;font-weight:900;color:#ff4757;text-shadow:0 0 20px rgba(255,71,87,0.8);animation:bangAnim 0.6s forwards}
 @keyframes bangAnim{0%{transform:translate(-50%,-50%) scale(0);opacity:0}50%{transform:translate(-50%,-50%) scale(1.4);opacity:1}100%{transform:translate(-50%,-50%) scale(1);opacity:1}}
-
-/* ============================================================
-   SHOTGUN ANIMATION STYLES
-============================================================ */
 .shotgun-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1550;pointer-events:none;overflow:hidden}
 .shotgun-overlay.show{display:block}
-/* Dark red vignette */
 .shotgun-vignette{position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at center,transparent 30%,rgba(120,0,0,0.0) 60%);animation:shotgunVig 2.2s forwards}
 @keyframes shotgunVig{0%{background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0) 60%)}15%{background:radial-gradient(ellipse at center,transparent 15%,rgba(140,0,0,0.85) 55%)}60%{background:radial-gradient(ellipse at center,transparent 20%,rgba(80,0,0,0.6) 60%)}100%{background:radial-gradient(ellipse at center,transparent 30%,rgba(0,0,0,0) 60%)}}
-/* Central muzzle flash */
 .shotgun-flash{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;background:radial-gradient(circle,#fff 0%,#ffe066 30%,#ff8800 60%,transparent 80%);animation:shotgunFlash 0.35s forwards}
 @keyframes shotgunFlash{0%{width:0;height:0;opacity:0}10%{width:380px;height:380px;opacity:1}40%{width:500px;height:500px;opacity:0.7}100%{width:600px;height:600px;opacity:0}}
-/* Smoke cloud */
 .shotgun-smoke{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:0;height:0;border-radius:50%;background:radial-gradient(circle,rgba(200,200,200,0.9) 0%,rgba(150,150,150,0.5) 50%,transparent 80%);animation:shotgunSmoke 1.8s ease-out forwards}
 @keyframes shotgunSmoke{0%{width:0;height:0;opacity:0}20%{width:200px;height:200px;opacity:0.85}60%{width:480px;height:380px;opacity:0.55}100%{width:700px;height:550px;opacity:0;transform:translate(-50%,-58%)}}
-/* Buckshot pellets */
 .shotgun-pellet{position:absolute;top:50%;left:50%;width:10px;height:10px;border-radius:50%;background:#ffd700;box-shadow:0 0 8px #ff8800;animation:pelletFly 0.55s ease-out forwards}
 @keyframes pelletFly{0%{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translate(var(--px),var(--py)) scale(0.3);opacity:0}}
-/* Casing eject */
 .shotgun-casing{position:absolute;top:50%;left:50%;width:8px;height:22px;background:linear-gradient(180deg,#e8c040,#b8960a);border-radius:3px 3px 1px 1px;animation:casingEject 0.9s ease-in forwards}
 @keyframes casingEject{0%{transform:translate(-50%,-50%) rotate(0deg) translate(0,0);opacity:1}60%{opacity:1}100%{transform:translate(-50%,-50%) rotate(var(--cr)) translate(var(--cx),var(--cy));opacity:0}}
-/* BIG BOOM text */
 .shotgun-boom{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:5.5em;font-weight:900;color:#ff2020;text-shadow:0 0 30px #ff8800,0 0 60px #ff4400,4px 4px 0 #000;letter-spacing:4px;white-space:nowrap;animation:shotgunBoom 1.2s ease-out forwards}
 @keyframes shotgunBoom{0%{transform:translate(-50%,-50%) scale(0.2) rotate(-10deg);opacity:0}15%{transform:translate(-50%,-50%) scale(1.3) rotate(3deg);opacity:1}35%{transform:translate(-50%,-50%) scale(1.0) rotate(0deg);opacity:1}80%{transform:translate(-50%,-50%) scale(1.1) rotate(0deg);opacity:0.8}100%{transform:translate(-50%,-50%) scale(1.2) rotate(0deg);opacity:0}}
-/* Victim name tag */
 .shotgun-victim{position:absolute;top:62%;left:50%;transform:translateX(-50%);background:rgba(20,0,0,0.88);color:#ff4444;font-family:'Courier New',monospace;font-size:1.5em;font-weight:900;letter-spacing:5px;text-transform:uppercase;padding:10px 28px;border-radius:10px;border:2px solid rgba(255,50,50,0.7);text-shadow:0 0 12px rgba(255,0,0,0.9);white-space:nowrap;animation:victimTag 1.8s forwards}
 @keyframes victimTag{0%{opacity:0;transform:translateX(-50%) translateY(20px)}20%{opacity:1;transform:translateX(-50%) translateY(0)}75%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-10px)}}
-/* Screen crack lines */
 .shotgun-crack{position:absolute;top:0;left:0;width:100%;height:100%;animation:crackFade 1.8s forwards}
 @keyframes crackFade{0%{opacity:0}10%{opacity:1}70%{opacity:0.8}100%{opacity:0}}
 .shotgun-crack svg{width:100%;height:100%}
-/* Pellet impact sparks */
 .pellet-spark{position:absolute;animation:sparkBurst 0.7s ease-out forwards}
 @keyframes sparkBurst{0%{transform:scale(0);opacity:1}100%{transform:scale(2.5);opacity:0}}
-/* Shell eject smoke trail */
 .shotgun-recoil{position:absolute;top:0;left:0;width:100%;height:100%;animation:recoilShake 0.5s ease-out forwards}
 @keyframes recoilShake{0%{transform:translate(0,0) rotate(0deg)}8%{transform:translate(-15px,-10px) rotate(-1.5deg)}16%{transform:translate(14px,8px) rotate(1deg)}25%{transform:translate(-10px,6px) rotate(-0.8deg)}35%{transform:translate(8px,-5px) rotate(0.5deg)}50%{transform:translate(-5px,3px) rotate(-0.3deg)}70%{transform:translate(3px,-2px) rotate(0.1deg)}100%{transform:translate(0,0) rotate(0deg)}}
-/* Multiple victims badge */
 .shotgun-multikill{position:absolute;top:28%;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ff4500,#ff8c00);color:#fff;font-size:1.3em;font-weight:900;letter-spacing:3px;padding:8px 24px;border-radius:30px;border:3px solid #ffd700;text-shadow:1px 1px 3px rgba(0,0,0,0.5);white-space:nowrap;animation:multikillBadge 2s forwards}
 @keyframes multikillBadge{0%{opacity:0;transform:translateX(-50%) scale(0.5)}18%{opacity:1;transform:translateX(-50%) scale(1.15)}30%{transform:translateX(-50%) scale(1.0)}80%{opacity:1}100%{opacity:0}}
-/* ============================================================
-   END SHOTGUN STYLES
-============================================================ */
-
 .sniper-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1600;pointer-events:none;overflow:hidden;}
 .sniper-overlay.show{display:block}
 .sniper-vignette{position:absolute;top:0;left:0;width:100%;height:100%;animation:vignetteIn 0.7s ease-out forwards;}
@@ -226,85 +325,111 @@ input[type=text]:focus{outline:none;border-color:#667eea}
 .social-link:hover{background:#667eea;color:#fff;transform:translateY(-2px)}
 .config-btn{position:fixed;top:16px;left:16px;background:rgba(255,255,255,0.95);padding:10px 18px;border-radius:16px;box-shadow:0 4px 15px rgba(0,0,0,.3);border:none;color:#667eea;font-weight:600;cursor:pointer;font-size:0.9em;transition:all 0.3s;z-index:100}
 .config-btn:hover{background:#667eea;color:#fff;transform:translateY(-2px)}
-
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:#f1f1f1;border-radius:3px}
 ::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
 @media(max-width:860px){body{flex-direction:column;align-items:center;padding:12px}.side-panel{width:100%;max-width:520px;max-height:none}.main-container{max-width:520px}}
-@media(max-width:600px){.wheel-wrapper{width:260px;height:260px}h1{font-size:1.4em}}
+@media(max-width:600px){.wheel-wrapper{width:260px;height:260px}h1{font-size:1.4em}.start-title{font-size:2.6em}}
 </style>
 </head>
 <body>
-<button class="config-btn" onclick="openConfig()">⚙️ Config</button>
-<a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">📱 Redes</a>
-<img src="Captura_de_pantalla_2025-11-27_184757-removebg-preview.png" style="position:absolute;top:600px;left:1580px;width:300px">
-<img src="GxUMxn0WMAESagQ-removebg-preview.png" style="position:absolute;top:666px;left:3px;width:400px">
-<img src="GxoqO02WYAASpT3-removebg-preview.png" style="position:absolute;top:766px;left:1300px;width:300px">
-<img src="cxnnard_goad.png" style="position:absolute;top:803px;left:400px;width:200px">
-<img src="Ilustracion.png" style="position:absolute;top:884px;left:1200px;width:119px">
-<div class="troll-banner" id="trollBanner"></div>
 
-<div class="main-container">
-  <div class="top-bar">
-    <div class="mode-selector">
-      <button class="mode-btn active-normal" id="btnNormal" onclick="setMode('normal')">🎯 Normal</button>
-      <button class="mode-btn" id="btnTroll" onclick="setMode('troll')">😈 Troll</button>
-    </div>
-    <div class="stage-selector" id="stageSelector" style="display:none">
-      <button class="stage-btn troll-active" id="stageBtn1" onclick="setStage(1)">Etapa 1</button>
-      <button class="stage-btn" id="stageBtn2" onclick="setStage(2)">Etapa 2</button>
-      <button class="stage-btn" id="stageBtn3" onclick="setStage(3)">Etapa 3 (1v1)</button>
-    </div>
+<!-- ============================================================
+     PANTALLA DE INICIO
+============================================================ -->
+<div id="startScreen">
+  <!-- Partículas flotantes -->
+  <div class="start-particles" id="startParticles"></div>
+  <!-- Estrellas de fondo -->
+  <div class="start-stars" id="startStars"></div>
+
+  <!-- Logo animado -->
+  <div class="start-logo-ring">
+    <div class="start-logo-inner">🎯</div>
   </div>
-  <h1 id="mainTitle">🎯 Ruleta de Matashiro</h1>
-  <div class="stage-info troll-info" id="stageInfoBar" style="display:none">
-    <div class="stage-info-item">Etapa: <span class="val" id="siEtapa">1</span></div>
-    <div class="stage-info-item">Meta: <span class="val" id="siMeta">≤12</span></div>
-    <div class="stage-info-item">Vidas: <span class="val" id="siVidas">1</span></div>
-    <div class="stage-info-item">Arma: <span class="val" id="siArma">—</span></div>
-    <div class="stage-info-item">Escudo: <span class="val" id="siEscudo">20%</span></div>
-  </div>
-  <div class="weapon-display" id="weaponDisplay" style="display:none">
-    <div class="weapon-icon" id="wIcon">🔫</div>
-    <div class="weapon-info">
-      <div class="weapon-name" id="wName">Sin arma</div>
-      <div class="weapon-stats" id="wStats">—</div>
-    </div>
-  </div>
-  <div class="wheel-container">
-    <div class="wheel-wrapper" id="wheelWrapper">
-      <div class="pointer"></div>
-      <canvas id="wheelCanvas" width="400" height="400"></canvas>
-      <div class="center-circle"></div>
-    </div>
-    <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
-    <div class="queue-indicator" id="queueIndicator"></div>
-  </div>
-  <div class="controls">
-    <div class="input-group">
-      <input type="text" id="itemInput" placeholder="Nombre o número..." onkeypress="if(event.key==='Enter')addItem()">
-      <button class="add-btn" onclick="addItem()">+ Agregar</button>
-    </div>
-    <div class="items-list" id="itemsList"></div>
-  </div>
+
+  <!-- Textos -->
+  <div class="start-welcome">Bienvenido a</div>
+  <div class="start-title">Astra</div>
+  <div class="start-subtitle">Sistema de Ruleta · Modo Troll · Eliminación por armas</div>
+
+  <!-- Botón de inicio -->
+  <button class="start-btn" onclick="enterApp()">
+    ¡ENTRAR AL JUEGO! &nbsp;🎰
+  </button>
+
+  <div class="start-footer">Matashiro © 2025 · Astra v2.0</div>
 </div>
 
-<div class="side-panel" id="sidePanel" style="display:none">
-  <div class="panel-title">⚔️ Estado de Jugadores</div>
-  <div class="panel-section">
-    <div class="panel-section-label">🟢 En juego</div>
-    <div id="aliveList"></div>
+<!-- ============================================================
+     APLICACIÓN PRINCIPAL (oculta hasta hacer clic en Entrar)
+============================================================ -->
+<div id="appRoot">
+  <button class="config-btn" onclick="openConfig()">⚙️ Config</button>
+  <a href="https://www.instagram.com/mati_finv/" target="_blank" class="social-link">📱 Redes</a>
+  <div class="troll-banner" id="trollBanner"></div>
+
+  <div class="main-container">
+    <div class="top-bar">
+      <div class="mode-selector">
+        <button class="mode-btn active-normal" id="btnNormal" onclick="setMode('normal')">🎯 Normal</button>
+        <button class="mode-btn" id="btnTroll" onclick="setMode('troll')">😈 Troll</button>
+      </div>
+      <div class="stage-selector" id="stageSelector" style="display:none">
+        <button class="stage-btn troll-active" id="stageBtn1" onclick="setStage(1)">Etapa 1</button>
+        <button class="stage-btn" id="stageBtn2" onclick="setStage(2)">Etapa 2</button>
+        <button class="stage-btn" id="stageBtn3" onclick="setStage(3)">Etapa 3 (1v1)</button>
+      </div>
+    </div>
+    <h1 id="mainTitle">🎯 Ruleta de Matashiro</h1>
+    <div class="stage-info troll-info" id="stageInfoBar" style="display:none">
+      <div class="stage-info-item">Etapa: <span class="val" id="siEtapa">1</span></div>
+      <div class="stage-info-item">Meta: <span class="val" id="siMeta">≤12</span></div>
+      <div class="stage-info-item">Vidas: <span class="val" id="siVidas">1</span></div>
+      <div class="stage-info-item">Arma: <span class="val" id="siArma">—</span></div>
+      <div class="stage-info-item">Escudo: <span class="val" id="siEscudo">20%</span></div>
+    </div>
+    <div class="weapon-display" id="weaponDisplay" style="display:none">
+      <div class="weapon-icon" id="wIcon">🔫</div>
+      <div class="weapon-info">
+        <div class="weapon-name" id="wName">Sin arma</div>
+        <div class="weapon-stats" id="wStats">—</div>
+      </div>
+    </div>
+    <div class="wheel-container">
+      <div class="wheel-wrapper" id="wheelWrapper">
+        <div class="pointer"></div>
+        <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        <div class="center-circle"></div>
+      </div>
+      <button class="spin-btn" id="spinBtn" onclick="spin()">¡GIRAR!</button>
+      <div class="queue-indicator" id="queueIndicator"></div>
+    </div>
+    <div class="controls">
+      <div class="input-group">
+        <input type="text" id="itemInput" placeholder="Nombre o número..." onkeypress="if(event.key==='Enter')addItem()">
+        <button class="add-btn" onclick="addItem()">+ Agregar</button>
+      </div>
+      <div class="items-list" id="itemsList"></div>
+    </div>
   </div>
-  <div class="panel-section">
-    <div class="panel-section-label">💀 Eliminados</div>
-    <div id="deadList"></div>
+
+  <div class="side-panel" id="sidePanel" style="display:none">
+    <div class="panel-title">⚔️ Estado de Jugadores</div>
+    <div class="panel-section">
+      <div class="panel-section-label">🟢 En juego</div>
+      <div id="aliveList"></div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-section-label">💀 Eliminados</div>
+      <div id="deadList"></div>
+    </div>
   </div>
-</div>
+</div><!-- fin appRoot -->
 
 <div class="shoot-overlay" id="shootOverlay"></div>
-<!-- NEW: Shotgun overlay container -->
 <div class="shotgun-overlay" id="shotgunOverlay"></div>
 <div class="sniper-overlay" id="sniperOverlay"></div>
 <div class="explosion-overlay" id="explosionOverlay"></div>
@@ -399,1490 +524,524 @@ input[type=text]:focus{outline:none;border-color:#667eea}
 
 <script>
 /* ============================================================
+   PANTALLA DE INICIO — Efectos visuales y entrada
+============================================================ */
+(function initStartScreen() {
+  const starsEl = document.getElementById('startStars');
+  const particlesEl = document.getElementById('startParticles');
+  const starColors = ['#fff','#ffe0f0','#e0e8ff','#fffde0','#e0fff8'];
+  for (let i = 0; i < 80; i++) {
+    const s = document.createElement('div');
+    s.className = 'start-star';
+    const size = 1 + Math.random() * 3;
+    s.style.cssText = [
+      'width:' + size + 'px', 'height:' + size + 'px',
+      'left:' + Math.random() * 100 + '%', 'top:' + Math.random() * 100 + '%',
+      '--dur:' + (1.5 + Math.random() * 3) + 's',
+      '--op:' + (0.4 + Math.random() * 0.6),
+      'animation-delay:' + Math.random() * 4 + 's',
+      'background:' + starColors[Math.floor(Math.random() * starColors.length)]
+    ].join(';');
+    starsEl.appendChild(s);
+  }
+  const particleColors = ['#8A2BE2','#FF0080','#FF8C00','#FFD700','#00D4FF','#ff4757','#667eea'];
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 4 + Math.random() * 10;
+    p.style.cssText = [
+      'width:' + size + 'px', 'height:' + size + 'px',
+      'left:' + Math.random() * 100 + '%',
+      'background:' + particleColors[Math.floor(Math.random() * particleColors.length)],
+      'opacity:0.7',
+      '--dur:' + (6 + Math.random() * 8) + 's',
+      '--delay:' + Math.random() * 6 + 's'
+    ].join(';');
+    particlesEl.appendChild(p);
+  }
+})();
+
+function enterApp() {
+  const screen = document.getElementById('startScreen');
+  screen.classList.add('exiting');
+  setTimeout(() => {
+    screen.style.display = 'none';
+    const app = document.getElementById('appRoot');
+    app.classList.add('visible');
+    // Inicializar la app después de mostrarla
+    loadData();
+    initPlayerDB();
+    drawWheel();
+    updateItemsList();
+  }, 680);
+}
+
+/* ============================================================
    WEB AUDIO API — SISTEMA DE SONIDOS PROCEDURAL
 ============================================================ */
 let audioCtx = null;
-
 function getAudioCtx() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
   return audioCtx;
 }
-
 document.addEventListener('click', () => { if (!audioCtx) getAudioCtx(); }, { once: true });
 
 function playTone(freq, type, vol, startTime, duration, ctx, dest) {
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
+  const osc = ctx.createOscillator(), gain = ctx.createGain();
   osc.connect(gain); gain.connect(dest);
-  osc.type = type;
-  osc.frequency.setValueAtTime(freq, startTime);
+  osc.type = type; osc.frequency.setValueAtTime(freq, startTime);
   gain.gain.setValueAtTime(vol, startTime);
   gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
   osc.start(startTime); osc.stop(startTime + duration + 0.01);
 }
-
 function playNoise(vol, startTime, duration, ctx, dest, filterFreq, filterType) {
   const bufSize = Math.ceil(ctx.sampleRate * duration);
   const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
   const data = buf.getChannelData(0);
   for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
-  const src = ctx.createBufferSource();
-  src.buffer = buf;
-  const gain = ctx.createGain();
-  const filter = ctx.createBiquadFilter();
-  filter.type = filterType || 'bandpass';
-  filter.frequency.value = filterFreq || 800;
-  filter.Q.value = 0.7;
+  const src = ctx.createBufferSource(), gain = ctx.createGain(), filter = ctx.createBiquadFilter();
+  filter.type = filterType || 'bandpass'; filter.frequency.value = filterFreq || 800; filter.Q.value = 0.7;
   src.connect(filter); filter.connect(gain); gain.connect(dest);
   gain.gain.setValueAtTime(vol, startTime);
   gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
   src.start(startTime); src.stop(startTime + duration + 0.01);
 }
 
-/* ============================================================
-   SONIDO: GIRO DE RULETA
-============================================================ */
 let wheelSpinSoundNodes = [];
-
 function playWheelSpinSound(durationMs) {
   stopWheelSpinSound();
   try {
-    const ctx = getAudioCtx();
-    const totalSec = durationMs / 1000;
-    const now = ctx.currentTime;
-    const numItems = Math.max(2, getActiveItems().length);
-    const totalSpins = 6;
+    const ctx = getAudioCtx(), totalSec = durationMs / 1000, now = ctx.currentTime;
+    const numItems = Math.max(2, getActiveItems().length), totalSpins = 6;
     const totalTicks = totalSpins * numItems;
     const tickTimes = [];
-    for (let i = 0; i < totalTicks; i++) {
-      tickTimes.push(easeInOutSpin(i / totalTicks) * totalSec);
-    }
-
+    for (let i = 0; i < totalTicks; i++) tickTimes.push(easeInOutSpin(i / totalTicks) * totalSec);
     tickTimes.forEach((t, i) => {
-      const progress = i / totalTicks;
-      const isNearEnd = progress > 0.82;
-      const clickGain = ctx.createGain();
-      const masterFade = ctx.createGain();
-      clickGain.connect(masterFade);
-      masterFade.connect(ctx.destination);
+      const progress = i / totalTicks, isNearEnd = progress > 0.82;
+      const clickGain = ctx.createGain(), masterFade = ctx.createGain();
+      clickGain.connect(masterFade); masterFade.connect(ctx.destination);
       const clickBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.018), ctx.sampleRate);
       const data = clickBuf.getChannelData(0);
-      for (let j = 0; j < data.length; j++) {
-        data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (ctx.sampleRate * 0.004));
-      }
-      const clickSrc = ctx.createBufferSource();
-      clickSrc.buffer = clickBuf;
-      clickSrc.connect(clickGain);
+      for (let j = 0; j < data.length; j++) data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (ctx.sampleRate * 0.004));
+      const clickSrc = ctx.createBufferSource(); clickSrc.buffer = clickBuf; clickSrc.connect(clickGain);
       const vol = isNearEnd ? 0.12 + (progress - 0.82) * 0.5 : 0.04 + progress * 0.04;
       const startT = now + t;
-      clickGain.gain.setValueAtTime(vol, startT);
-      clickGain.gain.exponentialRampToValueAtTime(0.001, startT + 0.016);
-      clickSrc.start(startT);
-      clickSrc.stop(startT + 0.020);
+      clickGain.gain.setValueAtTime(vol, startT); clickGain.gain.exponentialRampToValueAtTime(0.001, startT + 0.016);
+      clickSrc.start(startT); clickSrc.stop(startT + 0.020);
       wheelSpinSoundNodes.push(clickSrc, clickGain, masterFade);
       if (isNearEnd) {
-        const toneFreq = 520 - (progress - 0.82) * 900;
-        const tg = ctx.createGain();
-        const to = ctx.createOscillator();
-        to.connect(tg); tg.connect(ctx.destination);
-        to.type = 'sine';
-        to.frequency.value = Math.max(140, toneFreq);
-        tg.gain.setValueAtTime(0.04, startT);
-        tg.gain.exponentialRampToValueAtTime(0.001, startT + 0.14);
-        to.start(startT); to.stop(startT + 0.16);
-        wheelSpinSoundNodes.push(to, tg);
+        const toneFreq = 520 - (progress - 0.82) * 900, tg = ctx.createGain(), to = ctx.createOscillator();
+        to.connect(tg); tg.connect(ctx.destination); to.type = 'sine'; to.frequency.value = Math.max(140, toneFreq);
+        tg.gain.setValueAtTime(0.04, startT); tg.gain.exponentialRampToValueAtTime(0.001, startT + 0.14);
+        to.start(startT); to.stop(startT + 0.16); wheelSpinSoundNodes.push(to, tg);
       }
     });
-
     const stopT = now + totalSec;
     [660, 880].forEach((freq, i) => {
-      const fg = ctx.createGain();
-      const fo = ctx.createOscillator();
-      fo.connect(fg); fg.connect(ctx.destination);
-      fo.type = 'sine';
-      fo.frequency.value = freq;
+      const fg = ctx.createGain(), fo = ctx.createOscillator();
+      fo.connect(fg); fg.connect(ctx.destination); fo.type = 'sine'; fo.frequency.value = freq;
       const d = stopT + i * 0.09;
-      fg.gain.setValueAtTime(0, d);
-      fg.gain.linearRampToValueAtTime(0.08, d + 0.015);
-      fg.gain.exponentialRampToValueAtTime(0.001, d + 0.30);
-      fo.start(d); fo.stop(d + 0.32);
-      wheelSpinSoundNodes.push(fo, fg);
+      fg.gain.setValueAtTime(0, d); fg.gain.linearRampToValueAtTime(0.08, d + 0.015); fg.gain.exponentialRampToValueAtTime(0.001, d + 0.30);
+      fo.start(d); fo.stop(d + 0.32); wheelSpinSoundNodes.push(fo, fg);
     });
-  } catch(e) { console.warn('Audio error (wheel spin):', e); }
+  } catch(e) { console.warn('Audio error:', e); }
 }
-
 function easeInOutSpin(t) {
   if (t < 0.12) return 0.5 * Math.pow(t / 0.12, 2) * 0.08;
   else if (t < 0.68) return 0.08 + (t - 0.12) / 0.56 * 0.62;
   else return 0.70 + (1 - Math.pow(1 - (t - 0.68) / 0.32, 2.8)) * 0.30;
 }
-
 function stopWheelSpinSound() {
-  wheelSpinSoundNodes.forEach(node => {
-    try { node.stop && node.stop(); node.disconnect && node.disconnect(); } catch(e) {}
-  });
+  wheelSpinSoundNodes.forEach(node => { try { node.stop && node.stop(); node.disconnect && node.disconnect(); } catch(e) {} });
   wheelSpinSoundNodes = [];
 }
 
-/* ============================================================
-   SONIDO: ESCOPETA
-============================================================ */
 function playShotgunBlastSound() {
   try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.80;
-    master.connect(ctx.destination);
+    const ctx = getAudioCtx(), master = ctx.createGain(); master.gain.value = 0.80; master.connect(ctx.destination);
     const now = ctx.currentTime;
-
-    // Deep body boom — characteristic shotgun low-end punch
-    const boom = ctx.createOscillator();
-    const boomGain = ctx.createGain();
-    boom.connect(boomGain); boomGain.connect(master);
-    boom.type = 'sawtooth';
-    boom.frequency.setValueAtTime(95, now);
-    boom.frequency.exponentialRampToValueAtTime(28, now + 0.22);
-    boomGain.gain.setValueAtTime(0, now);
-    boomGain.gain.linearRampToValueAtTime(1.1, now + 0.003);
-    boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+    const boom = ctx.createOscillator(), boomGain = ctx.createGain();
+    boom.connect(boomGain); boomGain.connect(master); boom.type = 'sawtooth';
+    boom.frequency.setValueAtTime(95, now); boom.frequency.exponentialRampToValueAtTime(28, now + 0.22);
+    boomGain.gain.setValueAtTime(0, now); boomGain.gain.linearRampToValueAtTime(1.1, now + 0.003); boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
     boom.start(now); boom.stop(now + 0.24);
-
-    // Sub bass thud
-    playTone(42, 'sine', 0.9, now, 0.40, ctx, master);
-    playTone(55, 'sine', 0.6, now, 0.28, ctx, master);
-
-    // Wide noise burst — shotgun spread
-    playNoise(2.2, now, 0.18, ctx, master, 350, 'lowpass');
-    playNoise(1.4, now, 0.30, ctx, master, 140, 'lowpass');
-    playNoise(0.8, now + 0.002, 0.055, ctx, master, 7000, 'highpass');
-
-    // Crack / initial attack transient
-    const crack = ctx.createOscillator();
-    const crackGain = ctx.createGain();
-    crack.connect(crackGain); crackGain.connect(master);
-    crack.type = 'square';
-    crack.frequency.setValueAtTime(200, now);
-    crack.frequency.exponentialRampToValueAtTime(50, now + 0.06);
-    crackGain.gain.setValueAtTime(0, now);
-    crackGain.gain.linearRampToValueAtTime(0.75, now + 0.002);
-    crackGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-    crack.start(now); crack.stop(now + 0.07);
-
-    // Pellet scatter sound — multiple small pops
-    for (let i = 0; i < 6; i++) {
-      const delay = now + 0.01 + i * 0.008 + Math.random() * 0.01;
-      playNoise(0.28 - i * 0.03, delay, 0.025, ctx, master, 2500 + Math.random() * 2000, 'bandpass');
-    }
-
-    // Mechanical chamber chunk
-    playNoise(0.55, now + 0.28, 0.035, ctx, master, 3200);
-    playTone(180, 'square', 0.22, now + 0.28, 0.03, ctx, master);
-
-    // Reverb tail / room bounce
-    [0.38, 0.58, 0.78].forEach((delay, i) => {
-      const v = 0.30 / (i + 1);
-      playNoise(v, now + delay, 0.12 + i * 0.04, ctx, master, 280 - i * 40, 'lowpass');
-      playTone(35 + i * 5, 'sine', v * 0.4, now + delay, 0.18 + i * 0.06, ctx, master);
-    });
-
-    // High shell eject metallic ring
-    const ring = ctx.createOscillator();
-    const ringGain = ctx.createGain();
-    ring.connect(ringGain); ringGain.connect(master);
-    ring.type = 'sine';
-    ring.frequency.setValueAtTime(2800, now + 0.09);
-    ring.frequency.exponentialRampToValueAtTime(900, now + 0.55);
-    ringGain.gain.setValueAtTime(0, now + 0.09);
-    ringGain.gain.linearRampToValueAtTime(0.10, now + 0.12);
-    ringGain.gain.exponentialRampToValueAtTime(0.001, now + 0.55);
-    ring.start(now + 0.09); ring.stop(now + 0.57);
-
+    playTone(42,'sine',0.9,now,0.40,ctx,master); playTone(55,'sine',0.6,now,0.28,ctx,master);
+    playNoise(2.2,now,0.18,ctx,master,350,'lowpass'); playNoise(1.4,now,0.30,ctx,master,140,'lowpass'); playNoise(0.8,now+0.002,0.055,ctx,master,7000,'highpass');
+    const crack=ctx.createOscillator(),crackGain=ctx.createGain(); crack.connect(crackGain); crackGain.connect(master); crack.type='square';
+    crack.frequency.setValueAtTime(200,now); crack.frequency.exponentialRampToValueAtTime(50,now+0.06);
+    crackGain.gain.setValueAtTime(0,now); crackGain.gain.linearRampToValueAtTime(0.75,now+0.002); crackGain.gain.exponentialRampToValueAtTime(0.001,now+0.06);
+    crack.start(now); crack.stop(now+0.07);
+    for(let i=0;i<6;i++){const delay=now+0.01+i*0.008+Math.random()*0.01; playNoise(0.28-i*0.03,delay,0.025,ctx,master,2500+Math.random()*2000,'bandpass');}
+    playNoise(0.55,now+0.28,0.035,ctx,master,3200); playTone(180,'square',0.22,now+0.28,0.03,ctx,master);
+    [0.38,0.58,0.78].forEach((delay,i)=>{const v=0.30/(i+1); playNoise(v,now+delay,0.12+i*0.04,ctx,master,280-i*40,'lowpass'); playTone(35+i*5,'sine',v*0.4,now+delay,0.18+i*0.06,ctx,master);});
+    const ring=ctx.createOscillator(),ringGain=ctx.createGain(); ring.connect(ringGain); ringGain.connect(master); ring.type='sine';
+    ring.frequency.setValueAtTime(2800,now+0.09); ring.frequency.exponentialRampToValueAtTime(900,now+0.55);
+    ringGain.gain.setValueAtTime(0,now+0.09); ringGain.gain.linearRampToValueAtTime(0.10,now+0.12); ringGain.gain.exponentialRampToValueAtTime(0.001,now+0.55);
+    ring.start(now+0.09); ring.stop(now+0.57);
   } catch(e) { console.warn('Audio error (shotgun):', e); }
 }
-
-/* ============================================================
-   SONIDO: FRANCOTIRADOR
-============================================================ */
-function playSniperReloadSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.65;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    playNoise(0.9, now + 0.00, 0.055, ctx, master, 3500);
-    playTone(160, 'square', 0.28, now + 0.00, 0.045, ctx, master);
-    const slide1 = ctx.createOscillator();
-    const sg1 = ctx.createGain();
-    slide1.connect(sg1); sg1.connect(master);
-    slide1.type = 'sawtooth';
-    slide1.frequency.setValueAtTime(900, now + 0.08);
-    slide1.frequency.exponentialRampToValueAtTime(180, now + 0.30);
-    sg1.gain.setValueAtTime(0, now + 0.08);
-    sg1.gain.linearRampToValueAtTime(0.30, now + 0.10);
-    sg1.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
-    slide1.start(now + 0.08); slide1.stop(now + 0.32);
-    playNoise(0.45, now + 0.08, 0.22, ctx, master, 1200);
-    playNoise(0.85, now + 0.36, 0.040, ctx, master, 5000);
-    playTone(1800, 'sine', 0.10, now + 0.36, 0.08, ctx, master);
-    playTone(2400, 'sine', 0.07, now + 0.40, 0.10, ctx, master);
-    playNoise(1.0, now + 0.52, 0.038, ctx, master, 4000);
-    playTone(110, 'square', 0.35, now + 0.52, 0.038, ctx, master);
-    const slide2 = ctx.createOscillator();
-    const sg2 = ctx.createGain();
-    slide2.connect(sg2); sg2.connect(master);
-    slide2.type = 'sawtooth';
-    slide2.frequency.setValueAtTime(180, now + 0.62);
-    slide2.frequency.exponentialRampToValueAtTime(950, now + 0.80);
-    sg2.gain.setValueAtTime(0, now + 0.62);
-    sg2.gain.linearRampToValueAtTime(0.30, now + 0.64);
-    sg2.gain.exponentialRampToValueAtTime(0.001, now + 0.80);
-    slide2.start(now + 0.62); slide2.stop(now + 0.82);
-    playNoise(0.38, now + 0.62, 0.18, ctx, master, 1200);
-    playNoise(0.95, now + 0.84, 0.048, ctx, master, 3800);
-    playTone(200, 'square', 0.32, now + 0.84, 0.040, ctx, master);
-    playTone(1100, 'sine', 0.06, now + 0.95, 0.10, ctx, master);
-  } catch(e) { console.warn('Audio error (reload):', e); }
-}
-
-function playSniperShotSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.75;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    playTone(48, 'sine', 0.85, now, 0.35, ctx, master);
-    playTone(62, 'sine', 0.60, now, 0.22, ctx, master);
-    const blastOsc = ctx.createOscillator();
-    const blastGain = ctx.createGain();
-    blastOsc.connect(blastGain); blastGain.connect(master);
-    blastOsc.type = 'sawtooth';
-    blastOsc.frequency.setValueAtTime(130, now);
-    blastOsc.frequency.exponentialRampToValueAtTime(35, now + 0.18);
-    blastGain.gain.setValueAtTime(0, now);
-    blastGain.gain.linearRampToValueAtTime(0.95, now + 0.004);
-    blastGain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-    blastOsc.start(now); blastOsc.stop(now + 0.20);
-    playNoise(1.4, now, 0.14, ctx, master, 500);
-    playNoise(0.7, now, 0.28, ctx, master, 180);
-    playNoise(0.55, now + 0.002, 0.045, ctx, master, 9000, 'highpass');
-    const whistle = ctx.createOscillator();
-    const wg = ctx.createGain();
-    whistle.connect(wg); wg.connect(master);
-    whistle.type = 'sine';
-    whistle.frequency.setValueAtTime(2600, now + 0.008);
-    whistle.frequency.exponentialRampToValueAtTime(500, now + 0.28);
-    wg.gain.setValueAtTime(0.14, now + 0.008);
-    wg.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
-    whistle.start(now + 0.008); whistle.stop(now + 0.30);
-    [0.22, 0.40, 0.58, 0.76].forEach((delay, i) => {
-      const v = 0.22 / (i + 1);
-      playNoise(v * 0.9, now + delay, 0.09 + i * 0.02, ctx, master, 400 - i * 50);
-      playTone(70 - i * 8, 'sine', v * 0.45, now + delay, 0.14 + i * 0.04, ctx, master);
-    });
-  } catch(e) { console.warn('Audio error (shot):', e); }
-}
-
-function playSniperImpactSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.55;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    playTone(75, 'sine', 0.75, now, 0.14, ctx, master);
-    playNoise(0.85, now, 0.07, ctx, master, 1800);
-    const osc = ctx.createOscillator();
-    const g = ctx.createGain();
-    osc.connect(g); g.connect(master);
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(3200, now);
-    osc.frequency.exponentialRampToValueAtTime(380, now + 0.09);
-    g.gain.setValueAtTime(0.18, now);
-    g.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-    osc.start(now); osc.stop(now + 0.11);
-  } catch(e) { console.warn('Audio error (impact):', e); }
-}
-
-function playGrenadeExplosionSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.72;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    playTone(38, 'sine', 1.0, now, 1.4, ctx, master);
-    playTone(52, 'sine', 0.75, now, 1.0, ctx, master);
-    playTone(28, 'sine', 0.55, now + 0.03, 1.8, ctx, master);
-    playNoise(2.0, now, 0.40, ctx, master, 280, 'lowpass');
-    playNoise(1.3, now, 0.65, ctx, master, 140, 'lowpass');
-    playNoise(0.65, now, 1.0, ctx, master, 70, 'lowpass');
-    const shock = ctx.createOscillator();
-    const shg = ctx.createGain();
-    shock.connect(shg); shg.connect(master);
-    shock.type = 'sawtooth';
-    shock.frequency.setValueAtTime(210, now);
-    shock.frequency.exponentialRampToValueAtTime(18, now + 0.32);
-    shg.gain.setValueAtTime(0, now);
-    shg.gain.linearRampToValueAtTime(1.3, now + 0.004);
-    shg.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
-    shock.start(now); shock.stop(now + 0.34);
-    playNoise(0.85, now + 0.04, 0.18, ctx, master, 2200, 'bandpass');
-    playNoise(0.55, now + 0.10, 0.22, ctx, master, 4500, 'bandpass');
-    for (let i = 0; i < 10; i++) {
-      const t = now + 0.28 + i * 0.09 + Math.random() * 0.06;
-      const v = 0.32 - i * 0.025;
-      if (v <= 0) break;
-      playNoise(v, t, 0.055 + Math.random() * 0.045, ctx, master, 900 + Math.random() * 2500);
-    }
-    [0.45, 0.85, 1.25].forEach((delay, i) => {
-      const v = 0.38 / (i + 1);
-      playNoise(v, now + delay, 0.22 + i * 0.06, ctx, master, 200 + i * 80, 'lowpass');
-      playTone(33 + i * 6, 'sine', v * 0.55, now + delay, 0.35 + i * 0.12, ctx, master);
-    });
-    const ring = ctx.createOscillator();
-    const rg = ctx.createGain();
-    ring.connect(rg); rg.connect(master);
-    ring.type = 'sine';
-    ring.frequency.setValueAtTime(3800, now + 0.08);
-    ring.frequency.exponentialRampToValueAtTime(1100, now + 2.2);
-    rg.gain.setValueAtTime(0, now + 0.08);
-    rg.gain.linearRampToValueAtTime(0.13, now + 0.18);
-    rg.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
-    ring.start(now + 0.08); ring.stop(now + 2.3);
-  } catch(e) { console.warn('Audio error (grenade):', e); }
-}
-
-function playPistolShotSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.6;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    const bang = ctx.createOscillator();
-    const bg = ctx.createGain();
-    bang.connect(bg); bg.connect(master);
-    bang.type = 'sawtooth';
-    bang.frequency.setValueAtTime(160, now);
-    bang.frequency.exponentialRampToValueAtTime(40, now + 0.09);
-    bg.gain.setValueAtTime(0, now);
-    bg.gain.linearRampToValueAtTime(0.9, now + 0.003);
-    bg.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
-    bang.start(now); bang.stop(now + 0.10);
-    playNoise(1.1, now, 0.07, ctx, master, 600, 'bandpass');
-    playNoise(0.5, now, 0.12, ctx, master, 150, 'lowpass');
-    const whistle = ctx.createOscillator();
-    const wg = ctx.createGain();
-    whistle.connect(wg); wg.connect(master);
-    whistle.type = 'sine';
-    whistle.frequency.setValueAtTime(1800, now + 0.01);
-    whistle.frequency.exponentialRampToValueAtTime(400, now + 0.18);
-    wg.gain.setValueAtTime(0.08, now + 0.01);
-    wg.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
-    whistle.start(now + 0.01); whistle.stop(now + 0.20);
-    playNoise(0.25, now + 0.12, 0.10, ctx, master, 300, 'lowpass');
-    playTone(55, 'sine', 0.3, now, 0.18, ctx, master);
-  } catch(e) { console.warn('Audio error (pistol):', e); }
-}
-
-function playKnifeSlashSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.55;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    const swBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.14), ctx.sampleRate);
-    const swData = swBuf.getChannelData(0);
-    for (let i = 0; i < swData.length; i++) swData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.025));
-    const swSrc = ctx.createBufferSource();
-    swSrc.buffer = swBuf;
-    const swF = ctx.createBiquadFilter();
-    swF.type = 'highpass'; swF.frequency.value = 3500;
-    const swG = ctx.createGain();
-    swG.gain.setValueAtTime(0.9, now);
-    swG.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
-    swSrc.connect(swF); swF.connect(swG); swG.connect(master);
-    swSrc.start(now); swSrc.stop(now + 0.15);
-    playTone(3200, 'sine', 0.15, now, 0.06, ctx, master);
-    playTone(2100, 'sine', 0.10, now + 0.02, 0.08, ctx, master);
-  } catch(e) { console.warn('Audio error (knife slash):', e); }
-}
-
-function playBleedingSound() {
-  try {
-    const ctx = getAudioCtx();
-    const master = ctx.createGain();
-    master.gain.value = 0.45;
-    master.connect(ctx.destination);
-    const now = ctx.currentTime;
-    [0, 0.18, 0.42].forEach((delay, i) => {
-      const dropBuf = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.04), ctx.sampleRate);
-      const data = dropBuf.getChannelData(0);
-      for (let j = 0; j < data.length; j++) data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (ctx.sampleRate * 0.006));
-      const src = ctx.createBufferSource();
-      src.buffer = dropBuf;
-      const f = ctx.createBiquadFilter();
-      f.type = 'lowpass'; f.frequency.value = 900 - i * 100;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.7 - i * 0.1, now + delay);
-      g.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.038);
-      src.connect(f); f.connect(g); g.connect(master);
-      src.start(now + delay); src.stop(now + delay + 0.05);
-      playTone(180 - i * 20, 'sine', 0.18 - i * 0.03, now + delay, 0.07, ctx, master);
-    });
-    playTone(60, 'sine', 0.12, now + 0.05, 0.25, ctx, master);
-  } catch(e) { console.warn('Audio error (bleeding):', e); }
-}
+function playSniperReloadSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.65;master.connect(ctx.destination);const now=ctx.currentTime;playNoise(0.9,now+0.00,0.055,ctx,master,3500);playTone(160,'square',0.28,now+0.00,0.045,ctx,master);const slide1=ctx.createOscillator(),sg1=ctx.createGain();slide1.connect(sg1);sg1.connect(master);slide1.type='sawtooth';slide1.frequency.setValueAtTime(900,now+0.08);slide1.frequency.exponentialRampToValueAtTime(180,now+0.30);sg1.gain.setValueAtTime(0,now+0.08);sg1.gain.linearRampToValueAtTime(0.30,now+0.10);sg1.gain.exponentialRampToValueAtTime(0.001,now+0.30);slide1.start(now+0.08);slide1.stop(now+0.32);playNoise(0.45,now+0.08,0.22,ctx,master,1200);playNoise(0.85,now+0.36,0.040,ctx,master,5000);playTone(1800,'sine',0.10,now+0.36,0.08,ctx,master);playTone(2400,'sine',0.07,now+0.40,0.10,ctx,master);playNoise(1.0,now+0.52,0.038,ctx,master,4000);playTone(110,'square',0.35,now+0.52,0.038,ctx,master);const slide2=ctx.createOscillator(),sg2=ctx.createGain();slide2.connect(sg2);sg2.connect(master);slide2.type='sawtooth';slide2.frequency.setValueAtTime(180,now+0.62);slide2.frequency.exponentialRampToValueAtTime(950,now+0.80);sg2.gain.setValueAtTime(0,now+0.62);sg2.gain.linearRampToValueAtTime(0.30,now+0.64);sg2.gain.exponentialRampToValueAtTime(0.001,now+0.80);slide2.start(now+0.62);slide2.stop(now+0.82);playNoise(0.38,now+0.62,0.18,ctx,master,1200);playNoise(0.95,now+0.84,0.048,ctx,master,3800);playTone(200,'square',0.32,now+0.84,0.040,ctx,master);playTone(1100,'sine',0.06,now+0.95,0.10,ctx,master);}catch(e){console.warn('Audio error (reload):',e);}}
+function playSniperShotSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.75;master.connect(ctx.destination);const now=ctx.currentTime;playTone(48,'sine',0.85,now,0.35,ctx,master);playTone(62,'sine',0.60,now,0.22,ctx,master);const blastOsc=ctx.createOscillator(),blastGain=ctx.createGain();blastOsc.connect(blastGain);blastGain.connect(master);blastOsc.type='sawtooth';blastOsc.frequency.setValueAtTime(130,now);blastOsc.frequency.exponentialRampToValueAtTime(35,now+0.18);blastGain.gain.setValueAtTime(0,now);blastGain.gain.linearRampToValueAtTime(0.95,now+0.004);blastGain.gain.exponentialRampToValueAtTime(0.001,now+0.18);blastOsc.start(now);blastOsc.stop(now+0.20);playNoise(1.4,now,0.14,ctx,master,500);playNoise(0.7,now,0.28,ctx,master,180);playNoise(0.55,now+0.002,0.045,ctx,master,9000,'highpass');const whistle=ctx.createOscillator(),wg=ctx.createGain();whistle.connect(wg);wg.connect(master);whistle.type='sine';whistle.frequency.setValueAtTime(2600,now+0.008);whistle.frequency.exponentialRampToValueAtTime(500,now+0.28);wg.gain.setValueAtTime(0.14,now+0.008);wg.gain.exponentialRampToValueAtTime(0.001,now+0.28);whistle.start(now+0.008);whistle.stop(now+0.30);[0.22,0.40,0.58,0.76].forEach((delay,i)=>{const v=0.22/(i+1);playNoise(v*0.9,now+delay,0.09+i*0.02,ctx,master,400-i*50);playTone(70-i*8,'sine',v*0.45,now+delay,0.14+i*0.04,ctx,master);});}catch(e){console.warn('Audio error (shot):',e);}}
+function playSniperImpactSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.55;master.connect(ctx.destination);const now=ctx.currentTime;playTone(75,'sine',0.75,now,0.14,ctx,master);playNoise(0.85,now,0.07,ctx,master,1800);const osc=ctx.createOscillator(),g=ctx.createGain();osc.connect(g);g.connect(master);osc.type='sine';osc.frequency.setValueAtTime(3200,now);osc.frequency.exponentialRampToValueAtTime(380,now+0.09);g.gain.setValueAtTime(0.18,now);g.gain.exponentialRampToValueAtTime(0.001,now+0.09);osc.start(now);osc.stop(now+0.11);}catch(e){console.warn('Audio error (impact):',e);}}
+function playGrenadeExplosionSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.72;master.connect(ctx.destination);const now=ctx.currentTime;playTone(38,'sine',1.0,now,1.4,ctx,master);playTone(52,'sine',0.75,now,1.0,ctx,master);playTone(28,'sine',0.55,now+0.03,1.8,ctx,master);playNoise(2.0,now,0.40,ctx,master,280,'lowpass');playNoise(1.3,now,0.65,ctx,master,140,'lowpass');playNoise(0.65,now,1.0,ctx,master,70,'lowpass');const shock=ctx.createOscillator(),shg=ctx.createGain();shock.connect(shg);shg.connect(master);shock.type='sawtooth';shock.frequency.setValueAtTime(210,now);shock.frequency.exponentialRampToValueAtTime(18,now+0.32);shg.gain.setValueAtTime(0,now);shg.gain.linearRampToValueAtTime(1.3,now+0.004);shg.gain.exponentialRampToValueAtTime(0.001,now+0.32);shock.start(now);shock.stop(now+0.34);playNoise(0.85,now+0.04,0.18,ctx,master,2200,'bandpass');playNoise(0.55,now+0.10,0.22,ctx,master,4500,'bandpass');for(let i=0;i<10;i++){const t=now+0.28+i*0.09+Math.random()*0.06,v=0.32-i*0.025;if(v<=0)break;playNoise(v,t,0.055+Math.random()*0.045,ctx,master,900+Math.random()*2500);}[0.45,0.85,1.25].forEach((delay,i)=>{const v=0.38/(i+1);playNoise(v,now+delay,0.22+i*0.06,ctx,master,200+i*80,'lowpass');playTone(33+i*6,'sine',v*0.55,now+delay,0.35+i*0.12,ctx,master);});const ring=ctx.createOscillator(),rg=ctx.createGain();ring.connect(rg);rg.connect(master);ring.type='sine';ring.frequency.setValueAtTime(3800,now+0.08);ring.frequency.exponentialRampToValueAtTime(1100,now+2.2);rg.gain.setValueAtTime(0,now+0.08);rg.gain.linearRampToValueAtTime(0.13,now+0.18);rg.gain.exponentialRampToValueAtTime(0.001,now+2.2);ring.start(now+0.08);ring.stop(now+2.3);}catch(e){console.warn('Audio error (grenade):',e);}}
+function playPistolShotSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.6;master.connect(ctx.destination);const now=ctx.currentTime;const bang=ctx.createOscillator(),bg=ctx.createGain();bang.connect(bg);bg.connect(master);bang.type='sawtooth';bang.frequency.setValueAtTime(160,now);bang.frequency.exponentialRampToValueAtTime(40,now+0.09);bg.gain.setValueAtTime(0,now);bg.gain.linearRampToValueAtTime(0.9,now+0.003);bg.gain.exponentialRampToValueAtTime(0.001,now+0.09);bang.start(now);bang.stop(now+0.10);playNoise(1.1,now,0.07,ctx,master,600,'bandpass');playNoise(0.5,now,0.12,ctx,master,150,'lowpass');const whistle=ctx.createOscillator(),wg=ctx.createGain();whistle.connect(wg);wg.connect(master);whistle.type='sine';whistle.frequency.setValueAtTime(1800,now+0.01);whistle.frequency.exponentialRampToValueAtTime(400,now+0.18);wg.gain.setValueAtTime(0.08,now+0.01);wg.gain.exponentialRampToValueAtTime(0.001,now+0.18);whistle.start(now+0.01);whistle.stop(now+0.20);playNoise(0.25,now+0.12,0.10,ctx,master,300,'lowpass');playTone(55,'sine',0.3,now,0.18,ctx,master);}catch(e){console.warn('Audio error (pistol):',e);}}
+function playKnifeSlashSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.55;master.connect(ctx.destination);const now=ctx.currentTime;const swBuf=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*0.14),ctx.sampleRate);const swData=swBuf.getChannelData(0);for(let i=0;i<swData.length;i++)swData[i]=(Math.random()*2-1)*Math.exp(-i/(ctx.sampleRate*0.025));const swSrc=ctx.createBufferSource();swSrc.buffer=swBuf;const swF=ctx.createBiquadFilter();swF.type='highpass';swF.frequency.value=3500;const swG=ctx.createGain();swG.gain.setValueAtTime(0.9,now);swG.gain.exponentialRampToValueAtTime(0.001,now+0.13);swSrc.connect(swF);swF.connect(swG);swG.connect(master);swSrc.start(now);swSrc.stop(now+0.15);playTone(3200,'sine',0.15,now,0.06,ctx,master);playTone(2100,'sine',0.10,now+0.02,0.08,ctx,master);}catch(e){console.warn('Audio error (knife slash):',e);}}
+function playBleedingSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.45;master.connect(ctx.destination);const now=ctx.currentTime;[0,0.18,0.42].forEach((delay,i)=>{const dropBuf=ctx.createBuffer(1,Math.ceil(ctx.sampleRate*0.04),ctx.sampleRate);const data=dropBuf.getChannelData(0);for(let j=0;j<data.length;j++)data[j]=(Math.random()*2-1)*Math.exp(-j/(ctx.sampleRate*0.006));const src=ctx.createBufferSource();src.buffer=dropBuf;const f=ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=900-i*100;const g=ctx.createGain();g.gain.setValueAtTime(0.7-i*0.1,now+delay);g.gain.exponentialRampToValueAtTime(0.001,now+delay+0.038);src.connect(f);f.connect(g);g.connect(master);src.start(now+delay);src.stop(now+delay+0.05);playTone(180-i*20,'sine',0.18-i*0.03,now+delay,0.07,ctx,master);});playTone(60,'sine',0.12,now+0.05,0.25,ctx,master);}catch(e){console.warn('Audio error (bleeding):',e);}}
 
 /* ============================================================
    CONSTANTS & DATA
 ============================================================ */
-const COLORS = ['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A','#C5A028','#9B59B6','#E74C3C','#1ABC9C'];
-
-const WEAPONS = [
-  { id:'pistol',   name:'Pistola',       icon:'🔫', prob:0.20, failChance:0.33, kills:1,   desc:'33% de fallar. Si impacta, elimina a 1 persona.' },
-  { id:'shotgun',  name:'Escopeta',      icon:'🪓', prob:0.20, failChance:0.50, kills:3,   desc:'50% de fallar. Si impacta, elimina hasta 3 personas.' },
-  { id:'sniper',   name:'Francotirador', icon:'🎯', prob:0.20, failChance:0.00, kills:1,   desc:'No puede fallar. Elimina a 1 persona con precisión.' },
-  { id:'grenade',  name:'Granada',       icon:'💣', prob:0.20, failChance:0.90, kills:999, desc:'Solo 10% de explotar. Si explota, elimina hasta llegar al límite.' },
-  { id:'knife',    name:'Cuchillo',      icon:'🔪', prob:0.20, failChance:0.50, kills:1,   half:true, desc:'50% de fallar. Quita media vida y puede eliminar.' }
+const COLORS=['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A','#C5A028','#9B59B6','#E74C3C','#1ABC9C'];
+const WEAPONS=[
+  {id:'pistol',name:'Pistola',icon:'🔫',prob:0.20,failChance:0.33,kills:1,desc:'33% de fallar. Si impacta, elimina a 1 persona.'},
+  {id:'shotgun',name:'Escopeta',icon:'🪓',prob:0.20,failChance:0.50,kills:3,desc:'50% de fallar. Si impacta, elimina hasta 3 personas.'},
+  {id:'sniper',name:'Francotirador',icon:'🎯',prob:0.20,failChance:0.00,kills:1,desc:'No puede fallar. Elimina a 1 persona con precisión.'},
+  {id:'grenade',name:'Granada',icon:'💣',prob:0.20,failChance:0.90,kills:999,desc:'Solo 10% de explotar. Si explota, elimina hasta llegar al límite.'},
+  {id:'knife',name:'Cuchillo',icon:'🔪',prob:0.20,failChance:0.50,kills:1,half:true,desc:'50% de fallar. Quita media vida y puede eliminar.'}
 ];
+const BG_MAP={g1:'linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)',g2:'linear-gradient(135deg,#667eea,#764ba2)',g3:'linear-gradient(135deg,#f093fb,#f5576c)',g4:'linear-gradient(135deg,#4facfe,#00f2fe)',g5:'linear-gradient(135deg,#43e97b,#38f9d7)',g6:'linear-gradient(135deg,#fa709a,#fee140)',g7:'linear-gradient(135deg,#30cfd0,#330867)',g8:'linear-gradient(135deg,#ff9a56,#ff6a88)'};
 
-const BG_MAP = {
-  g1:'linear-gradient(135deg,#FF0080 0%,#FF8C00 25%,#FFD700 50%,#00D4FF 75%,#8A2BE2 100%)',
-  g2:'linear-gradient(135deg,#667eea,#764ba2)',
-  g3:'linear-gradient(135deg,#f093fb,#f5576c)',
-  g4:'linear-gradient(135deg,#4facfe,#00f2fe)',
-  g5:'linear-gradient(135deg,#43e97b,#38f9d7)',
-  g6:'linear-gradient(135deg,#fa709a,#fee140)',
-  g7:'linear-gradient(135deg,#30cfd0,#330867)',
-  g8:'linear-gradient(135deg,#ff9a56,#ff6a88)'
-};
+let items=['Ana','Carlos','María','Pedro','Lucía','Diego','Sofía','Tomás','Valentina','Nicolás','Laura','Sebastián'];
+let originalItems=[...items],isSpinning=false,currentRotation=0,lastWinner=null,currentMode='normal',currentStage=1,currentBg='g1',savedWheels={},spinQueue=0,playerDB={},eliminatedDB=[],currentWeapon=null,pendingWeaponCallback=null,duelState=null;
+const trollFlags={nextPurgeTo8:false};
 
-/* ============================================================
-   STATE
-============================================================ */
-let items = ['Ana','Carlos','María','Pedro','Lucía','Diego','Sofía','Tomás','Valentina','Nicolás','Laura','Sebastián'];
-let originalItems = [...items];
-let isSpinning = false;
-let currentRotation = 0;
-let lastWinner = null;
-let currentMode = 'normal';
-let currentStage = 1;
-let currentBg = 'g1';
-let savedWheels = {};
-let spinQueue = 0;
-let playerDB = {};
-let eliminatedDB = [];
-let currentWeapon = null;
-let pendingWeaponCallback = null;
-let duelState = null;
-const trollFlags = { nextPurgeTo8: false };
+function initPlayerDB(){playerDB={};eliminatedDB=[];items.forEach(name=>{playerDB[name]=makePlayer(name);});}
+function makePlayer(name){const lives=currentStage===3?1:2;return{name,lives,maxLives:lives,shield:false,bleeding:false,bleedRound:0,status:'alive'};}
+function ensurePlayer(name){if(!playerDB[name])playerDB[name]=makePlayer(name);}
+function loadData(){try{const sw=localStorage.getItem('matashiroWheels');if(sw)savedWheels=JSON.parse(sw);const bg=localStorage.getItem('matashiroBg');if(bg){currentBg=bg;applyBg(bg);}const saved=localStorage.getItem('matashiroItems');if(saved){items=JSON.parse(saved);originalItems=[...items];}}catch(e){}}
+function saveData(){localStorage.setItem('matashiroWheels',JSON.stringify(savedWheels));localStorage.setItem('matashiroBg',currentBg);localStorage.setItem('matashiroItems',JSON.stringify(items));}
+function applyBg(k){document.body.style.background=BG_MAP[k]||BG_MAP['g1'];document.body.style.backgroundSize='400% 400%';}
+function changeBg(k){currentBg=k;applyBg(k);saveData();document.querySelectorAll('.color-option').forEach(el=>el.classList.remove('active'));const el=document.getElementById('bg-'+k);if(el)el.classList.add('active');}
 
-/* ============================================================
-   INIT
-============================================================ */
-function initPlayerDB() {
-  playerDB = {}; eliminatedDB = [];
-  items.forEach(name => { playerDB[name] = makePlayer(name); });
-}
-function makePlayer(name) {
-  const lives = currentStage === 3 ? 1 : 2;
-  return { name, lives, maxLives: lives, shield: false, bleeding: false, bleedRound: 0, status: 'alive' };
-}
-function ensurePlayer(name) {
-  if (!playerDB[name]) playerDB[name] = makePlayer(name);
-}
-function loadData() {
-  try {
-    const sw = localStorage.getItem('matashiroWheels'); if (sw) savedWheels = JSON.parse(sw);
-    const bg = localStorage.getItem('matashiroBg'); if (bg) { currentBg = bg; applyBg(bg); }
-    const saved = localStorage.getItem('matashiroItems'); if (saved) { items = JSON.parse(saved); originalItems = [...items]; }
-  } catch(e) {}
-}
-function saveData() {
-  localStorage.setItem('matashiroWheels', JSON.stringify(savedWheels));
-  localStorage.setItem('matashiroBg', currentBg);
-  localStorage.setItem('matashiroItems', JSON.stringify(items));
-}
-function applyBg(k) { document.body.style.background = BG_MAP[k] || BG_MAP['g1']; document.body.style.backgroundSize = '400% 400%'; }
-function changeBg(k) {
-  currentBg = k; applyBg(k); saveData();
-  document.querySelectorAll('.color-option').forEach(el => el.classList.remove('active'));
-  const el = document.getElementById('bg-' + k); if (el) el.classList.add('active');
-}
+function updateQueueIndicator(){const el=document.getElementById('queueIndicator');if(spinQueue>0){el.textContent=`⏳ ${spinQueue} giro${spinQueue>1?'s':''} en cola`;el.classList.add('show');}else{el.classList.remove('show');}}
 
-/* ============================================================
-   QUEUE
-============================================================ */
-function updateQueueIndicator() {
-  const el = document.getElementById('queueIndicator');
-  if (spinQueue > 0) { el.textContent = `⏳ ${spinQueue} giro${spinQueue > 1 ? 's' : ''} en cola`; el.classList.add('show'); }
-  else { el.classList.remove('show'); }
-}
-
-/* ============================================================
-   MODE & STAGE
-============================================================ */
-function setMode(mode) {
-  currentMode = mode; spinQueue = 0; updateQueueIndicator();
-  const title = document.getElementById('mainTitle');
-  const spinBtn = document.getElementById('spinBtn');
-  const btnN = document.getElementById('btnNormal'); const btnT = document.getElementById('btnTroll');
-  const stageBar = document.getElementById('stageInfoBar'); const stageSelector = document.getElementById('stageSelector');
-  const weaponDisplay = document.getElementById('weaponDisplay'); const sidePanel = document.getElementById('sidePanel');
-  if (mode === 'normal') {
-    title.textContent = '🎯 Ruleta de Matashiro'; title.className = '';
-    spinBtn.textContent = '¡GIRAR!'; spinBtn.className = 'spin-btn';
-    btnN.className = 'mode-btn active-normal'; btnT.className = 'mode-btn';
-    stageBar.style.display = 'none'; stageSelector.style.display = 'none';
-    weaponDisplay.style.display = 'none'; sidePanel.style.display = 'none';
-  } else {
-    title.textContent = '😈 Ruleta TROLL 😈'; title.className = 'troll-title';
-    spinBtn.textContent = '😈 ¡GIRAR!'; spinBtn.className = 'spin-btn troll-spin';
-    btnN.className = 'mode-btn'; btnT.className = 'mode-btn active-troll';
-    stageBar.style.display = 'flex'; stageSelector.style.display = 'flex';
-    weaponDisplay.style.display = 'flex'; sidePanel.style.display = 'block';
-    initPlayerDB(); setStage(currentStage, true);
+function setMode(mode){
+  currentMode=mode;spinQueue=0;updateQueueIndicator();
+  const title=document.getElementById('mainTitle'),spinBtn=document.getElementById('spinBtn');
+  const btnN=document.getElementById('btnNormal'),btnT=document.getElementById('btnTroll');
+  const stageBar=document.getElementById('stageInfoBar'),stageSelector=document.getElementById('stageSelector');
+  const weaponDisplay=document.getElementById('weaponDisplay'),sidePanel=document.getElementById('sidePanel');
+  if(mode==='normal'){
+    title.textContent='🎯 Ruleta de Matashiro';title.className='';
+    spinBtn.textContent='¡GIRAR!';spinBtn.className='spin-btn';
+    btnN.className='mode-btn active-normal';btnT.className='mode-btn';
+    stageBar.style.display='none';stageSelector.style.display='none';
+    weaponDisplay.style.display='none';sidePanel.style.display='none';
+  }else{
+    title.textContent='😈 Ruleta TROLL 😈';title.className='troll-title';
+    spinBtn.textContent='😈 ¡GIRAR!';spinBtn.className='spin-btn troll-spin';
+    btnN.className='mode-btn';btnT.className='mode-btn active-troll';
+    stageBar.style.display='flex';stageSelector.style.display='flex';
+    weaponDisplay.style.display='flex';sidePanel.style.display='block';
+    initPlayerDB();setStage(currentStage,true);
   }
-  currentRotation = 0; canvas.style.transition = 'none'; canvas.style.transform = 'rotate(0deg)';
-  drawWheel(); updateItemsList();
+  currentRotation=0;canvas.style.transition='none';canvas.style.transform='rotate(0deg)';
+  drawWheel();updateItemsList();
 }
-
-function setStage(stage, force) {
-  if (currentStage === stage && !force) return;
-  currentStage = stage;
-  [1,2,3].forEach(s => { const b = document.getElementById('stageBtn' + s); b.className = 'stage-btn' + (s === stage ? ' troll-active' : ''); });
-  document.getElementById('siEtapa').textContent = stage;
-  document.getElementById('siMeta').textContent = stage === 1 ? '≤12' : stage === 2 ? '≤8' : '1v1';
-  document.getElementById('siVidas').textContent = stage === 3 ? '1' : '2';
-  document.getElementById('siEscudo').textContent = stage === 1 ? '20%' : stage === 2 ? '18.5%' : '—';
-  if (stage !== 3) {
-    const lv = stage === 3 ? 1 : 2;
-    items.forEach(name => {
-      ensurePlayer(name);
-      if (playerDB[name].status === 'alive') {
-        playerDB[name].maxLives = lv;
-        if (playerDB[name].lives > lv) playerDB[name].lives = lv;
-        if (playerDB[name].lives < 1) playerDB[name].lives = 1;
-      }
-    });
-  }
-  document.getElementById('spinBtn').textContent = stage === 3 ? '😈 ¡DUELO 1v1!' : '😈 ¡GIRAR!';
+function setStage(stage,force){
+  if(currentStage===stage&&!force)return;currentStage=stage;
+  [1,2,3].forEach(s=>{const b=document.getElementById('stageBtn'+s);b.className='stage-btn'+(s===stage?' troll-active':'');});
+  document.getElementById('siEtapa').textContent=stage;
+  document.getElementById('siMeta').textContent=stage===1?'≤12':stage===2?'≤8':'1v1';
+  document.getElementById('siVidas').textContent=stage===3?'1':'2';
+  document.getElementById('siEscudo').textContent=stage===1?'20%':stage===2?'18.5%':'—';
+  if(stage!==3){const lv=stage===3?1:2;items.forEach(name=>{ensurePlayer(name);if(playerDB[name].status==='alive'){playerDB[name].maxLives=lv;if(playerDB[name].lives>lv)playerDB[name].lives=lv;if(playerDB[name].lives<1)playerDB[name].lives=1;}});}
+  document.getElementById('spinBtn').textContent=stage===3?'😈 ¡DUELO 1v1!':'😈 ¡GIRAR!';
   updateSidePanel();
 }
 
-/* ============================================================
-   WHEEL DRAW
-============================================================ */
-const canvas = document.getElementById('wheelCanvas');
-const ctx = canvas.getContext('2d');
-
-function drawWheel() {
-  const cx = canvas.width / 2, cy = canvas.height / 2, r = 180;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  const active = currentMode === 'troll' ? items.filter(n => getPlayerStatus(n) === 'alive') : items;
-  if (active.length === 0) { ctx.font = '16px Arial'; ctx.fillStyle = '#999'; ctx.textAlign = 'center'; ctx.fillText('Sin jugadores activos', cx, cy); return; }
-  const sliceAngle = (2 * Math.PI) / active.length;
-  active.forEach((item, i) => {
-    const s = i * sliceAngle, e = s + sliceAngle;
-    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, s, e); ctx.closePath();
-    ctx.fillStyle = COLORS[i % COLORS.length]; ctx.fill();
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.stroke();
-    ctx.save(); ctx.translate(cx, cy); ctx.rotate(s + sliceAngle / 2);
-    ctx.textAlign = 'center'; ctx.fillStyle = '#fff'; ctx.font = 'bold 14px Arial';
-    ctx.shadowColor = 'rgba(0,0,0,0.4)'; ctx.shadowBlur = 3;
-    const bleed = playerDB[item] && playerDB[item].bleeding ? '🩸 ' : '';
-    const shield = playerDB[item] && playerDB[item].shield ? '🛡 ' : '';
-    ctx.fillText(shield + bleed + item, r * 0.6, 5); ctx.restore();
+const canvas=document.getElementById('wheelCanvas');
+const ctx=canvas.getContext('2d');
+function drawWheel(){
+  const cx=canvas.width/2,cy=canvas.height/2,r=180;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const active=currentMode==='troll'?items.filter(n=>getPlayerStatus(n)==='alive'):items;
+  if(active.length===0){ctx.font='16px Arial';ctx.fillStyle='#999';ctx.textAlign='center';ctx.fillText('Sin jugadores activos',cx,cy);return;}
+  const sliceAngle=(2*Math.PI)/active.length;
+  active.forEach((item,i)=>{
+    const s=i*sliceAngle,e=s+sliceAngle;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,s,e);ctx.closePath();
+    ctx.fillStyle=COLORS[i%COLORS.length];ctx.fill();
+    ctx.strokeStyle='#fff';ctx.lineWidth=3;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(s+sliceAngle/2);
+    ctx.textAlign='center';ctx.fillStyle='#fff';ctx.font='bold 14px Arial';
+    ctx.shadowColor='rgba(0,0,0,0.4)';ctx.shadowBlur=3;
+    const bleed=playerDB[item]&&playerDB[item].bleeding?'🩸 ':'';
+    const shield=playerDB[item]&&playerDB[item].shield?'🛡 ':'';
+    ctx.fillText(shield+bleed+item,r*0.6,5);ctx.restore();
   });
 }
+function getActiveItems(){return currentMode!=='troll'?items:items.filter(n=>getPlayerStatus(n)==='alive');}
+function getPlayerStatus(name){return playerDB[name]?playerDB[name].status:'alive';}
 
-function getActiveItems() { return currentMode !== 'troll' ? items : items.filter(n => getPlayerStatus(n) === 'alive'); }
-function getPlayerStatus(name) { return playerDB[name] ? playerDB[name].status : 'alive'; }
-
-/* ============================================================
-   ITEMS LIST
-============================================================ */
-function updateItemsList() {
-  const list = document.getElementById('itemsList'); list.innerHTML = '';
-  items.forEach((item, i) => {
-    const div = document.createElement('div'); div.className = 'item';
-    div.innerHTML = `<div style="display:flex;align-items:center"><div class="item-color" style="background:${COLORS[i%COLORS.length]}"></div><div class="item-text">${item}</div></div><button class="delete-btn" onclick="deleteItem(${i})">×</button>`;
+function updateItemsList(){
+  const list=document.getElementById('itemsList');list.innerHTML='';
+  items.forEach((item,i)=>{
+    const div=document.createElement('div');div.className='item';
+    div.innerHTML=`<div style="display:flex;align-items:center"><div class="item-color" style="background:${COLORS[i%COLORS.length]}"></div><div class="item-text">${item}</div></div><button class="delete-btn" onclick="deleteItem(${i})">×</button>`;
     list.appendChild(div);
   });
 }
-function addItem() {
-  const inp = document.getElementById('itemInput'); const v = inp.value.trim(); if (!v) return;
-  items.push(v); originalItems.push(v); ensurePlayer(v);
-  inp.value = ''; saveData(); drawWheel(); updateItemsList(); updateSidePanel();
-}
-function deleteItem(i) { items.splice(i, 1); drawWheel(); updateItemsList(); updateSidePanel(); }
+function addItem(){const inp=document.getElementById('itemInput');const v=inp.value.trim();if(!v)return;items.push(v);originalItems.push(v);ensurePlayer(v);inp.value='';saveData();drawWheel();updateItemsList();updateSidePanel();}
+function deleteItem(i){items.splice(i,1);drawWheel();updateItemsList();updateSidePanel();}
 
-/* ============================================================
-   SIDE PANEL
-============================================================ */
-function updateSidePanel() {
-  if (currentMode !== 'troll') return;
-  const alive = document.getElementById('aliveList'); const dead = document.getElementById('deadList');
-  alive.innerHTML = ''; dead.innerHTML = '';
-  items.forEach((name, i) => {
-    ensurePlayer(name); const p = playerDB[name];
-    const el = buildPlayerEntry(name, i, p);
-    if (p.status === 'dead') dead.appendChild(el); else alive.appendChild(el);
-  });
-  eliminatedDB.forEach(name => {
-    if (!items.includes(name) && playerDB[name]) {
-      const i = originalItems.indexOf(name);
-      dead.appendChild(buildPlayerEntry(name, i, playerDB[name]));
-    }
-  });
+function updateSidePanel(){
+  if(currentMode!=='troll')return;
+  const alive=document.getElementById('aliveList'),dead=document.getElementById('deadList');
+  alive.innerHTML='';dead.innerHTML='';
+  items.forEach((name,i)=>{ensurePlayer(name);const p=playerDB[name];const el=buildPlayerEntry(name,i,p);if(p.status==='dead')dead.appendChild(el);else alive.appendChild(el);});
+  eliminatedDB.forEach(name=>{if(!items.includes(name)&&playerDB[name]){const i=originalItems.indexOf(name);dead.appendChild(buildPlayerEntry(name,i,playerDB[name]));}});
 }
-function buildPlayerEntry(name, i, p) {
-  const div = document.createElement('div'); div.className = 'player-entry' + (p.status !== 'alive' ? ' eliminated' : '');
-  const lives = p.maxLives > 0 ? Array.from({length: p.maxLives}, (_, j) => `<span class="life-heart">${j < p.lives ? '❤️' : '🖤'}</span>`).join('') : '';
-  let statusTxt = '', statusCls = 'status-alive';
-  if (p.status === 'dead') { statusTxt = 'Eliminado'; statusCls = 'status-dead'; }
-  else if (p.bleeding) { statusTxt = 'Sangrando'; statusCls = 'status-bleeding'; }
-  else if (p.shield) { statusTxt = 'Escudo'; statusCls = 'status-shield'; }
-  else { statusTxt = 'Activo'; statusCls = 'status-alive'; }
-  div.innerHTML = `<div class="player-color" style="background:${COLORS[i%COLORS.length]}"></div><div class="player-name">${name}</div><div class="player-lives">${lives}</div><div class="player-status ${statusCls}">${statusTxt}</div>${p.bleeding ? `<div class="bleeding-bar" style="width:${Math.min(100, p.bleedRound * 15)}%"></div>` : ''}`;
+function buildPlayerEntry(name,i,p){
+  const div=document.createElement('div');div.className='player-entry'+(p.status!=='alive'?' eliminated':'');
+  const lives=p.maxLives>0?Array.from({length:p.maxLives},(_,j)=>`<span class="life-heart">${j<p.lives?'❤️':'🖤'}</span>`).join(''):'';
+  let statusTxt='',statusCls='status-alive';
+  if(p.status==='dead'){statusTxt='Eliminado';statusCls='status-dead';}
+  else if(p.bleeding){statusTxt='Sangrando';statusCls='status-bleeding';}
+  else if(p.shield){statusTxt='Escudo';statusCls='status-shield';}
+  else{statusTxt='Activo';statusCls='status-alive';}
+  div.innerHTML=`<div class="player-color" style="background:${COLORS[i%COLORS.length]}"></div><div class="player-name">${name}</div><div class="player-lives">${lives}</div><div class="player-status ${statusCls}">${statusTxt}</div>${p.bleeding?`<div class="bleeding-bar" style="width:${Math.min(100,p.bleedRound*15)}%"></div>`:''}`;
   return div;
 }
 
-/* ============================================================
-   ROTATION CALC
-============================================================ */
-function calcRotation(winnerIndex, numItems, baseRot, spins) {
-  const sliceDeg = 360 / numItems;
-  const centerAngle = (winnerIndex + 0.5) * sliceDeg;
-  let target = 270 - centerAngle;
-  target = ((target % 360) + 360) % 360;
-  let total = baseRot - (((baseRot % 360) + 360) % 360) + target;
-  if (total <= baseRot) total += 360;
-  total += spins * 360;
-  return total;
+function calcRotation(winnerIndex,numItems,baseRot,spins){
+  const sliceDeg=360/numItems,centerAngle=(winnerIndex+0.5)*sliceDeg;
+  let target=270-centerAngle;target=((target%360)+360)%360;
+  let total=baseRot-(((baseRot%360)+360)%360)+target;
+  if(total<=baseRot)total+=360;total+=spins*360;return total;
 }
 
-/* ============================================================
-   SPIN
-============================================================ */
-const SPIN_DURATION_MS = 5000;
+const SPIN_DURATION_MS=5000;
+function spin(){if(currentMode==='troll'&&currentStage===3){startDuel();return;}if(isSpinning){spinQueue++;updateQueueIndicator();return;}if(currentMode==='troll')spinTroll();else spinNormal();}
+function processNextInQueue(){if(spinQueue>0){spinQueue--;updateQueueIndicator();setTimeout(()=>{if(currentMode==='troll')spinTroll();else spinNormal();},800);}}
 
-function spin() {
-  if (currentMode === 'troll' && currentStage === 3) { startDuel(); return; }
-  if (isSpinning) { spinQueue++; updateQueueIndicator(); return; }
-  if (currentMode === 'troll') spinTroll(); else spinNormal();
-}
-function processNextInQueue() {
-  if (spinQueue > 0) { spinQueue--; updateQueueIndicator(); setTimeout(() => { if (currentMode === 'troll') spinTroll(); else spinNormal(); }, 800); }
-}
-
-function spinNormal() {
-  if (items.length === 0) return;
-  isSpinning = true; updateSpinBtnLabel();
-  const winner = pickWinner(items);
-  const winnerIdx = items.indexOf(winner);
-  const spins = 5 + Math.floor(Math.random() * 3);
-  const total = calcRotation(winnerIdx, items.length, currentRotation, spins);
-  canvas.style.transition = `transform ${SPIN_DURATION_MS}ms cubic-bezier(.17,.67,.12,.99)`;
-  canvas.style.transform = `rotate(${total}deg)`;
+function spinNormal(){
+  if(items.length===0)return;isSpinning=true;updateSpinBtnLabel();
+  const winner=pickWinner(items),winnerIdx=items.indexOf(winner);
+  const spins=5+Math.floor(Math.random()*3),total=calcRotation(winnerIdx,items.length,currentRotation,spins);
+  canvas.style.transition=`transform ${SPIN_DURATION_MS}ms cubic-bezier(.17,.67,.12,.99)`;
+  canvas.style.transform=`rotate(${total}deg)`;
   playWheelSpinSound(SPIN_DURATION_MS);
-  setTimeout(() => { lastWinner = winner; currentRotation = total; showWinner(winner, false); isSpinning = false; updateSpinBtnLabel(); processNextInQueue(); }, SPIN_DURATION_MS + 100);
+  setTimeout(()=>{lastWinner=winner;currentRotation=total;showWinner(winner,false);isSpinning=false;updateSpinBtnLabel();processNextInQueue();},SPIN_DURATION_MS+100);
 }
-
-function spinTroll() {
-  const active = getActiveItems();
-  if (active.length === 0) { showBanner('¡No hay jugadores activos!', 3000); return; }
-  processBleedingRound();
-  isSpinning = true; updateSpinBtnLabel();
-  pickWeaponForRound(() => {
-    const activeNow = getActiveItems();
-    if (activeNow.length === 0) { isSpinning = false; updateSpinBtnLabel(); processNextInQueue(); return; }
-    const winner = pickWinner(activeNow);
-    const winnerIdx = activeNow.indexOf(winner);
-    const spins = 5 + Math.floor(Math.random() * 3);
-    const total = calcRotation(winnerIdx, activeNow.length, currentRotation, spins);
-    canvas.style.transition = `transform ${SPIN_DURATION_MS}ms cubic-bezier(.17,.67,.12,.99)`;
-    canvas.style.transform = `rotate(${total}deg)`;
+function spinTroll(){
+  const active=getActiveItems();if(active.length===0){showBanner('¡No hay jugadores activos!',3000);return;}
+  processBleedingRound();isSpinning=true;updateSpinBtnLabel();
+  pickWeaponForRound(()=>{
+    const activeNow=getActiveItems();if(activeNow.length===0){isSpinning=false;updateSpinBtnLabel();processNextInQueue();return;}
+    const winner=pickWinner(activeNow),winnerIdx=activeNow.indexOf(winner);
+    const spins=5+Math.floor(Math.random()*3),total=calcRotation(winnerIdx,activeNow.length,currentRotation,spins);
+    canvas.style.transition=`transform ${SPIN_DURATION_MS}ms cubic-bezier(.17,.67,.12,.99)`;
+    canvas.style.transform=`rotate(${total}deg)`;
     playWheelSpinSound(SPIN_DURATION_MS);
-    setTimeout(() => { lastWinner = winner; currentRotation = total; processTrollResult(winner); }, SPIN_DURATION_MS + 100);
+    setTimeout(()=>{lastWinner=winner;currentRotation=total;processTrollResult(winner);},SPIN_DURATION_MS+100);
   });
 }
+function pickWinner(pool){let winner=pool[Math.floor(Math.random()*pool.length)];if(pool.length>1&&winner===lastWinner){do{winner=pool[Math.floor(Math.random()*pool.length)];}while(winner===lastWinner);}return winner;}
+function updateSpinBtnLabel(){const btn=document.getElementById('spinBtn');const base=currentStage===3?'😈 ¡DUELO 1v1!':(currentMode==='troll'?'😈 ¡GIRAR!':'¡GIRAR!');btn.disabled=false;btn.textContent=base;}
 
-function pickWinner(pool) {
-  let winner = pool[Math.floor(Math.random() * pool.length)];
-  if (pool.length > 1 && winner === lastWinner) { do { winner = pool[Math.floor(Math.random() * pool.length)]; } while (winner === lastWinner); }
-  return winner;
-}
-function updateSpinBtnLabel() {
-  const btn = document.getElementById('spinBtn');
-  const base = currentStage === 3 ? '😈 ¡DUELO 1v1!' : (currentMode === 'troll' ? '😈 ¡GIRAR!' : '¡GIRAR!');
-  btn.disabled = false; btn.textContent = base;
-}
-
-/* ============================================================
-   WEAPON SYSTEM
-============================================================ */
-function pickWeaponForRound(callback) {
-  const roll = Math.random(); let cumul = 0;
-  for (const w of WEAPONS) { cumul += w.prob; if (roll < cumul) { currentWeapon = w; break; } }
-  if (!currentWeapon) currentWeapon = WEAPONS[0];
-  document.getElementById('wIcon').textContent = currentWeapon.icon;
-  document.getElementById('wName').textContent = currentWeapon.name;
-  document.getElementById('wStats').textContent = currentWeapon.desc;
-  document.getElementById('siArma').textContent = currentWeapon.name;
-  document.getElementById('wrIcon').textContent = currentWeapon.icon;
-  document.getElementById('wrName').textContent = currentWeapon.name;
-  document.getElementById('wrStats').textContent = currentWeapon.desc;
-  pendingWeaponCallback = callback;
+function pickWeaponForRound(callback){
+  const roll=Math.random();let cumul=0;
+  for(const w of WEAPONS){cumul+=w.prob;if(roll<cumul){currentWeapon=w;break;}}
+  if(!currentWeapon)currentWeapon=WEAPONS[0];
+  document.getElementById('wIcon').textContent=currentWeapon.icon;
+  document.getElementById('wName').textContent=currentWeapon.name;
+  document.getElementById('wStats').textContent=currentWeapon.desc;
+  document.getElementById('siArma').textContent=currentWeapon.name;
+  document.getElementById('wrIcon').textContent=currentWeapon.icon;
+  document.getElementById('wrName').textContent=currentWeapon.name;
+  document.getElementById('wrStats').textContent=currentWeapon.desc;
+  pendingWeaponCallback=callback;
   document.getElementById('weaponRevealModal').classList.add('show');
 }
-function afterWeaponReveal() { if (pendingWeaponCallback) { pendingWeaponCallback(); pendingWeaponCallback = null; } }
+function afterWeaponReveal(){if(pendingWeaponCallback){pendingWeaponCallback();pendingWeaponCallback=null;}}
 
-/* ============================================================
-   TROLL RESULT
-============================================================ */
-function processTrollResult(winner) {
-  ensurePlayer(winner);
-  const p = playerDB[winner];
-  const isGrenade = currentWeapon.id === 'grenade';
-
-  if (!isGrenade && currentWeapon.id !== 'sniper' && Math.random() < 0.20) {
-    showBanner(`💨 ¡${currentWeapon.name} falló! ${winner} se salva esta vez.`, 3500);
-    showEventModal('💨', 'FALLO DE ARMA', '¡Falló!', winner,
-      `La ${currentWeapon.name} falló su disparo. ${winner} respira aliviado.`,
-      '#667eea', '#fff', () => { finishSpin(); });
-    return;
-  }
-
-  if (!isGrenade) {
-    const shieldChance = currentStage === 2 ? 0.185 : 0.20;
-    if (Math.random() < shieldChance) {
-      p.shield = true;
-      showBanner(`🛡️ ¡${winner} obtuvo un ESCUDO!`, 3500);
-      drawWheel(); updateSidePanel();
-      showEventModal('🛡️', 'ESCUDO', '¡Protegido!', winner,
-        `${winner} obtuvo un escudo y está protegido por esta ronda.`,
-        '#1565c0', '#e3f2fd', () => { finishSpin(); });
-      return;
-    }
-  }
-
-  const deadRevivable = eliminatedDB.filter(n => playerDB[n] && playerDB[n].status === 'dead');
-  if (!isGrenade && Math.random() < 0.15 && deadRevivable.length > 0) {
-    showBanner(`💚 ¡${winner} puede revivir a alguien!`, 3000);
-    showRevivePicker(winner, () => { finishSpin(); });
-    return;
-  }
-
-  const activeNow = getActiveItems().filter(n => n !== winner);
-  if (!isGrenade && Math.random() < (currentStage === 1 ? 0.05 : 0.08) && activeNow.length > 0) {
-    const opponent = activeNow[Math.floor(Math.random() * activeNow.length)];
-    showBanner(`⚔️ ¡DUELO! ${winner} vs ${opponent}`, 3000);
-    startMiniDuel(winner, opponent, () => { finishSpin(); });
-    return;
-  }
-
-  if (Math.random() < 0.005 && eliminatedDB.length > 0) {
-    const count = eliminatedDB.length; reviveAll(); trollFlags.nextPurgeTo8 = true;
-    showEventModal('🌟', 'LEGENDARIO', '¡TODOS REVIVEN!', `${count} volvieron`,
-      'Un milagro ha ocurrido. ¡Todos los eliminados vuelven! (La próxima purga dejará solo 8).',
-      '#11998e', '#e8f5e9', () => { finishSpin(); });
-    return;
-  }
-
-  if (Math.random() < 0.005) {
-    const limit = trollFlags.nextPurgeTo8 ? 8 : (currentStage === 1 ? 12 : 8);
-    trollFlags.nextPurgeTo8 = false;
-    if (getActiveItems().length > limit) {
-      purgeTo(limit);
-      showEventModal('💥', '0.5% — PURGA', '¡MASACRE!', `Quedan ${limit} jugadores`,
-        `¡La ruleta eliminó participantes hasta dejar ${limit}!`,
-        '#ff4757', '#fff', () => { finishSpin(); });
-      return;
-    }
-  }
-
-  if (Math.random() < 0.005) {
-    showEventModal('👑', '¡VIP TWITCH!', '¡VIP GANADO!', winner,
-      `¡${winner} gana un VIP en el canal de Twitch! 👑 ¡Felicitaciones!`,
-      '#9146ff', '#f0e6ff', () => { finishSpin(); });
-    showBanner(`👑 ¡${winner} ganó un VIP de Twitch!`, 5000); return;
-  }
-
-  if (Math.random() < 0.005) {
-    showEventModal('🎁', '¡SUB TWITCH!', '¡SUSCRIPCIÓN GANADA!', winner,
-      `¡${winner} gana una suscripción al canal de Twitch! 🎁 ¡Disfrútala!`,
-      '#bf00ff', '#f5e6ff', () => { finishSpin(); });
-    showBanner(`🎁 ¡${winner} ganó una sub de Twitch!`, 5000); return;
-  }
-
-  applyWeaponHit(winner, () => { finishSpin(); });
+function processTrollResult(winner){
+  ensurePlayer(winner);const p=playerDB[winner];const isGrenade=currentWeapon.id==='grenade';
+  if(!isGrenade&&currentWeapon.id!=='sniper'&&Math.random()<0.20){showBanner(`💨 ¡${currentWeapon.name} falló! ${winner} se salva esta vez.`,3500);showEventModal('💨','FALLO DE ARMA','¡Falló!',winner,`La ${currentWeapon.name} falló su disparo. ${winner} respira aliviado.`,'#667eea','#fff',()=>{finishSpin();});return;}
+  if(!isGrenade){const shieldChance=currentStage===2?0.185:0.20;if(Math.random()<shieldChance){p.shield=true;showBanner(`🛡️ ¡${winner} obtuvo un ESCUDO!`,3500);drawWheel();updateSidePanel();showEventModal('🛡️','ESCUDO','¡Protegido!',winner,`${winner} obtuvo un escudo y está protegido por esta ronda.`,'#1565c0','#e3f2fd',()=>{finishSpin();});return;}}
+  const deadRevivable=eliminatedDB.filter(n=>playerDB[n]&&playerDB[n].status==='dead');
+  if(!isGrenade&&Math.random()<0.15&&deadRevivable.length>0){showBanner(`💚 ¡${winner} puede revivir a alguien!`,3000);showRevivePicker(winner,()=>{finishSpin();});return;}
+  const activeNow=getActiveItems().filter(n=>n!==winner);
+  if(!isGrenade&&Math.random()<(currentStage===1?0.05:0.08)&&activeNow.length>0){const opponent=activeNow[Math.floor(Math.random()*activeNow.length)];showBanner(`⚔️ ¡DUELO! ${winner} vs ${opponent}`,3000);startMiniDuel(winner,opponent,()=>{finishSpin();});return;}
+  if(Math.random()<0.005&&eliminatedDB.length>0){const count=eliminatedDB.length;reviveAll();trollFlags.nextPurgeTo8=true;showEventModal('🌟','LEGENDARIO','¡TODOS REVIVEN!',`${count} volvieron`,'Un milagro ha ocurrido. ¡Todos los eliminados vuelven! (La próxima purga dejará solo 8).','#11998e','#e8f5e9',()=>{finishSpin();});return;}
+  if(Math.random()<0.005){const limit=trollFlags.nextPurgeTo8?8:(currentStage===1?12:8);trollFlags.nextPurgeTo8=false;if(getActiveItems().length>limit){purgeTo(limit);showEventModal('💥','0.5% — PURGA','¡MASACRE!',`Quedan ${limit} jugadores`,`¡La ruleta eliminó participantes hasta dejar ${limit}!`,'#ff4757','#fff',()=>{finishSpin();});return;}}
+  if(Math.random()<0.005){showEventModal('👑','¡VIP TWITCH!','¡VIP GANADO!',winner,`¡${winner} gana un VIP en el canal de Twitch! 👑 ¡Felicitaciones!`,'#9146ff','#f0e6ff',()=>{finishSpin();});showBanner(`👑 ¡${winner} ganó un VIP de Twitch!`,5000);return;}
+  if(Math.random()<0.005){showEventModal('🎁','¡SUB TWITCH!','¡SUSCRIPCIÓN GANADA!',winner,`¡${winner} gana una suscripción al canal de Twitch! 🎁 ¡Disfrútala!`,'#bf00ff','#f5e6ff',()=>{finishSpin();});showBanner(`🎁 ¡${winner} ganó una sub de Twitch!`,5000);return;}
+  applyWeaponHit(winner,()=>{finishSpin();});
 }
 
-/* ============================================================
-   WEAPON HIT
-============================================================ */
-function applyWeaponHit(winner, callback) {
-  ensurePlayer(winner);
-  const p = playerDB[winner];
-  const w = currentWeapon;
-
-  if (Math.random() < w.failChance) {
-    if (w.id === 'grenade') {
-      showBanner(`💨 ¡La granada no explotó! ${winner} está a salvo.`, 3000);
-      showEventModal('💨', 'DUD 💣', '¡No explotó!', winner,
-        `La granada era un dud. Solo el 10% de chance de explotar — esta vez no explotó.`,
-        '#667eea', '#fff', callback);
-      return;
-    }
-    showBanner(`💨 ${w.name} falló su disparo en ${winner}!`, 3000);
-    if (Math.random() < 0.70 && !p.bleeding && p.status === 'alive') {
-      p.bleeding = true; p.bleedRound = 0;
-      drawWheel(); updateSidePanel();
-      showEventModal('🩸', 'SANGRADO', '¡Desangrándose!', winner,
-        `${winner} no murió pero está sangrando. Ronda 1: 15%, Ronda 2: 20%, Ronda 3: 25%, Ronda 4+: 33%.`,
-        '#e65100', '#fff3e0', callback);
-    } else {
-      showEventModal('💨', 'FALLO', `${w.name} falló`, winner,
-        `El disparo de ${w.name} no impactó. ${winner} sigue en juego.`,
-        '#667eea', '#fff', callback);
-    }
+function applyWeaponHit(winner,callback){
+  ensurePlayer(winner);const p=playerDB[winner];const w=currentWeapon;
+  if(Math.random()<w.failChance){
+    if(w.id==='grenade'){showBanner(`💨 ¡La granada no explotó! ${winner} está a salvo.`,3000);showEventModal('💨','DUD 💣','¡No explotó!',winner,'La granada era un dud. Solo el 10% de chance de explotar — esta vez no explotó.','#667eea','#fff',callback);return;}
+    showBanner(`💨 ${w.name} falló su disparo en ${winner}!`,3000);
+    if(Math.random()<0.70&&!p.bleeding&&p.status==='alive'){p.bleeding=true;p.bleedRound=0;drawWheel();updateSidePanel();showEventModal('🩸','SANGRADO','¡Desangrándose!',winner,`${winner} no murió pero está sangrando. Ronda 1: 15%, Ronda 2: 20%, Ronda 3: 25%, Ronda 4+: 33%.`,'#e65100','#fff3e0',callback);}
+    else{showEventModal('💨','FALLO',`${w.name} falló`,winner,`El disparo de ${w.name} no impactó. ${winner} sigue en juego.`,'#667eea','#fff',callback);}
     return;
   }
-
-  if (p.shield && w.id !== 'grenade') {
-    p.shield = false; drawWheel(); updateSidePanel();
-    showEventModal('🛡️', 'ESCUDO ACTIVADO', '¡Bloqueado!', winner,
-      `El escudo de ${winner} absorbió el impacto. El escudo se ha roto.`,
-      '#1565c0', '#e3f2fd', callback);
+  if(p.shield&&w.id!=='grenade'){p.shield=false;drawWheel();updateSidePanel();showEventModal('🛡️','ESCUDO ACTIVADO','¡Bloqueado!',winner,`El escudo de ${winner} absorbió el impacto. El escudo se ha roto.`,'#1565c0','#e3f2fd',callback);return;}
+  if(w.id==='knife'){
+    playKnifeSlashSound();eliminatePlayer(winner);drawWheel();updateSidePanel();updateItemsList();
+    const pAfter=playerDB[winner];
+    if(pAfter&&pAfter.status==='dead'){showEventModal('🔪','ELIMINACIÓN','¡Eliminado!',winner,`El cuchillo acabó con ${winner}. Sin vidas restantes.`,'#ff4757','#fff',()=>{checkDragAlong(winner,callback);});}
+    else{showEventModal('🔪','HERIDO','¡Herido!',winner,`El cuchillo hirió a ${winner}. Le queda ${pAfter?pAfter.lives:'?'} vida(s).`,'#bf360c','#fff',()=>{if(pAfter&&!pAfter.bleeding&&pAfter.status==='alive')checkBleeding(winner);callback();});}
     return;
   }
-
-  if (w.id === 'knife') {
-    playKnifeSlashSound();
-    eliminatePlayer(winner); drawWheel(); updateSidePanel(); updateItemsList();
-    const pAfter = playerDB[winner];
-    if (pAfter && pAfter.status === 'dead') {
-      showEventModal('🔪', 'ELIMINACIÓN', '¡Eliminado!', winner,
-        `El cuchillo acabó con ${winner}. Sin vidas restantes.`,
-        '#ff4757', '#fff', () => { checkDragAlong(winner, callback); });
-    } else {
-      showEventModal('🔪', 'HERIDO', '¡Herido!', winner,
-        `El cuchillo hirió a ${winner}. Le queda ${pAfter ? pAfter.lives : '?'} vida(s).`,
-        '#bf360c', '#fff', () => { if (pAfter && !pAfter.bleeding && pAfter.status === 'alive') checkBleeding(winner); callback(); });
-    }
-    return;
+  if(w.id==='sniper'){playSniperAnimAtPointer(winner,()=>{eliminatePlayer(winner);drawWheel();updateSidePanel();updateItemsList();showEventModal(w.icon,'ELIMINACIÓN','¡Eliminado!',winner,`El francotirador no falla. ${winner} ha sido neutralizado.`,'#ff4757','#fff',()=>{checkDragAlong(winner,callback);});});return;}
+  if(w.id==='shotgun'){
+    const activeNow=getActiveItems();const killed=[winner];const others=activeNow.filter(n=>n!==winner);
+    for(let i=0;i<Math.min(w.kills-1,others.length);i++)killed.push(others[i]);
+    playShotgunAnim(killed,()=>{
+      killed.forEach(name=>eliminatePlayer(name));drawWheel();updateSidePanel();updateItemsList();
+      const anyDead=killed.some(n=>playerDB[n]&&playerDB[n].status==='dead');
+      const resultLines=killed.map(name=>{const pp=playerDB[name];return pp&&pp.status==='dead'?`💀 ${name} eliminado`:`❤️ ${name} perdió una vida (le queda ${pp?pp.lives:'?'})`;});
+      const badge=killed.length>=3?'TRIPLE KILL 🎯':killed.length===2?'DOBLE KILL':'ELIMINACIÓN';
+      const title=killed.length>=3?'¡TRIPLE KILL!':killed.length===2?'¡Doble baja!':'¡Eliminado!';
+      showEventModal(w.icon,badge,title,killed.join(', '),resultLines.join(' | '),anyDead?'#ff4757':'#e65100','#fff',()=>{if(playerDB[winner]&&playerDB[winner].status==='dead')checkDragAlong(winner,callback);else callback();});
+    });return;
   }
-
-  if (w.id === 'sniper') {
-    playSniperAnimAtPointer(winner, () => {
-      eliminatePlayer(winner); drawWheel(); updateSidePanel(); updateItemsList();
-      showEventModal(w.icon, 'ELIMINACIÓN', '¡Eliminado!', winner,
-        `El francotirador no falla. ${winner} ha sido neutralizado.`,
-        '#ff4757', '#fff', () => { checkDragAlong(winner, callback); });
-    });
-    return;
-  }
-
-  // SHOTGUN — use cinematic animation
-  if (w.id === 'shotgun') {
-    const activeNow = getActiveItems();
-    const killed = [winner];
-    const others = activeNow.filter(n => n !== winner);
-    for (let i = 0; i < Math.min(w.kills - 1, others.length); i++) killed.push(others[i]);
-    playShotgunAnim(killed, () => {
-      killed.forEach(name => eliminatePlayer(name));
-      drawWheel(); updateSidePanel(); updateItemsList();
-      const anyDead = killed.some(n => playerDB[n] && playerDB[n].status === 'dead');
-      const allDead = killed.every(n => playerDB[n] && playerDB[n].status === 'dead');
-      const resultLines = killed.map(name => {
-        const pp = playerDB[name];
-        return pp && pp.status === 'dead' ? `💀 ${name} eliminado` : `❤️ ${name} perdió una vida (le queda ${pp ? pp.lives : '?'})`;
-      });
-      const badge = killed.length >= 3 ? 'TRIPLE KILL 🎯' : killed.length === 2 ? 'DOBLE KILL' : 'ELIMINACIÓN';
-      const title = killed.length >= 3 ? '¡TRIPLE KILL!' : killed.length === 2 ? '¡Doble baja!' : '¡Eliminado!';
-      showEventModal(w.icon, badge, title, killed.join(', '),
-        resultLines.join(' | '), anyDead ? '#ff4757' : '#e65100', '#fff', () => {
-          if (playerDB[winner] && playerDB[winner].status === 'dead') checkDragAlong(winner, callback);
-          else callback();
-        });
-    });
-    return;
-  }
-
-  const activeNow = getActiveItems();
-  const killed = [winner];
-  if (w.kills > 1) {
-    const others = activeNow.filter(n => n !== winner);
-    for (let i = 0; i < Math.min(w.kills - 1, others.length); i++) killed.push(others[i]);
-  }
-  if (w.id === 'grenade') {
-    const others = activeNow.filter(n => n !== winner).sort(() => Math.random() - 0.5);
-    for (let i = 0; i < Math.min(3, others.length); i++) killed.push(others[i]);
-  }
-
-  playShootAnim(winner, () => {
-    killed.forEach(name => eliminatePlayer(name));
-    drawWheel(); updateSidePanel(); updateItemsList();
-    const resultLines = killed.map(name => {
-      const pp = playerDB[name];
-      return pp && pp.status === 'dead' ? `💀 ${name} eliminado` : `❤️ ${name} perdió una vida (le queda ${pp ? pp.lives : '?'})`;
-    });
-    const anyDead = killed.some(n => playerDB[n] && playerDB[n].status === 'dead');
-    const allDead = killed.every(n => playerDB[n] && playerDB[n].status === 'dead');
-    const modalBadge = allDead ? (killed.length === 1 ? 'ELIMINACIÓN' : 'MASACRE') : (anyDead ? 'BAJAS MIXTAS' : 'HERIDO');
-    const modalTitle = allDead ? (killed.length === 1 ? '¡Eliminado!' : `¡${killed.length} eliminados!`) : (anyDead ? '¡Bajas y heridos!' : killed.length === 1 ? '¡Herido!' : '¡Varios heridos!');
-    showEventModal(w.icon, modalBadge, modalTitle, killed.join(', '),
-      resultLines.join(' | '), anyDead ? '#ff4757' : '#e65100', '#fff', () => {
-        if (playerDB[winner] && playerDB[winner].status === 'dead') checkDragAlong(winner, callback);
-        else callback();
-      });
+  const activeNow=getActiveItems();const killed=[winner];
+  if(w.kills>1){const others=activeNow.filter(n=>n!==winner);for(let i=0;i<Math.min(w.kills-1,others.length);i++)killed.push(others[i]);}
+  if(w.id==='grenade'){const others=activeNow.filter(n=>n!==winner).sort(()=>Math.random()-0.5);for(let i=0;i<Math.min(3,others.length);i++)killed.push(others[i]);}
+  playShootAnim(winner,()=>{
+    killed.forEach(name=>eliminatePlayer(name));drawWheel();updateSidePanel();updateItemsList();
+    const resultLines=killed.map(name=>{const pp=playerDB[name];return pp&&pp.status==='dead'?`💀 ${name} eliminado`:`❤️ ${name} perdió una vida (le queda ${pp?pp.lives:'?'})`;});
+    const anyDead=killed.some(n=>playerDB[n]&&playerDB[n].status==='dead'),allDead=killed.every(n=>playerDB[n]&&playerDB[n].status==='dead');
+    const modalBadge=allDead?(killed.length===1?'ELIMINACIÓN':'MASACRE'):(anyDead?'BAJAS MIXTAS':'HERIDO');
+    const modalTitle=allDead?(killed.length===1?'¡Eliminado!':`¡${killed.length} eliminados!`):(anyDead?'¡Bajas y heridos!':killed.length===1?'¡Herido!':'¡Varios heridos!');
+    showEventModal(w.icon,modalBadge,modalTitle,killed.join(', '),resultLines.join(' | '),anyDead?'#ff4757':'#e65100','#fff',()=>{if(playerDB[winner]&&playerDB[winner].status==='dead')checkDragAlong(winner,callback);else callback();});
   });
 }
 
-function checkBleeding(name) {
-  const p = playerDB[name];
-  if (!p || p.status !== 'alive' || p.bleeding) return;
-  if (Math.random() < 0.70) { p.bleeding = true; p.bleedRound = 0; showBanner(`🩸 ${name} está sangrando...`, 2500); drawWheel(); updateSidePanel(); }
-}
-function checkDragAlong(name, callback) {
-  if (Math.random() < 0.20 && currentWeapon.id !== 'sniper') {
-    const active = getActiveItems();
-    if (active.length > 0) {
-      const dragged = active[Math.floor(Math.random() * active.length)];
-      eliminatePlayer(dragged); drawWheel(); updateSidePanel(); updateItemsList();
-      showBanner(`💀 ¡${name} se llevó a ${dragged} con él/ella!`, 3500);
-      showEventModal('💀', 'ARRASTRE 20%', '¡Se lleva a alguien!', dragged,
-        `Al morir, ${name} arrastró a ${dragged} consigo. ¡Dos eliminados!`,
-        '#ff4757', '#fff', callback);
-      return;
-    }
-  }
-  callback();
+function checkBleeding(name){const p=playerDB[name];if(!p||p.status!=='alive'||p.bleeding)return;if(Math.random()<0.70){p.bleeding=true;p.bleedRound=0;showBanner(`🩸 ${name} está sangrando...`,2500);drawWheel();updateSidePanel();}}
+function checkDragAlong(name,callback){
+  if(Math.random()<0.20&&currentWeapon.id!=='sniper'){const active=getActiveItems();if(active.length>0){const dragged=active[Math.floor(Math.random()*active.length)];eliminatePlayer(dragged);drawWheel();updateSidePanel();updateItemsList();showBanner(`💀 ¡${name} se llevó a ${dragged} con él/ella!`,3500);showEventModal('💀','ARRASTRE 20%','¡Se lleva a alguien!',dragged,`Al morir, ${name} arrastró a ${dragged} consigo. ¡Dos eliminados!`,'#ff4757','#fff',callback);return;}}callback();
 }
 
-/* ============================================================
-   BLEEDING
-============================================================ */
-function processBleedingRound() {
-  const bleedDeaths = [];
-  items.forEach(name => {
-    const p = playerDB[name];
-    if (!p || !p.bleeding || p.status !== 'alive') return;
-    p.bleedRound++;
-    const dc = p.bleedRound === 1 ? 0.15 : p.bleedRound === 2 ? 0.20 : p.bleedRound === 3 ? 0.25 : 0.33;
-    if (Math.random() < dc) bleedDeaths.push(name);
-  });
-  bleedDeaths.forEach(name => { eliminatePlayer(name); showBanner(`🩸 ¡${name} murió desangrándose!`, 3200); });
+function processBleedingRound(){
+  const bleedDeaths=[];
+  items.forEach(name=>{const p=playerDB[name];if(!p||!p.bleeding||p.status!=='alive')return;p.bleedRound++;const dc=p.bleedRound===1?0.15:p.bleedRound===2?0.20:p.bleedRound===3?0.25:0.33;if(Math.random()<dc)bleedDeaths.push(name);});
+  bleedDeaths.forEach(name=>{eliminatePlayer(name);showBanner(`🩸 ¡${name} murió desangrándose!`,3200);});
 }
 
-/* ============================================================
-   PURGE / ELIMINATE / REVIVE
-============================================================ */
-function purgeTo(limit) {
-  const active = getActiveItems();
-  while (active.length > limit) { const victim = active.splice(Math.floor(Math.random() * active.length), 1)[0]; eliminatePlayer(victim); }
-  drawWheel(); updateSidePanel(); updateItemsList();
-}
-function eliminatePlayer(name) {
-  ensurePlayer(name); const p = playerDB[name];
-  if (p.status !== 'alive') return;
-  p.lives--;
-  if (p.lives <= 0) { p.status = 'dead'; p.lives = 0; p.bleeding = false; if (!eliminatedDB.includes(name)) eliminatedDB.push(name); removeFromWheel(name); }
-}
-function removeFromWheel(name) { const idx = items.indexOf(name); if (idx !== -1) items.splice(idx, 1); }
-function revivePlayer(name) {
-  if (!playerDB[name]) return;
-  const p = playerDB[name];
-  p.status = 'alive'; p.lives = currentStage === 3 ? 1 : 2; p.maxLives = p.lives;
-  p.bleeding = false; p.bleedRound = 0; p.shield = false;
-  if (!items.includes(name)) items.push(name);
-  if (!originalItems.includes(name)) originalItems.push(name);
-  const idx = eliminatedDB.indexOf(name); if (idx !== -1) eliminatedDB.splice(idx, 1);
-  drawWheel(); updateSidePanel(); updateItemsList();
-}
-function reviveAll() { [...eliminatedDB].forEach(name => revivePlayer(name)); }
+function purgeTo(limit){const active=getActiveItems();while(active.length>limit){const victim=active.splice(Math.floor(Math.random()*active.length),1)[0];eliminatePlayer(victim);}drawWheel();updateSidePanel();updateItemsList();}
+function eliminatePlayer(name){ensurePlayer(name);const p=playerDB[name];if(p.status!=='alive')return;p.lives--;if(p.lives<=0){p.status='dead';p.lives=0;p.bleeding=false;if(!eliminatedDB.includes(name))eliminatedDB.push(name);removeFromWheel(name);}}
+function removeFromWheel(name){const idx=items.indexOf(name);if(idx!==-1)items.splice(idx,1);}
+function revivePlayer(name){if(!playerDB[name])return;const p=playerDB[name];p.status='alive';p.lives=currentStage===3?1:2;p.maxLives=p.lives;p.bleeding=false;p.bleedRound=0;p.shield=false;if(!items.includes(name))items.push(name);if(!originalItems.includes(name))originalItems.push(name);const idx=eliminatedDB.indexOf(name);if(idx!==-1)eliminatedDB.splice(idx,1);drawWheel();updateSidePanel();updateItemsList();}
+function reviveAll(){[...eliminatedDB].forEach(name=>revivePlayer(name));}
 
-/* ============================================================
-   REVIVE PICKER
-============================================================ */
-function showRevivePicker(reviver, callback) {
-  const dead = eliminatedDB.filter(n => playerDB[n] && playerDB[n].status === 'dead');
-  if (dead.length === 0) { callback(); return; }
-  document.getElementById('reviverName').textContent = reviver;
-  const opts = document.getElementById('reviveOptions'); opts.innerHTML = '';
-  dead.forEach(name => {
-    const btn = document.createElement('button'); btn.className = 'revive-option-btn';
-    btn.textContent = '💚 ' + name;
-    btn.onclick = () => { revivePlayer(name); closeModal('revivePickModal'); showBanner(`💚 ¡${name} ha sido revivido por ${reviver}!`, 3000); callback(); };
-    opts.appendChild(btn);
-  });
+function showRevivePicker(reviver,callback){
+  const dead=eliminatedDB.filter(n=>playerDB[n]&&playerDB[n].status==='dead');if(dead.length===0){callback();return;}
+  document.getElementById('reviverName').textContent=reviver;const opts=document.getElementById('reviveOptions');opts.innerHTML='';
+  dead.forEach(name=>{const btn=document.createElement('button');btn.className='revive-option-btn';btn.textContent='💚 '+name;btn.onclick=()=>{revivePlayer(name);closeModal('revivePickModal');showBanner(`💚 ¡${name} ha sido revivido por ${reviver}!`,3000);callback();};opts.appendChild(btn);});
   document.getElementById('revivePickModal').classList.add('show');
 }
 
-/* ============================================================
-   DUEL
-============================================================ */
-function startMiniDuel(p1, p2, callback) {
-  duelState = { p1, p2, score1: 0, score2: 0, log: [], onFinish: callback };
-  document.getElementById('duelName1').textContent = p1;
-  document.getElementById('duelName2').textContent = p2;
-  document.getElementById('duelScore1').textContent = '0';
-  document.getElementById('duelScore2').textContent = '0';
-  document.getElementById('duelLog').innerHTML = '';
-  document.getElementById('duelNextBtn').textContent = 'Tirar dado 🎲';
-  document.getElementById('duelNextBtn').onclick = duelRound;
-  document.getElementById('duelModal').classList.add('show');
+function startMiniDuel(p1,p2,callback){
+  duelState={p1,p2,score1:0,score2:0,log:[],onFinish:callback};
+  document.getElementById('duelName1').textContent=p1;document.getElementById('duelName2').textContent=p2;
+  document.getElementById('duelScore1').textContent='0';document.getElementById('duelScore2').textContent='0';
+  document.getElementById('duelLog').innerHTML='';document.getElementById('duelNextBtn').textContent='Tirar dado 🎲';
+  document.getElementById('duelNextBtn').onclick=duelRound;document.getElementById('duelModal').classList.add('show');
 }
-function duelRound() {
-  if (!duelState) return;
-  const r1 = Math.floor(Math.random() * 6) + 1, r2 = Math.floor(Math.random() * 6) + 1;
-  let msg = '';
-  if (r1 > r2) { duelState.score1++; msg = `🎲 ${duelState.p1} sacó ${r1} vs ${r2} — ¡Punto para ${duelState.p1}!`; }
-  else if (r2 > r1) { duelState.score2++; msg = `🎲 ${duelState.p2} sacó ${r2} vs ${r1} — ¡Punto para ${duelState.p2}!`; }
-  else { msg = `🎲 Empate ${r1}-${r2}. ¡Nadie anota!`; }
-  duelState.log.push(msg);
-  document.getElementById('duelScore1').textContent = duelState.score1;
-  document.getElementById('duelScore2').textContent = duelState.score2;
-  const logEl = document.getElementById('duelLog');
-  logEl.innerHTML = duelState.log.map(l => `<div>${l}</div>`).join('');
-  logEl.scrollTop = logEl.scrollHeight;
-  if (duelState.score1 >= 5 || duelState.score2 >= 5) {
-    const winner = duelState.score1 >= 5 ? duelState.p1 : duelState.p2;
-    const loser  = duelState.score1 >= 5 ? duelState.p2 : duelState.p1;
-    document.getElementById('duelNextBtn').textContent = `✅ Cerrar — ${winner} ganó`;
-    document.getElementById('duelNextBtn').onclick = () => {
-      eliminatePlayer(loser); drawWheel(); updateSidePanel(); updateItemsList();
-      document.getElementById('duelModal').classList.remove('show');
-      showBanner(`⚔️ ¡${winner} ganó el duelo! ¡${loser} eliminado!`, 3500);
-      const cb = duelState.onFinish; duelState = null; if (cb) cb();
-    };
+function duelRound(){
+  if(!duelState)return;const r1=Math.floor(Math.random()*6)+1,r2=Math.floor(Math.random()*6)+1;let msg='';
+  if(r1>r2){duelState.score1++;msg=`🎲 ${duelState.p1} sacó ${r1} vs ${r2} — ¡Punto para ${duelState.p1}!`;}
+  else if(r2>r1){duelState.score2++;msg=`🎲 ${duelState.p2} sacó ${r2} vs ${r1} — ¡Punto para ${duelState.p2}!`;}
+  else{msg=`🎲 Empate ${r1}-${r2}. ¡Nadie anota!`;}
+  duelState.log.push(msg);document.getElementById('duelScore1').textContent=duelState.score1;document.getElementById('duelScore2').textContent=duelState.score2;
+  const logEl=document.getElementById('duelLog');logEl.innerHTML=duelState.log.map(l=>`<div>${l}</div>`).join('');logEl.scrollTop=logEl.scrollHeight;
+  if(duelState.score1>=5||duelState.score2>=5){
+    const winner=duelState.score1>=5?duelState.p1:duelState.p2,loser=duelState.score1>=5?duelState.p2:duelState.p1;
+    document.getElementById('duelNextBtn').textContent=`✅ Cerrar — ${winner} ganó`;
+    document.getElementById('duelNextBtn').onclick=()=>{eliminatePlayer(loser);drawWheel();updateSidePanel();updateItemsList();document.getElementById('duelModal').classList.remove('show');showBanner(`⚔️ ¡${winner} ganó el duelo! ¡${loser} eliminado!`,3500);const cb=duelState.onFinish;duelState=null;if(cb)cb();};
   }
 }
-function startDuel() {
-  const active = getActiveItems();
-  if (active.length < 2) { showBanner('Necesitas al menos 2 jugadores para el duelo.', 3000); return; }
-  if (active.length === 2) { startMiniDuel(active[0], active[1], () => {}); }
-  else {
-    const idx1 = Math.floor(Math.random() * active.length);
-    let idx2; do { idx2 = Math.floor(Math.random() * active.length); } while (idx2 === idx1);
-    startMiniDuel(active[idx1], active[idx2], () => {});
-  }
-}
+function startDuel(){const active=getActiveItems();if(active.length<2){showBanner('Necesitas al menos 2 jugadores para el duelo.',3000);return;}if(active.length===2){startMiniDuel(active[0],active[1],()=>{});}else{const idx1=Math.floor(Math.random()*active.length);let idx2;do{idx2=Math.floor(Math.random()*active.length);}while(idx2===idx1);startMiniDuel(active[idx1],active[idx2],()=>{});}}
 
-/* ============================================================
-   FINISH SPIN
-============================================================ */
-function finishSpin() {
-  isSpinning = false; updateSpinBtnLabel(); checkStageTransition();
-  drawWheel(); updateSidePanel(); updateItemsList(); processNextInQueue();
-}
-function checkStageTransition() {
-  const active = getActiveItems().length;
-  if (currentMode !== 'troll') return;
-  if (currentStage === 1 && active <= 12) showBanner('🏆 ¡Etapa 1 completada! Ya quedan ≤12 jugadores. Puedes pasar a Etapa 2.', 5000);
-  if (currentStage === 2 && active <= 8) showBanner('🏆 ¡Etapa 2 completada! Ya quedan ≤8 jugadores. Puedes pasar a Etapa 3.', 5000);
-}
+function finishSpin(){isSpinning=false;updateSpinBtnLabel();checkStageTransition();drawWheel();updateSidePanel();updateItemsList();processNextInQueue();}
+function checkStageTransition(){const active=getActiveItems().length;if(currentMode!=='troll')return;if(currentStage===1&&active<=12)showBanner('🏆 ¡Etapa 1 completada! Ya quedan ≤12 jugadores. Puedes pasar a Etapa 2.',5000);if(currentStage===2&&active<=8)showBanner('🏆 ¡Etapa 2 completada! Ya quedan ≤8 jugadores. Puedes pasar a Etapa 3.',5000);}
 
-/* ============================================================
-   SHOOT ANIMATION (pistola genérica)
-============================================================ */
-function playShootAnim(name, callback) {
-  if (currentWeapon && currentWeapon.id === 'grenade') { playExplosionAnim(name, callback); return; }
+function playShootAnim(name,callback){
+  if(currentWeapon&&currentWeapon.id==='grenade'){playExplosionAnim(name,callback);return;}
   playPistolShotSound();
-  const overlay = document.getElementById('shootOverlay');
-  overlay.innerHTML = `<div class="bang-text">💥 ¡BANG!<br><span style="font-size:0.5em">${name} impactado</span></div>`;
+  const overlay=document.getElementById('shootOverlay');
+  overlay.innerHTML=`<div class="bang-text">💥 ¡BANG!<br><span style="font-size:0.5em">${name} impactado</span></div>`;
   overlay.classList.add('show');
-  setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 1200);
+  setTimeout(()=>{overlay.classList.remove('show');overlay.innerHTML='';callback();},1200);
 }
 
-/* ============================================================
-   SHOTGUN ANIMATION  🪓💥
-============================================================ */
-function playShotgunAnim(victims, callback) {
-  playShotgunBlastSound();
-  const overlay = document.getElementById('shotgunOverlay');
-  overlay.innerHTML = '';
+function playShotgunAnim(victims,callback){
+  playShotgunBlastSound();const overlay=document.getElementById('shotgunOverlay');overlay.innerHTML='';
+  const vig=document.createElement('div');vig.className='shotgun-vignette';overlay.appendChild(vig);
+  const crackDiv=document.createElement('div');crackDiv.className='shotgun-crack';crackDiv.innerHTML=`<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><line x1="400" y1="300" x2="220" y2="80" stroke="rgba(255,50,50,0.55)" stroke-width="2.5"/><line x1="400" y1="300" x2="600" y2="50" stroke="rgba(255,50,50,0.45)" stroke-width="1.8"/><line x1="400" y1="300" x2="100" y2="350" stroke="rgba(255,50,50,0.50)" stroke-width="2"/><line x1="400" y1="300" x2="700" y2="420" stroke="rgba(255,50,50,0.40)" stroke-width="1.5"/><line x1="400" y1="300" x2="300" y2="550" stroke="rgba(255,50,50,0.45)" stroke-width="2"/><line x1="400" y1="300" x2="650" y2="560" stroke="rgba(255,50,50,0.35)" stroke-width="1.5"/></svg>`;overlay.appendChild(crackDiv);
+  const flash=document.createElement('div');flash.className='shotgun-flash';overlay.appendChild(flash);
+  const smoke=document.createElement('div');smoke.className='shotgun-smoke';overlay.appendChild(smoke);
+  const boom=document.createElement('div');boom.className='shotgun-boom';boom.textContent=victims.length>=3?'🪓 TRIPLE KILL!':victims.length===2?'🪓 DOBLE KILL!':'🪓 ¡BOOM!';overlay.appendChild(boom);
+  if(victims.length>=2){const badge=document.createElement('div');badge.className='shotgun-multikill';badge.textContent=victims.length>=3?`💀 ${victims.length} BAJAS`:'💀 DOBLE BAJA';overlay.appendChild(badge);}
+  victims.forEach((name,i)=>{const tag=document.createElement('div');tag.className='shotgun-victim';tag.style.top=(55+i*10)+'%';tag.style.animationDelay=(i*0.12)+'s';tag.textContent='💀 '+name;overlay.appendChild(tag);});
+  const pelletAngles=[-40,-28,-16,-6,6,16,28,40];
+  pelletAngles.forEach((angleDeg,i)=>{const pellet=document.createElement('div');pellet.className='shotgun-pellet';const rad=(angleDeg-90)*Math.PI/180,dist=200+Math.random()*120;pellet.style.setProperty('--px',Math.cos(rad)*dist+'px');pellet.style.setProperty('--py',Math.sin(rad)*dist+'px');pellet.style.animationDelay=(i*0.018)+'s';pellet.style.animationDuration=(0.45+Math.random()*0.15)+'s';overlay.appendChild(pellet);});
+  [-18,18].forEach((cr,i)=>{const casing=document.createElement('div');casing.className='shotgun-casing';casing.style.setProperty('--cr',cr+'deg');casing.style.setProperty('--cx',(100+i*30)+'px');casing.style.setProperty('--cy',(-80-i*20)+'px');casing.style.animationDelay=(0.05+i*0.08)+'s';overlay.appendChild(casing);});
+  for(let i=0;i<5;i++){const spark=document.createElement('div');spark.className='pellet-spark';spark.style.left=(20+Math.random()*60)+'%';spark.style.top=(20+Math.random()*60)+'%';spark.style.width=(30+Math.random()*40)+'px';spark.style.height=spark.style.width;spark.style.borderRadius='50%';spark.style.background='radial-gradient(circle,#fff 0%,#ffd700 40%,#ff4500 70%,transparent 100%)';spark.style.animationDelay=(0.05+i*0.06)+'s';overlay.appendChild(spark);}
+  overlay.classList.add('show');document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),800);
+  setTimeout(()=>{overlay.classList.remove('show');overlay.innerHTML='';callback();},2400);
+}
 
-  // Vignette
-  const vig = document.createElement('div');
-  vig.className = 'shotgun-vignette';
-  overlay.appendChild(vig);
-
-  // Screen crack SVG overlay
-  const crackDiv = document.createElement('div');
-  crackDiv.className = 'shotgun-crack';
-  crackDiv.innerHTML = `<svg viewBox="0 0 800 600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <line x1="400" y1="300" x2="220" y2="80"  stroke="rgba(255,50,50,0.55)" stroke-width="2.5"/>
-    <line x1="400" y1="300" x2="600" y2="50"  stroke="rgba(255,50,50,0.45)" stroke-width="1.8"/>
-    <line x1="400" y1="300" x2="100" y2="350" stroke="rgba(255,50,50,0.50)" stroke-width="2"/>
-    <line x1="400" y1="300" x2="700" y2="420" stroke="rgba(255,50,50,0.40)" stroke-width="1.5"/>
-    <line x1="400" y1="300" x2="300" y2="550" stroke="rgba(255,50,50,0.45)" stroke-width="2"/>
-    <line x1="400" y1="300" x2="650" y2="560" stroke="rgba(255,50,50,0.35)" stroke-width="1.5"/>
-    <line x1="220" y1="80"  x2="150" y2="20"  stroke="rgba(255,50,50,0.35)" stroke-width="1.5"/>
-    <line x1="220" y1="80"  x2="280" y2="10"  stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
-    <line x1="600" y1="50"  x2="680" y2="10"  stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
-    <line x1="100" y1="350" x2="30"  y2="280" stroke="rgba(255,50,50,0.30)" stroke-width="1.2"/>
-    <line x1="700" y1="420" x2="790" y2="380" stroke="rgba(255,50,50,0.28)" stroke-width="1"/>
-  </svg>`;
-  overlay.appendChild(crackDiv);
-
-  // Muzzle flash
-  const flash = document.createElement('div');
-  flash.className = 'shotgun-flash';
-  overlay.appendChild(flash);
-
-  // Smoke
-  const smoke = document.createElement('div');
-  smoke.className = 'shotgun-smoke';
-  overlay.appendChild(smoke);
-
-  // Boom text
-  const boom = document.createElement('div');
-  boom.className = 'shotgun-boom';
-  boom.textContent = victims.length >= 3 ? '🪓 TRIPLE KILL!' : victims.length === 2 ? '🪓 DOBLE KILL!' : '🪓 ¡BOOM!';
-  overlay.appendChild(boom);
-
-  // Multi-kill badge (if 2+)
-  if (victims.length >= 2) {
-    const badge = document.createElement('div');
-    badge.className = 'shotgun-multikill';
-    badge.textContent = victims.length >= 3 ? `💀 ${victims.length} BAJAS` : '💀 DOBLE BAJA';
-    overlay.appendChild(badge);
-  }
-
-  // Victim name tags (staggered)
-  victims.forEach((name, i) => {
-    const tag = document.createElement('div');
-    tag.className = 'shotgun-victim';
-    tag.style.top = (55 + i * 10) + '%';
-    tag.style.animationDelay = (i * 0.12) + 's';
-    tag.textContent = '💀 ' + name;
-    overlay.appendChild(tag);
-  });
-
-  // Buckshot pellets (8 pellets in spread pattern)
-  const pelletAngles = [-40, -28, -16, -6, 6, 16, 28, 40];
-  pelletAngles.forEach((angleDeg, i) => {
-    const pellet = document.createElement('div');
-    pellet.className = 'shotgun-pellet';
-    const rad = (angleDeg - 90) * Math.PI / 180;
-    const dist = 200 + Math.random() * 120;
-    pellet.style.setProperty('--px', Math.cos(rad) * dist + 'px');
-    pellet.style.setProperty('--py', Math.sin(rad) * dist + 'px');
-    pellet.style.animationDelay = (i * 0.018) + 's';
-    pellet.style.animationDuration = (0.45 + Math.random() * 0.15) + 's';
-    overlay.appendChild(pellet);
-  });
-
-  // Shell casings (2 casings ejecting to the right)
-  [-18, 18].forEach((cr, i) => {
-    const casing = document.createElement('div');
-    casing.className = 'shotgun-casing';
-    casing.style.setProperty('--cr', cr + 'deg');
-    casing.style.setProperty('--cx', (100 + i * 30) + 'px');
-    casing.style.setProperty('--cy', (-80 - i * 20) + 'px');
-    casing.style.animationDelay = (0.05 + i * 0.08) + 's';
-    overlay.appendChild(casing);
-  });
-
-  // Pellet impact sparks at random screen positions
-  for (let i = 0; i < 5; i++) {
-    const spark = document.createElement('div');
-    spark.className = 'pellet-spark';
-    spark.style.left = (20 + Math.random() * 60) + '%';
-    spark.style.top  = (20 + Math.random() * 60) + '%';
-    spark.style.width = (30 + Math.random() * 40) + 'px';
-    spark.style.height = spark.style.width;
-    spark.style.borderRadius = '50%';
-    spark.style.background = `radial-gradient(circle,#fff 0%,#ffd700 40%,#ff4500 70%,transparent 100%)`;
-    spark.style.animationDelay = (0.05 + i * 0.06) + 's';
-    overlay.appendChild(spark);
-  }
-
+function getPointerTipScreenPosition(){const wrapper=document.getElementById('wheelWrapper');const rect=wrapper.getBoundingClientRect();return{xPct:(rect.left+rect.width/2)/window.innerWidth*100,yPct:rect.top/window.innerHeight*100};}
+function playSniperAnimAtPointer(name,callback){
+  const overlay=document.getElementById('sniperOverlay');overlay.innerHTML='';
+  const target=getPointerTipScreenPosition();const TARGET_CX=Math.max(5,Math.min(95,target.xPct)),TARGET_CY=Math.max(5,Math.min(90,target.yPct));
+  const startCx=TARGET_CX>50?5+Math.random()*20:75+Math.random()*20,startCy=TARGET_CY>40?5+Math.random()*15:70+Math.random()*15;
+  const targetTag=document.createElement('div');targetTag.style.cssText=['position:absolute','left:'+TARGET_CX+'%','top:'+TARGET_CY+'%','transform:translate(-50%,-50%)','background:rgba(20,0,0,0.85)','color:#ff3333','font-family:Courier New,monospace','font-size:1.4em','font-weight:900','letter-spacing:4px','text-transform:uppercase','padding:8px 20px','border-radius:8px','border:2px solid rgba(255,50,50,0.7)','text-shadow:0 0 10px rgba(255,0,0,0.9)','white-space:nowrap','z-index:5','animation:nameFlicker 0.2s infinite alternate'].join(';');targetTag.textContent=name;overlay.appendChild(targetTag);
+  const vignette=document.createElement('div');vignette.className='sniper-vignette';vignette.style.setProperty('--cx',startCx+'%');vignette.style.setProperty('--cy',startCy+'%');overlay.appendChild(vignette);
+  const scan=document.createElement('div');scan.className='sniper-scan-line';overlay.appendChild(scan);
+  const scope=document.createElement('div');scope.className='sniper-scope';scope.style.left=startCx+'%';scope.style.top=startCy+'%';overlay.appendChild(scope);
+  const dot=document.createElement('div');dot.className='sniper-dot';dot.style.left=startCx+'%';dot.style.top=startCy+'%';overlay.appendChild(dot);
+  const label=document.createElement('div');label.className='sniper-target-name';label.textContent='[ '+name+' ]';label.style.left=startCx+'%';label.style.top=startCy+'%';overlay.appendChild(label);
+  const hudTL=document.createElement('div');hudTL.className='sniper-hud sniper-hud-tl';hudTL.innerHTML='🎯 FRANCOTIRADOR<br>MODO: ÉLITE<br>DISTANCIA: '+(800+Math.floor(Math.random()*400))+'m';overlay.appendChild(hudTL);
+  const hudTR=document.createElement('div');hudTR.className='sniper-hud sniper-hud-tr';hudTR.innerHTML='OBJETIVO DETECTADO<br>PROBABILIDAD: 100%<br>VIENTO: '+Math.floor(Math.random()*15)+' km/h';overlay.appendChild(hudTR);
+  const hudBL=document.createElement('div');hudBL.className='sniper-hud sniper-hud-bl';hudBL.innerHTML='BUSCANDO OBJETIVO...<br>TARGET: '+name.toUpperCase();overlay.appendChild(hudBL);
   overlay.classList.add('show');
-
-  // Screen shake
-  document.body.classList.add('shaking');
-  setTimeout(() => document.body.classList.remove('shaking'), 800);
-
-  // Cleanup
-  const ANIM_DURATION = 2400;
-  setTimeout(() => {
-    overlay.classList.remove('show');
-    overlay.innerHTML = '';
-    callback();
-  }, ANIM_DURATION);
+  setTimeout(()=>{playSniperReloadSound();scope.style.transition='left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';dot.style.transition='left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';label.style.transition='left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';scope.style.left=TARGET_CX+'%';scope.style.top=TARGET_CY+'%';dot.style.left=TARGET_CX+'%';dot.style.top=TARGET_CY+'%';label.style.left=TARGET_CX+'%';label.style.top=TARGET_CY+'%';vignette.style.setProperty('--cx',TARGET_CX+'%');vignette.style.setProperty('--cy',TARGET_CY+'%');let jc=0;const ji=setInterval(()=>{if(jc++>4){clearInterval(ji);return;}const jx=TARGET_CX+(Math.random()-0.5)*2,jy=TARGET_CY+(Math.random()-0.5)*2;scope.style.transition='left 0.15s, top 0.15s';dot.style.transition='left 0.15s, top 0.15s';label.style.transition='left 0.15s, top 0.15s';scope.style.left=jx+'%';scope.style.top=jy+'%';dot.style.left=jx+'%';dot.style.top=jy+'%';label.style.left=jx+'%';label.style.top=jy+'%';},200);hudBL.innerHTML='APUNTANDO...<br>TARGET: '+name.toUpperCase();},300);
+  setTimeout(()=>{scope.style.transition='left 0.3s ease-out, top 0.3s ease-out';dot.style.transition='left 0.3s ease-out, top 0.3s ease-out';label.style.transition='left 0.3s ease-out, top 0.3s ease-out';scope.style.left=TARGET_CX+'%';scope.style.top=TARGET_CY+'%';dot.style.left=TARGET_CX+'%';dot.style.top=TARGET_CY+'%';label.style.left=TARGET_CX+'%';label.style.top=TARGET_CY+'%';vignette.style.setProperty('--cx',TARGET_CX+'%');vignette.style.setProperty('--cy',TARGET_CY+'%');hudBL.innerHTML='🔴 BLOQUEADO<br>TARGET: '+name.toUpperCase();hudBL.style.color='#ff2020';},1900);
+  setTimeout(()=>{playSniperShotSound();setTimeout(()=>playSniperImpactSound(),210);const flash=document.createElement('div');flash.className='sniper-flash';overlay.appendChild(flash);const bullet=document.createElement('div');bullet.className='sniper-bullet';const originX=startCx<50?0:100,originY=startCy<50?0:100;const angle=Math.atan2((TARGET_CY-originY)*window.innerHeight/100,(TARGET_CX-originX)*window.innerWidth/100)*180/Math.PI;bullet.style.left=originX+'%';bullet.style.top=originY+'%';bullet.style.transform='rotate('+angle+'deg)';overlay.appendChild(bullet);document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),600);setTimeout(()=>{targetTag.style.transition='opacity 0.15s';targetTag.style.opacity='0';const killText=document.createElement('div');killText.className='sniper-kill-text';killText.style.top=TARGET_CY+'%';killText.style.left=TARGET_CX+'%';killText.textContent='💀 NEUTRALIZADO';overlay.appendChild(killText);scope.style.transition='opacity 0.2s';scope.style.opacity='0';dot.style.opacity='0';label.style.opacity='0';},180);},2400);
+  setTimeout(()=>{overlay.classList.remove('show');overlay.innerHTML='';callback();},3900);
 }
 
-/* ============================================================
-   SNIPER ANIMATION
-============================================================ */
-function getPointerTipScreenPosition() {
-  const wrapper = document.getElementById('wheelWrapper');
-  const rect = wrapper.getBoundingClientRect();
-  const px = rect.left + rect.width / 2;
-  const py = rect.top;
-  return {
-    xPct: (px / window.innerWidth)  * 100,
-    yPct: (py / window.innerHeight) * 100
-  };
+function playExplosionAnim(name,callback){
+  const overlay=document.getElementById('explosionOverlay');overlay.innerHTML='';
+  overlay.appendChild(Object.assign(document.createElement('div'),{className:'explosion-flash'}));
+  overlay.appendChild(Object.assign(document.createElement('div'),{className:'shockwave'}));
+  const center=document.createElement('div');center.className='explosion-center';center.textContent='💥';overlay.appendChild(center);
+  const colors=['#ff4500','#ffd700','#ff6347','#ff8c00','#fff','#ffa500'];
+  for(let i=0;i<30;i++){const spark=document.createElement('div');spark.className='spark';const angle=(i/30)*360,dist=150+Math.random()*300;spark.style.cssText=`left:50%;top:50%;background:${colors[i%colors.length]};--tx:${Math.cos(angle*Math.PI/180)*dist}px;--ty:${Math.sin(angle*Math.PI/180)*dist}px;animation-delay:${Math.random()*0.2}s;animation-duration:${0.6+Math.random()*0.6}s`;overlay.appendChild(spark);}
+  const debrisEmojis=['🔥','💨','⚡','🌋','☄️','💫'];
+  for(let i=0;i<10;i++){const d=document.createElement('div');d.className='debris';const angle=Math.random()*360,dist=100+Math.random()*250;d.textContent=debrisEmojis[Math.floor(Math.random()*debrisEmojis.length)];d.style.cssText=`left:50%;top:50%;--tx:${Math.cos(angle*Math.PI/180)*dist}px;--ty:${Math.sin(angle*Math.PI/180)*dist}px;--rot:${Math.random()*720-360}deg;animation-delay:${Math.random()*0.15}s`;overlay.appendChild(d);}
+  const boom=document.createElement('div');boom.style.cssText='position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);font-size:4em;font-weight:900;color:#fff;text-shadow:0 0 30px #ff4500,0 0 60px #ffd700;animation:explodeCenter 1.4s forwards;z-index:10';boom.textContent='💣 ¡BOOM!';overlay.appendChild(boom);
+  overlay.classList.add('show');playGrenadeExplosionSound();document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),800);
+  setTimeout(()=>{overlay.classList.remove('show');overlay.innerHTML='';callback();},2000);
 }
 
-function playSniperAnimAtPointer(name, callback) {
-  const overlay = document.getElementById('sniperOverlay');
-  overlay.innerHTML = '';
-
-  const target = getPointerTipScreenPosition();
-  const TARGET_CX = Math.max(5, Math.min(95, target.xPct));
-  const TARGET_CY = Math.max(5, Math.min(90, target.yPct));
-
-  const startCx = TARGET_CX > 50 ? 5 + Math.random() * 20 : 75 + Math.random() * 20;
-  const startCy = TARGET_CY > 40 ? 5 + Math.random() * 15 : 70 + Math.random() * 15;
-
-  const targetTag = document.createElement('div');
-  targetTag.style.cssText = ['position:absolute','left:' + TARGET_CX + '%','top:' + TARGET_CY + '%',
-    'transform:translate(-50%,-50%)','background:rgba(20,0,0,0.85)','color:#ff3333',
-    'font-family:Courier New,monospace','font-size:1.4em','font-weight:900',
-    'letter-spacing:4px','text-transform:uppercase','padding:8px 20px',
-    'border-radius:8px','border:2px solid rgba(255,50,50,0.7)',
-    'text-shadow:0 0 10px rgba(255,0,0,0.9)','white-space:nowrap','z-index:5',
-    'animation:nameFlicker 0.2s infinite alternate'].join(';');
-  targetTag.textContent = name;
-  overlay.appendChild(targetTag);
-
-  const vignette = document.createElement('div');
-  vignette.className = 'sniper-vignette';
-  vignette.style.setProperty('--cx', startCx + '%');
-  vignette.style.setProperty('--cy', startCy + '%');
-  overlay.appendChild(vignette);
-
-  const scan = document.createElement('div');
-  scan.className = 'sniper-scan-line';
-  overlay.appendChild(scan);
-
-  const scope = document.createElement('div');
-  scope.className = 'sniper-scope';
-  scope.style.left = startCx + '%'; scope.style.top = startCy + '%';
-  overlay.appendChild(scope);
-
-  const dot = document.createElement('div');
-  dot.className = 'sniper-dot';
-  dot.style.left = startCx + '%'; dot.style.top = startCy + '%';
-  overlay.appendChild(dot);
-
-  const label = document.createElement('div');
-  label.className = 'sniper-target-name';
-  label.textContent = '[ ' + name + ' ]';
-  label.style.left = startCx + '%'; label.style.top = startCy + '%';
-  overlay.appendChild(label);
-
-  const hudTL = document.createElement('div');
-  hudTL.className = 'sniper-hud sniper-hud-tl';
-  hudTL.innerHTML = '🎯 FRANCOTIRADOR<br>MODO: ÉLITE<br>DISTANCIA: ' + (800 + Math.floor(Math.random() * 400)) + 'm';
-  overlay.appendChild(hudTL);
-
-  const hudTR = document.createElement('div');
-  hudTR.className = 'sniper-hud sniper-hud-tr';
-  hudTR.innerHTML = 'OBJETIVO DETECTADO<br>PROBABILIDAD: 100%<br>VIENTO: ' + Math.floor(Math.random() * 15) + ' km/h';
-  overlay.appendChild(hudTR);
-
-  const hudBL = document.createElement('div');
-  hudBL.className = 'sniper-hud sniper-hud-bl';
-  hudBL.innerHTML = 'BUSCANDO OBJETIVO...<br>TARGET: ' + name.toUpperCase();
-  overlay.appendChild(hudBL);
-
-  overlay.classList.add('show');
-
-  setTimeout(() => {
-    playSniperReloadSound();
-    scope.style.transition = 'left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';
-    dot.style.transition   = 'left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';
-    label.style.transition = 'left 1.1s cubic-bezier(.25,.1,.2,1), top 1.0s cubic-bezier(.25,.1,.2,1)';
-    scope.style.left = TARGET_CX + '%'; scope.style.top = TARGET_CY + '%';
-    dot.style.left   = TARGET_CX + '%'; dot.style.top   = TARGET_CY + '%';
-    label.style.left = TARGET_CX + '%'; label.style.top = TARGET_CY + '%';
-    vignette.style.setProperty('--cx', TARGET_CX + '%');
-    vignette.style.setProperty('--cy', TARGET_CY + '%');
-    let jc = 0;
-    const ji = setInterval(() => {
-      if (jc++ > 4) { clearInterval(ji); return; }
-      const jx = TARGET_CX + (Math.random() - 0.5) * 2;
-      const jy = TARGET_CY + (Math.random() - 0.5) * 2;
-      scope.style.transition = 'left 0.15s, top 0.15s';
-      dot.style.transition   = 'left 0.15s, top 0.15s';
-      label.style.transition = 'left 0.15s, top 0.15s';
-      scope.style.left = jx + '%'; scope.style.top = jy + '%';
-      dot.style.left   = jx + '%'; dot.style.top   = jy + '%';
-      label.style.left = jx + '%'; label.style.top = jy + '%';
-    }, 200);
-    hudBL.innerHTML = 'APUNTANDO...<br>TARGET: ' + name.toUpperCase();
-  }, 300);
-
-  setTimeout(() => {
-    scope.style.transition = 'left 0.3s ease-out, top 0.3s ease-out';
-    dot.style.transition   = 'left 0.3s ease-out, top 0.3s ease-out';
-    label.style.transition = 'left 0.3s ease-out, top 0.3s ease-out';
-    scope.style.left = TARGET_CX + '%'; scope.style.top = TARGET_CY + '%';
-    dot.style.left   = TARGET_CX + '%'; dot.style.top   = TARGET_CY + '%';
-    label.style.left = TARGET_CX + '%'; label.style.top = TARGET_CY + '%';
-    vignette.style.setProperty('--cx', TARGET_CX + '%');
-    vignette.style.setProperty('--cy', TARGET_CY + '%');
-    hudBL.innerHTML = '🔴 BLOQUEADO<br>TARGET: ' + name.toUpperCase();
-    hudBL.style.color = '#ff2020';
-  }, 1900);
-
-  setTimeout(() => {
-    playSniperShotSound();
-    setTimeout(() => playSniperImpactSound(), 210);
-    const flash = document.createElement('div');
-    flash.className = 'sniper-flash';
-    overlay.appendChild(flash);
-    const bullet = document.createElement('div');
-    bullet.className = 'sniper-bullet';
-    const originX = startCx < 50 ? 0 : 100;
-    const originY = startCy < 50 ? 0 : 100;
-    const angle = Math.atan2(
-      (TARGET_CY - originY) * window.innerHeight / 100,
-      (TARGET_CX - originX) * window.innerWidth  / 100
-    ) * 180 / Math.PI;
-    bullet.style.left = originX + '%';
-    bullet.style.top  = originY + '%';
-    bullet.style.transform = 'rotate(' + angle + 'deg)';
-    overlay.appendChild(bullet);
-    document.body.classList.add('shaking');
-    setTimeout(() => document.body.classList.remove('shaking'), 600);
-    setTimeout(() => {
-      targetTag.style.transition = 'opacity 0.15s';
-      targetTag.style.opacity = '0';
-      const killText = document.createElement('div');
-      killText.className = 'sniper-kill-text';
-      killText.style.top  = TARGET_CY + '%';
-      killText.style.left = TARGET_CX + '%';
-      killText.textContent = '💀 NEUTRALIZADO';
-      overlay.appendChild(killText);
-      scope.style.transition = 'opacity 0.2s';
-      scope.style.opacity = '0';
-      dot.style.opacity   = '0';
-      label.style.opacity = '0';
-    }, 180);
-  }, 2400);
-
-  setTimeout(() => {
-    overlay.classList.remove('show');
-    overlay.innerHTML = '';
-    callback();
-  }, 3900);
+function showBanner(text,duration){const b=document.getElementById('trollBanner');b.textContent=text;b.classList.add('show');clearTimeout(b._timeout);b._timeout=setTimeout(()=>b.classList.remove('show'),duration||3000);}
+function showWinner(name,isTroll){document.getElementById('winnerText').textContent=name;document.getElementById('winnerTitle').textContent=isTroll?'😈 ¡El troll eligió!':'🎉 ¡Tenemos un ganador!';document.getElementById('winnerSubtext').textContent='';document.getElementById('winnerModal').classList.add('show');}
+function showEventModal(icon,badge,title,name,desc,titleColor,nameBg,callback){
+  document.getElementById('evIcon').textContent=icon;document.getElementById('evBadge').textContent=badge;document.getElementById('evTitle').textContent=title;document.getElementById('evTitle').style.color=titleColor;
+  document.getElementById('evName').textContent=name;document.getElementById('evName').style.background=nameBg;document.getElementById('evName').style.color=nameBg==='#fff'?'#333':'#fff';
+  document.getElementById('evDesc').textContent=desc;document.getElementById('evBtn').style.background=titleColor;document.getElementById('evBtn').style.color='#fff';
+  document.getElementById('eventModal').classList.add('show');window._eventModalCallback=callback;
 }
+function closeEventModal(){document.getElementById('eventModal').classList.remove('show');if(window._eventModalCallback){const cb=window._eventModalCallback;window._eventModalCallback=null;cb();}}
+document.getElementById('evBtn').onclick=closeEventModal;
+function closeModal(id){document.getElementById(id).classList.remove('show');}
 
-/* ============================================================
-   EXPLOSION ANIMATION
-============================================================ */
-function playExplosionAnim(name, callback) {
-  const overlay = document.getElementById('explosionOverlay');
-  overlay.innerHTML = '';
-  overlay.appendChild(Object.assign(document.createElement('div'), {className:'explosion-flash'}));
-  overlay.appendChild(Object.assign(document.createElement('div'), {className:'shockwave'}));
-  const center = document.createElement('div'); center.className='explosion-center'; center.textContent='💥'; overlay.appendChild(center);
-  const colors = ['#ff4500','#ffd700','#ff6347','#ff8c00','#fff','#ffa500'];
-  for (let i = 0; i < 30; i++) {
-    const spark = document.createElement('div'); spark.className = 'spark';
-    const angle = (i / 30) * 360, dist = 150 + Math.random() * 300;
-    spark.style.cssText = `left:50%;top:50%;background:${colors[i%colors.length]};--tx:${Math.cos(angle*Math.PI/180)*dist}px;--ty:${Math.sin(angle*Math.PI/180)*dist}px;animation-delay:${Math.random()*0.2}s;animation-duration:${0.6+Math.random()*0.6}s`;
-    overlay.appendChild(spark);
-  }
-  const debrisEmojis = ['🔥','💨','⚡','🌋','☄️','💫'];
-  for (let i = 0; i < 10; i++) {
-    const d = document.createElement('div'); d.className = 'debris';
-    const angle = Math.random() * 360, dist = 100 + Math.random() * 250;
-    d.textContent = debrisEmojis[Math.floor(Math.random()*debrisEmojis.length)];
-    d.style.cssText = `left:50%;top:50%;--tx:${Math.cos(angle*Math.PI/180)*dist}px;--ty:${Math.sin(angle*Math.PI/180)*dist}px;--rot:${Math.random()*720-360}deg;animation-delay:${Math.random()*0.15}s`;
-    overlay.appendChild(d);
-  }
-  const boom = document.createElement('div');
-  boom.style.cssText = 'position:absolute;top:42%;left:50%;transform:translate(-50%,-50%);font-size:4em;font-weight:900;color:#fff;text-shadow:0 0 30px #ff4500,0 0 60px #ffd700;animation:explodeCenter 1.4s forwards;z-index:10';
-  boom.textContent = '💣 ¡BOOM!'; overlay.appendChild(boom);
-  overlay.classList.add('show');
-  playGrenadeExplosionSound();
-  document.body.classList.add('shaking');
-  setTimeout(() => document.body.classList.remove('shaking'), 800);
-  setTimeout(() => { overlay.classList.remove('show'); overlay.innerHTML = ''; callback(); }, 2000);
-}
-
-/* ============================================================
-   BANNER / WINNER / EVENT MODAL / MODALS
-============================================================ */
-function showBanner(text, duration) {
-  const b = document.getElementById('trollBanner'); b.textContent = text; b.classList.add('show');
-  clearTimeout(b._timeout); b._timeout = setTimeout(() => b.classList.remove('show'), duration || 3000);
-}
-function showWinner(name, isTroll) {
-  document.getElementById('winnerText').textContent = name;
-  document.getElementById('winnerTitle').textContent = isTroll ? '😈 ¡El troll eligió!' : '🎉 ¡Tenemos un ganador!';
-  document.getElementById('winnerSubtext').textContent = '';
-  document.getElementById('winnerModal').classList.add('show');
-}
-function showEventModal(icon, badge, title, name, desc, titleColor, nameBg, callback) {
-  document.getElementById('evIcon').textContent = icon;
-  document.getElementById('evBadge').textContent = badge;
-  document.getElementById('evTitle').textContent = title;
-  document.getElementById('evTitle').style.color = titleColor;
-  document.getElementById('evName').textContent = name;
-  document.getElementById('evName').style.background = nameBg;
-  document.getElementById('evName').style.color = nameBg === '#fff' ? '#333' : '#fff';
-  document.getElementById('evDesc').textContent = desc;
-  document.getElementById('evBtn').style.background = titleColor;
-  document.getElementById('evBtn').style.color = '#fff';
-  document.getElementById('eventModal').classList.add('show');
-  window._eventModalCallback = callback;
-}
-function closeEventModal() {
-  document.getElementById('eventModal').classList.remove('show');
-  if (window._eventModalCallback) { const cb = window._eventModalCallback; window._eventModalCallback = null; cb(); }
-}
-document.getElementById('evBtn').onclick = closeEventModal;
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
-
-/* ============================================================
-   CONFIG
-============================================================ */
-function openConfig() { updateSavedWheelsList(); document.getElementById('configModal').classList.add('show'); }
-function saveCurrentWheel() {
-  const nameIn = document.getElementById('wheelNameInput'); const n = nameIn.value.trim();
-  if (!n) { alert('Ingresa un nombre'); return; }
-  if (items.length === 0) { alert('La ruleta está vacía'); return; }
-  savedWheels[n] = [...items]; saveData(); nameIn.value = ''; updateSavedWheelsList(); alert('¡Guardada!');
-}
-function loadWheel(name) {
-  if (savedWheels[name]) { items = [...savedWheels[name]]; originalItems = [...items]; initPlayerDB(); drawWheel(); updateItemsList(); updateSidePanel(); closeModal('configModal'); }
-}
-function deleteSavedWheel(name) {
-  if (confirm(`¿Eliminar "${name}"?`)) { delete savedWheels[name]; saveData(); updateSavedWheelsList(); }
-}
-function updateSavedWheelsList() {
-  const list = document.getElementById('savedWheelsList');
-  const names = Object.keys(savedWheels);
-  if (names.length === 0) { list.innerHTML = '<p style="text-align:center;color:#999;padding:16px">Sin ruletas guardadas</p>'; return; }
-  list.innerHTML = '';
-  names.forEach(name => {
-    const div = document.createElement('div'); div.className = 'saved-wheel-item';
-    div.innerHTML = `<div><strong>${name}</strong><span style="color:#999;font-size:0.85em;margin-left:8px">${savedWheels[name].length} items</span></div><div style="display:flex;gap:6px"><button class="load-btn" onclick="loadWheel('${name}')">Cargar</button><button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button></div>`;
-    list.appendChild(div);
-  });
-}
-
-/* ============================================================
-   BOOT
-============================================================ */
-loadData();
-initPlayerDB();
-drawWheel();
-updateItemsList();
+function openConfig(){updateSavedWheelsList();document.getElementById('configModal').classList.add('show');}
+function saveCurrentWheel(){const nameIn=document.getElementById('wheelNameInput');const n=nameIn.value.trim();if(!n){alert('Ingresa un nombre');return;}if(items.length===0){alert('La ruleta está vacía');return;}savedWheels[n]=[...items];saveData();nameIn.value='';updateSavedWheelsList();alert('¡Guardada!');}
+function loadWheel(name){if(savedWheels[name]){items=[...savedWheels[name]];originalItems=[...items];initPlayerDB();drawWheel();updateItemsList();updateSidePanel();closeModal('configModal');}}
+function deleteSavedWheel(name){if(confirm(`¿Eliminar "${name}"?`)){delete savedWheels[name];saveData();updateSavedWheelsList();}}
+function updateSavedWheelsList(){const list=document.getElementById('savedWheelsList');const names=Object.keys(savedWheels);if(names.length===0){list.innerHTML='<p style="text-align:center;color:#999;padding:16px">Sin ruletas guardadas</p>';return;}list.innerHTML='';names.forEach(name=>{const div=document.createElement('div');div.className='saved-wheel-item';div.innerHTML=`<div><strong>${name}</strong><span style="color:#999;font-size:0.85em;margin-left:8px">${savedWheels[name].length} items</span></div><div style="display:flex;gap:6px"><button class="load-btn" onclick="loadWheel('${name}')">Cargar</button><button class="delete-saved-btn" onclick="deleteSavedWheel('${name}')">Eliminar</button></div>`;list.appendChild(div);});}
 </script>
 </body>
 </html>
