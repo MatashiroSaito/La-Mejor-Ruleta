@@ -9,16 +9,12 @@
 html{font-size:16px;}
 body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-gradient(135deg,#0a0a1a 0%,#1a0a2e 40%,#0d1a2e 70%,#0a1a0a 100%);background-size:400% 400%;animation:gradientShiftDark 12s ease infinite;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:12px;gap:16px;overflow-x:hidden;}
 @keyframes gradientShiftDark{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-
-/* === GLOBAL BG FX === */
 #globalStars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .g-star{position:absolute;border-radius:50%;background:#fff;animation:starTwinkle var(--dur,2s) infinite alternate;opacity:0;}
 @keyframes starTwinkle{0%{opacity:0;transform:scale(0.5)}100%{opacity:var(--op,0.9);transform:scale(1)}}
 #globalParticles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
 .g-particle{position:absolute;border-radius:50%;animation:particleFloat var(--dur,8s) var(--delay,0s) ease-in-out infinite;}
 @keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:1}90%{opacity:0.4}100%{transform:translateY(-100px) scale(1);opacity:0}}
-
-/* === START SCREEN === */
 #startScreen{position:fixed;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:9999;background:transparent;padding:20px;text-align:center;}
 .start-logo-ring{width:clamp(90px,20vw,130px);height:clamp(90px,20vw,130px);border-radius:50%;background:linear-gradient(135deg,#8A2BE2,#FF0080,#FF8C00,#FFD700);display:flex;align-items:center;justify-content:center;margin-bottom:clamp(16px,4vw,28px);animation:rotateLogo 8s linear infinite;position:relative;box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3);z-index:1;}
 @keyframes rotateLogo{0%{box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3)}50%{box-shadow:0 0 80px rgba(255,0,128,0.6),0 0 140px rgba(255,140,0,0.4)}100%{box-shadow:0 0 60px rgba(138,43,226,0.5),0 0 120px rgba(255,0,128,0.3)}}
@@ -38,46 +34,32 @@ body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:linear-g
 .start-footer{position:absolute;bottom:16px;color:rgba(255,255,255,0.25);font-size:clamp(0.65em,2vw,0.8em);letter-spacing:2px;animation:fadeInUp 0.8s 1.2s both;z-index:1;}
 #startScreen.exiting{animation:screenExit 0.7s ease-in forwards}
 @keyframes screenExit{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06)}}
-
-/* === APP ROOT === */
 #appRoot{display:none;width:100%;flex-direction:row;justify-content:center;align-items:flex-start;gap:16px;flex-wrap:wrap;position:relative;z-index:1;}
 #appRoot.visible{display:flex}
-
-/* === MAIN CONTAINER === */
 .main-container{background:rgba(15,10,30,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(138,43,226,0.25);border-radius:clamp(16px,4vw,30px);padding:clamp(16px,4vw,30px);box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(138,43,226,0.1);max-width:620px;width:100%;min-width:0;}
 h1{text-align:center;color:#a78bfa;margin-bottom:16px;font-size:clamp(1.2em,4vw,1.8em)}
 h1.troll-title{color:#ff4757;animation:trollPulse 1s infinite alternate}
 @keyframes trollPulse{from{text-shadow:2px 2px 4px rgba(255,71,87,0.3)}to{text-shadow:0 0 20px rgba(255,71,87,0.9)}}
-
-/* === TOP BAR === */
 .top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
 .mode-selector{display:flex;gap:6px;flex-wrap:wrap;}
 .mode-btn{padding:clamp(6px,1.5vw,8px) clamp(10px,2.5vw,16px);border:1px solid rgba(255,255,255,0.15);border-radius:15px;cursor:pointer;font-weight:700;font-size:clamp(0.75em,2.5vw,0.85em);background:rgba(255,255,255,0.05);transition:all 0.3s;color:rgba(255,255,255,0.6);touch-action:manipulation;}
 .mode-btn.active-normal{background:linear-gradient(135deg,#4c35a0,#7c3aed);color:#fff;border-color:transparent}
 .mode-btn.active-troll{background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;border-color:transparent}
-
-/* === STAGE SELECTOR === */
 .stage-selector{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;justify-content:center}
 .stage-btn{padding:clamp(6px,1.5vw,8px) clamp(10px,2.5vw,16px);border:1px solid rgba(255,255,255,0.15);border-radius:20px;cursor:pointer;font-weight:700;font-size:clamp(0.72em,2.2vw,0.85em);background:rgba(255,255,255,0.05);transition:all 0.3s;color:rgba(255,255,255,0.6);touch-action:manipulation;}
 .stage-btn:hover{border-color:#8A2BE2;color:#c4b5fd}
 .stage-btn.active,.stage-btn.troll-active{background:linear-gradient(135deg,#4c35a0,#7c3aed);color:#fff;border-color:transparent}
 .stage-btn.troll-active{background:linear-gradient(135deg,#ff4757,#ffa502);}
-
-/* === STAGE INFO === */
 .stage-info{background:rgba(255,255,255,0.05);border:1px solid rgba(138,43,226,0.2);border-radius:12px;padding:10px 14px;margin-bottom:16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;font-size:clamp(0.72em,2.2vw,0.85em);}
 .stage-info-item{display:flex;align-items:center;gap:4px;font-weight:600;color:rgba(255,255,255,0.7)}
 .stage-info-item span.val{color:#c4b5fd}
 .stage-info.troll-info{background:rgba(255,71,87,0.07);border-color:rgba(255,71,87,0.2)}
 .stage-info.troll-info .stage-info-item span.val{color:#ff6b7a}
-
-/* === WEAPON DISPLAY === */
 .weapon-display{display:flex;align-items:center;gap:8px;background:rgba(255,71,87,0.07);border-radius:12px;padding:8px 14px;margin-bottom:12px;font-size:clamp(0.78em,2.5vw,0.9em);border:1px solid rgba(255,71,87,0.2);min-width:0;}
 .weapon-icon{font-size:clamp(1.3em,4vw,1.8em);flex-shrink:0;}
 .weapon-info{flex:1;min-width:0;}
 .weapon-name{font-weight:700;color:#ff6b7a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .weapon-stats{font-size:0.8em;color:rgba(255,255,255,0.5);margin-top:2px;line-height:1.4;}
-
-/* === WHEEL === */
 .wheel-container{position:relative;display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
 .wheel-wrapper{position:relative;width:clamp(220px,60vw,300px);height:clamp(220px,60vw,300px);}
 #wheelCanvas{width:100%;height:100%;transition:transform 4s cubic-bezier(.17,.67,.12,.99)}
@@ -91,8 +73,6 @@ h1.troll-title{color:#ff4757;animation:trollPulse 1s infinite alternate}
 .queue-indicator{display:none;margin-top:8px;padding:5px 14px;background:rgba(255,71,87,0.12);border-radius:12px;font-size:0.82em;font-weight:700;color:#ff6b7a;text-align:center;border:1px solid rgba(255,71,87,0.3);animation:queuePulse 1.5s infinite alternate;}
 .queue-indicator.show{display:block}
 @keyframes queuePulse{from{opacity:0.7}to{opacity:1}}
-
-/* === CONTROLS === */
 .controls{width:100%}
 .input-group{display:flex;gap:8px;margin-bottom:12px}
 input[type=text]{flex:1;padding:clamp(8px,2vw,10px) clamp(12px,3vw,16px);border:1px solid rgba(255,255,255,0.15);border-radius:25px;font-size:clamp(0.88em,3vw,0.95em);background:rgba(255,255,255,0.07);color:#fff;min-width:0;}
@@ -105,8 +85,6 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .item-color{width:14px;height:14px;border-radius:50%;margin-right:7px;flex-shrink:0;}
 .item-text{flex:1;font-weight:500;font-size:clamp(0.82em,2.5vw,0.9em);color:rgba(255,255,255,0.85);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .delete-btn{background:#ff4757;color:#fff;border:none;padding:clamp(4px,1vw,5px) clamp(8px,2vw,10px);border-radius:8px;cursor:pointer;font-size:clamp(0.75em,2.5vw,0.8em);flex-shrink:0;touch-action:manipulation;}
-
-/* === SIDE PANEL === */
 .side-panel{background:rgba(15,10,30,0.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(138,43,226,0.25);border-radius:clamp(16px,4vw,30px);padding:clamp(14px,3vw,24px);box-shadow:0 20px 60px rgba(0,0,0,.7);width:clamp(220px,28vw,280px);min-width:0;max-height:90vh;overflow-y:auto;}
 .panel-title{font-size:clamp(0.9em,2.5vw,1.1em);font-weight:700;color:#c4b5fd;margin-bottom:12px;text-align:center}
 .panel-section{margin-bottom:14px}
@@ -124,8 +102,6 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 @keyframes bleedPulse{from{background:rgba(230,81,0,0.2)}to{background:rgba(230,81,0,0.4)}}
 .bleeding-bar{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#ff4757,#ffa502);transition:width 0.5s;border-radius:0 0 12px 12px;}
 .player-entry.eliminated{opacity:0.5}
-
-/* === MODALS === */
 .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:1000;animation:fadeIn 0.3s;padding:12px;overflow-y:auto;}
 .modal-overlay.show{display:flex}
 .modal-box{background:rgba(20,12,40,0.97);border:1px solid rgba(138,43,226,0.3);padding:clamp(20px,5vw,40px);border-radius:clamp(16px,4vw,25px);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.6);animation:slideUp 0.5s;max-width:420px;width:100%;}
@@ -159,26 +135,23 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .duel-log{background:rgba(0,0,0,0.4);border-radius:12px;padding:9px;max-height:130px;overflow-y:auto;margin:10px 0;text-align:left;font-size:clamp(0.75em,2.2vw,0.85em);line-height:1.8;color:rgba(255,255,255,0.8)}
 .duel-next-btn{padding:clamp(10px,2.5vw,12px) clamp(22px,5vw,32px);background:linear-gradient(135deg,#ffd700,#ffa500);color:#1a1a2e;border:none;border-radius:22px;cursor:pointer;font-weight:800;font-size:clamp(0.88em,2.5vw,1em);transition:all 0.3s;margin-top:10px;touch-action:manipulation;}
 .duel-next-btn:hover{transform:scale(1.05)}
+/* ══ Muerte Súbita badge ══ */
+.duel-next-btn.sudden-death{background:linear-gradient(135deg,#ff4757,#ff6348,#ffa502);animation:sdPulse 1s infinite alternate;}
+@keyframes sdPulse{0%{box-shadow:0 4px 18px rgba(255,71,87,0.5)}100%{box-shadow:0 4px 32px rgba(255,71,87,0.9)}}
 .revive-pick-modal{background:rgba(10,25,20,0.97);border:1px solid rgba(17,153,142,0.3);border-radius:clamp(16px,4vw,25px);padding:clamp(24px,5vw,40px);text-align:center;max-width:420px;width:100%;animation:slideUp 0.5s}
 .revive-pick-modal h2{color:#4db6ac;font-size:clamp(1.2em,4vw,1.6em);margin-bottom:14px}
 .revive-pick-modal p{color:rgba(255,255,255,0.6);font-size:clamp(0.82em,2.5vw,0.9em);}
 .revive-options{display:flex;flex-direction:column;gap:7px;max-height:180px;overflow-y:auto;margin-bottom:14px}
 .revive-option-btn{padding:10px;background:rgba(17,153,142,0.15);border:1px solid rgba(17,153,142,0.4);border-radius:12px;cursor:pointer;font-weight:600;color:#4db6ac;transition:all 0.3s;font-size:clamp(0.88em,2.5vw,1em);touch-action:manipulation;}
 .revive-option-btn:hover{background:rgba(17,153,142,0.25);transform:scale(1.02)}
-
-/* === TROLL BANNER === */
 .troll-banner{display:none;position:fixed;top:clamp(60px,10vw,80px);left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;padding:clamp(10px,2.5vw,14px) clamp(16px,4vw,28px);border-radius:16px;font-size:clamp(0.9em,3vw,1.2em);font-weight:800;z-index:999;box-shadow:0 8px 25px rgba(255,71,87,.5);text-align:center;max-width:92vw;animation:bannerIn 0.5s;white-space:normal;word-break:break-word;}
 .troll-banner.show{display:block}
 @keyframes bannerIn{0%{transform:translateX(-50%) translateY(-30px);opacity:0}100%{transform:translateX(-50%) translateY(0);opacity:1}}
-
-/* === COUNTDOWN === */
 .countdown-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1400;justify-content:center;align-items:center;flex-direction:column;}
 .countdown-overlay.show{display:flex}
 .countdown-number{font-size:clamp(5em,18vw,8em);font-weight:900;color:#fff;text-shadow:0 0 40px rgba(255,71,87,0.9);animation:countPop 0.8s ease-out}
 @keyframes countPop{0%{transform:scale(2);opacity:0}50%{transform:scale(0.9);opacity:1}100%{transform:scale(1);opacity:1}}
 .countdown-label{font-size:clamp(1em,4vw,1.6em);color:#ffa502;font-weight:800;margin-top:8px;text-align:center;padding:0 16px;}
-
-/* === WEAPON ANIMATIONS (unchanged, just overlay-level) === */
 .shoot-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;z-index:1500;pointer-events:none}
 .shoot-overlay.show{display:block}
 .bang-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(1.8em,6vw,3em);font-weight:900;color:#ff4757;text-shadow:0 0 20px rgba(255,71,87,0.8);animation:bangAnim 0.6s forwards;text-align:center;white-space:normal;max-width:90vw;}
@@ -246,14 +219,10 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 @keyframes debrisFly{0%{transform:translate(0,0) rotate(0deg);opacity:1}100%{transform:translate(var(--tx),var(--ty)) rotate(var(--rot));opacity:0}}
 @keyframes screenShake{0%{transform:translate(0,0) rotate(0deg)}10%{transform:translate(-8px,6px) rotate(-1deg)}20%{transform:translate(10px,-8px) rotate(1deg)}30%{transform:translate(-10px,4px) rotate(-0.5deg)}40%{transform:translate(8px,-6px) rotate(0.8deg)}50%{transform:translate(-6px,8px) rotate(-0.8deg)}60%{transform:translate(10px,-4px) rotate(0.5deg)}70%{transform:translate(-8px,6px) rotate(-0.3deg)}80%{transform:translate(6px,-4px) rotate(0.3deg)}90%{transform:translate(-4px,2px) rotate(-0.1deg)}100%{transform:translate(0,0) rotate(0deg)}}
 .shaking{animation:screenShake 0.8s ease-out}
-
-/* === FIXED BUTTONS === */
 .social-link{position:fixed;top:12px;right:12px;background:rgba(15,10,35,0.9);border:1px solid rgba(138,43,226,0.3);padding:clamp(7px,1.5vw,10px) clamp(12px,2.5vw,18px);border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,.5);text-decoration:none;color:#c4b5fd;font-weight:600;font-size:clamp(0.75em,2.2vw,0.9em);transition:all 0.3s;z-index:100}
 .social-link:hover{background:linear-gradient(135deg,#4c35a0,#7c3aed);color:#fff;transform:translateY(-2px)}
 .config-btn{position:fixed;top:12px;left:12px;background:rgba(15,10,35,0.9);border:1px solid rgba(138,43,226,0.3);padding:clamp(7px,1.5vw,10px) clamp(12px,2.5vw,18px);border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,.5);color:#c4b5fd;font-weight:600;cursor:pointer;font-size:clamp(0.75em,2.2vw,0.9em);transition:all 0.3s;z-index:100;touch-action:manipulation;}
 .config-btn:hover{background:linear-gradient(135deg,#4c35a0,#7c3aed);color:#fff;transform:translateY(-2px)}
-
-/* === CONFIG MODAL === */
 .config-modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);justify-content:center;align-items:flex-start;z-index:1000;padding:12px;overflow-y:auto;}
 .config-modal-overlay.show{display:flex}
 .config-box{background:rgba(15,10,35,0.97);border:1px solid rgba(138,43,226,0.3);padding:clamp(20px,4vw,36px);border-radius:clamp(16px,4vw,25px);box-shadow:0 20px 60px rgba(0,0,0,.6);max-width:560px;width:100%;max-height:none;overflow-y:visible;animation:slideUp 0.5s;color:#fff;margin:auto;}
@@ -275,7 +244,7 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .load-btn{padding:7px 12px;background:linear-gradient(135deg,#4c35a0,#7c3aed);color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:clamp(0.78em,2vw,0.85em);touch-action:manipulation;}
 .delete-saved-btn{padding:7px 12px;background:#ff4757;color:#fff;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:clamp(0.78em,2vw,0.85em);touch-action:manipulation;}
 
-/* === STAGE 3 BRACKET === */
+/* ══ STAGE 3 BRACKET ══ */
 #stage3Arena{display:none;flex-direction:column;gap:16px;}
 #stage3Arena.show{display:flex;}
 .bracket-header{text-align:center;margin-bottom:6px;}
@@ -285,7 +254,14 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .match-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,0,0.18);border-radius:16px;padding:clamp(12px,3vw,16px);position:relative;transition:all 0.3s;}
 .match-card.active-match{border-color:rgba(255,215,0,0.6);box-shadow:0 0 20px rgba(255,215,0,0.15);}
 .match-card.finished{border-color:rgba(100,255,100,0.25);background:rgba(0,60,0,0.12);}
+/* ══ NUEVO: tarjeta en muerte súbita ══ */
+.match-card.sudden-death-active{border-color:rgba(255,71,87,0.8)!important;box-shadow:0 0 24px rgba(255,71,87,0.35)!important;animation:sdCardPulse 1s infinite alternate;}
+@keyframes sdCardPulse{from{border-color:rgba(255,71,87,0.6)}to{border-color:rgba(255,71,87,1)}}
 .match-label{font-size:clamp(0.62em,1.8vw,0.7em);font-weight:800;letter-spacing:3px;text-transform:uppercase;color:rgba(255,215,0,0.6);margin-bottom:8px;}
+/* ══ Badge muerte súbita en tarjeta ══ */
+.sd-badge{display:inline-block;background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff;font-size:clamp(0.6em,1.6vw,0.68em);font-weight:900;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:10px;margin-bottom:6px;animation:sdBadgePulse 0.8s infinite alternate;}
+@keyframes sdBadgePulse{from{box-shadow:0 0 6px rgba(255,71,87,0.4)}to{box-shadow:0 0 16px rgba(255,71,87,0.9)}}
+.sd-lead-info{font-size:clamp(0.6em,1.6vw,0.7em);color:rgba(255,165,0,0.8);text-align:center;margin-bottom:4px;font-weight:700;}
 .match-players{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .match-vs-badge{font-size:clamp(0.7em,2vw,0.8em);font-weight:900;color:rgba(255,255,255,0.35);padding:0 3px;flex-shrink:0;}
 .match-scores{display:flex;gap:5px;align-items:center;margin-bottom:8px;}
@@ -295,14 +271,22 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .match-score-box.leading{border-color:rgba(255,215,0,0.5);background:rgba(255,215,0,0.08);}
 .match-score-box.match-won{border-color:rgba(100,255,100,0.5);background:rgba(0,100,0,0.2);}
 .match-score-box.match-won .match-score-val{color:#81c784;}
+/* ══ En muerte súbita, resaltar líder en rojo ══ */
+.match-score-box.sd-leading{border-color:rgba(255,71,87,0.7)!important;background:rgba(255,71,87,0.12)!important;}
+.match-score-box.sd-leading .match-score-val{color:#ff6b7a!important;}
 .match-score-sep{font-size:clamp(0.9em,2.5vw,1.1em);font-weight:900;color:rgba(255,255,255,0.2);}
 .match-roll-btn{width:100%;padding:clamp(8px,2vw,10px);background:linear-gradient(135deg,#ffd700,#ffa500);color:#1a1a2e;border:none;border-radius:10px;cursor:pointer;font-weight:900;font-size:clamp(0.78em,2.2vw,1em);transition:all 0.3s;letter-spacing:1px;touch-action:manipulation;}
 .match-roll-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,215,0,0.4);}
 .match-roll-btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
 .match-roll-btn.winner-set{background:linear-gradient(135deg,#43e97b,#38f9d7);color:#0a2a15;}
+/* ══ Botón en modo muerte súbita ══ */
+.match-roll-btn.sd-mode{background:linear-gradient(135deg,#ff4757,#ff6348,#ffa502)!important;color:#fff!important;animation:sdBtnPulse 1s infinite alternate;}
+@keyframes sdBtnPulse{from{box-shadow:0 4px 14px rgba(255,71,87,0.4)}to{box-shadow:0 4px 28px rgba(255,71,87,0.9)}}
 .match-result-tag{text-align:center;font-size:clamp(0.7em,2vw,0.8em);font-weight:700;margin-top:5px;padding:3px 8px;border-radius:8px;background:rgba(100,255,100,0.12);color:#81c784;border:1px solid rgba(100,255,100,0.25);}
 .match-log{font-size:clamp(0.65em,1.8vw,0.75em);color:rgba(255,255,255,0.5);margin-top:5px;max-height:55px;overflow-y:auto;line-height:1.6;}
 .match-log-entry{padding:1px 0;}
+/* entradas de muerte súbita en el log */
+.match-log-entry.sd-entry{color:rgba(255,165,80,0.9);font-weight:700;}
 .dice-anim{display:inline-block;animation:diceSpin 0.4s ease-out;}
 @keyframes diceSpin{0%{transform:scale(0.5) rotate(-20deg);opacity:0}60%{transform:scale(1.2) rotate(5deg);opacity:1}100%{transform:scale(1) rotate(0deg);opacity:1}}
 .bracket-controls{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;}
@@ -310,82 +294,26 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 .bracket-ctrl-btn:hover{background:rgba(255,215,0,0.15);border-color:rgba(255,215,0,0.6);}
 .bracket-ctrl-btn.danger{border-color:rgba(255,71,87,0.3);color:#ff6b7a;background:rgba(255,71,87,0.07);}
 .bracket-ctrl-btn.danger:hover{background:rgba(255,71,87,0.15);border-color:rgba(255,71,87,0.6);}
+.bracket-ctrl-btn.random{border-color:rgba(67,233,123,0.4);color:#43e97b;background:rgba(67,233,123,0.07);}
+.bracket-ctrl-btn.random:hover{background:rgba(67,233,123,0.18);border-color:rgba(67,233,123,0.7);box-shadow:0 0 14px rgba(67,233,123,0.25);}
 .bracket-champion{display:none;text-align:center;padding:clamp(14px,4vw,20px);background:rgba(255,215,0,0.06);border:2px solid rgba(255,215,0,0.3);border-radius:18px;animation:slideUp 0.6s;}
 .bracket-champion.show{display:block;}
 .bracket-champion-icon{font-size:clamp(2em,6vw,3em);margin-bottom:6px;}
 .bracket-champion-label{font-size:clamp(0.7em,2vw,0.85em);letter-spacing:4px;color:rgba(255,215,0,0.6);text-transform:uppercase;margin-bottom:4px;}
 .bracket-champion-name{font-size:clamp(1.5em,5vw,2.2em);font-weight:900;color:#ffd700;text-shadow:0 0 24px rgba(255,215,0,0.5);word-break:break-word;}
 .bracket-summary{margin-top:8px;font-size:clamp(0.75em,2vw,0.85em);color:rgba(255,255,255,0.5);line-height:1.8;}
-
-/* bracket setup modal */
 #bracketSetupModal .modal-box{max-width:560px;}
 #bracketSetupForm > div select{width:100%;}
-
-/* === SCROLLBAR === */
 ::-webkit-scrollbar{width:5px;height:5px}
 ::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:3px}
 ::-webkit-scrollbar-thumb{background:rgba(138,43,226,0.4);border-radius:3px}
-
-/* === ANIMATIONS === */
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes slideUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
-
-/* ======================================
-   RESPONSIVE BREAKPOINTS
-   ====================================== */
-
-/* TABLET: apilado vertical, panel abajo */
-@media(max-width:860px){
-  body{flex-direction:column;align-items:center;padding:10px;padding-top:60px;}
-  .side-panel{width:100%;max-width:580px;max-height:none;order:2;}
-  .main-container{max-width:580px;order:1;}
-  .social-link,.config-btn{padding:7px 12px;font-size:0.75em;border-radius:12px;}
-}
-
-/* MOBILE: optimización para pantallas pequeñas */
-@media(max-width:600px){
-  body{padding:8px;padding-top:56px;gap:12px;}
-  .main-container{border-radius:18px;padding:14px;}
-  .wheel-wrapper{width:min(260px,80vw);height:min(260px,80vw);}
-  .bracket-grid{grid-template-columns:1fr;}
-  .duel-scores{gap:8px;}
-  .duel-player-box{padding:10px 12px;min-width:70px;}
-  .event-modal{padding:24px 16px;}
-  .weapon-reveal{padding:24px 16px;}
-  .duel-modal{padding:20px 14px;}
-  .stage-info{gap:6px 10px;}
-  .modal-overlay{padding:8px;}
-  /* Hide non-essential HUD on very small screens */
-  .sniper-hud-bl{display:none;}
-}
-
-/* VERY SMALL (iPhone SE etc) */
-@media(max-width:375px){
-  body{padding:6px;padding-top:52px;}
-  .wheel-wrapper{width:min(230px,82vw);height:min(230px,82vw);}
-  .start-subtitle{display:none;}
-  .bracket-controls{gap:6px;}
-  .bracket-ctrl-btn{padding:7px 10px;font-size:0.7em;}
-}
-
-/* LANDSCAPE MOBILE */
-@media(max-height:500px) and (orientation:landscape){
-  body{padding-top:10px;flex-direction:row;align-items:flex-start;}
-  .wheel-wrapper{width:clamp(160px,28vh,220px);height:clamp(160px,28vh,220px);}
-  .main-container{max-height:96vh;overflow-y:auto;}
-  .side-panel{max-height:96vh;width:clamp(180px,25vw,240px);}
-  .items-list{max-height:100px;}
-  .start-logo-ring{width:70px;height:70px;margin-bottom:10px;}
-  .start-logo-inner{width:56px;height:56px;}
-  .start-title{font-size:2em;}
-  .start-subtitle{display:none;}
-}
-
-/* DESKTOP LARGE */
-@media(min-width:1200px){
-  body{padding:20px;gap:24px;}
-  .side-panel{width:300px;}
-}
+@media(max-width:860px){body{flex-direction:column;align-items:center;padding:10px;padding-top:60px;}.side-panel{width:100%;max-width:580px;max-height:none;order:2;}.main-container{max-width:580px;order:1;}.social-link,.config-btn{padding:7px 12px;font-size:0.75em;border-radius:12px;}}
+@media(max-width:600px){body{padding:8px;padding-top:56px;gap:12px;}.main-container{border-radius:18px;padding:14px;}.wheel-wrapper{width:min(260px,80vw);height:min(260px,80vw);}.bracket-grid{grid-template-columns:1fr;}.duel-scores{gap:8px;}.duel-player-box{padding:10px 12px;min-width:70px;}.event-modal{padding:24px 16px;}.weapon-reveal{padding:24px 16px;}.duel-modal{padding:20px 14px;}.stage-info{gap:6px 10px;}.modal-overlay{padding:8px;}.sniper-hud-bl{display:none;}}
+@media(max-width:375px){body{padding:6px;padding-top:52px;}.wheel-wrapper{width:min(230px,82vw);height:min(230px,82vw);}.start-subtitle{display:none;}.bracket-controls{gap:6px;}.bracket-ctrl-btn{padding:7px 10px;font-size:0.7em;}}
+@media(max-height:500px) and (orientation:landscape){body{padding-top:10px;flex-direction:row;align-items:flex-start;}.wheel-wrapper{width:clamp(160px,28vh,220px);height:clamp(160px,28vh,220px);}.main-container{max-height:96vh;overflow-y:auto;}.side-panel{max-height:96vh;width:clamp(180px,25vw,240px);}.items-list{max-height:100px;}.start-logo-ring{width:70px;height:70px;margin-bottom:10px;}.start-logo-inner{width:56px;height:56px;}.start-title{font-size:2em;}.start-subtitle{display:none;}}
+@media(min-width:1200px){body{padding:20px;gap:24px;}.side-panel{width:300px;}}
 </style>
 </head>
 <body>
@@ -401,7 +329,7 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
   <div class="start-title">Astra</div>
   <div class="start-subtitle">Sistema de Ruleta · Modo Troll · Eliminación por armas</div>
   <button class="start-btn" onclick="enterApp()">¡ENTRAR AL JUEGO! &nbsp;🎰</button>
-  <div class="start-footer">Matashiro © 2025 · Astra v2.2</div>
+  <div class="start-footer">Matashiro © 2025 · Astra v2.3</div>
 </div>
 
 <div id="appRoot">
@@ -459,7 +387,7 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
     <div id="stage3Arena">
       <div class="bracket-header">
         <h2>⚔️ Arena de Duelos — Etapa 3</h2>
-        <p>4 enfrentamientos 1v1 · Primero en 5 puntos gana · El dado decide</p>
+        <p>4 enfrentamientos 1v1 · Primero en 5 puntos gana · Empate 4-4 → ⚡ Muerte Súbita (+2)</p>
       </div>
       <div class="bracket-grid" id="bracketGrid"></div>
       <div class="bracket-champion" id="bracketChampion">
@@ -469,7 +397,8 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
         <div class="bracket-summary" id="champSummary"></div>
       </div>
       <div class="bracket-controls">
-        <button class="bracket-ctrl-btn" onclick="setupBracketMatches()">🔀 Asignar Jugadores</button>
+        <button class="bracket-ctrl-btn random" onclick="autoAssignBracket()">🎲 Aleatorio</button>
+        <button class="bracket-ctrl-btn" onclick="setupBracketMatches()">✏️ Elegir Jugadores</button>
         <button class="bracket-ctrl-btn" onclick="resetAllMatches()">🔄 Reiniciar</button>
         <button class="bracket-ctrl-btn danger" onclick="setStage(2)">← Etapa 2</button>
       </div>
@@ -595,6 +524,7 @@ input[type=text]:focus{outline:none;border-color:#8A2BE2;background:rgba(255,255
 </div>
 
 <script>
+// ══ GLOBAL BG FX ══
 (function initGlobalBg() {
   const starsEl = document.getElementById('globalStars');
   const particlesEl = document.getElementById('globalParticles');
@@ -656,6 +586,9 @@ function playBleedingSound(){try{const ctx=getAudioCtx(),master=ctx.createGain()
 function playDiceRollSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.4;master.connect(ctx.destination);const now=ctx.currentTime;for(let i=0;i<4;i++){const t=now+i*0.06;playNoise(0.3-i*0.05,t,0.03,ctx,master,2000,'bandpass');playTone(300+i*80,'square',0.12,t,0.03,ctx,master);}playTone(600,'sine',0.15,now+0.28,0.12,ctx,master);}catch(e){console.warn('Audio error (dice):',e);}}
 function playMatchWinSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.5;master.connect(ctx.destination);const now=ctx.currentTime;[440,550,660,880].forEach((freq,i)=>{playTone(freq,'sine',0.18,now+i*0.1,0.25,ctx,master);});}catch(e){console.warn('Audio error (win):',e);}}
 
+// ══ Sonido especial para inicio de muerte súbita ══
+function playSuddenDeathSound(){try{const ctx=getAudioCtx(),master=ctx.createGain();master.gain.value=0.55;master.connect(ctx.destination);const now=ctx.currentTime;[220,330,440,550,440,330].forEach((freq,i)=>{playTone(freq,'sawtooth',0.18-i*0.02,now+i*0.08,0.12,ctx,master);});playNoise(0.3,now,0.5,ctx,master,800,'bandpass');}catch(e){console.warn('Audio error (sd):',e);}}
+
 const COLORS=['#FF6B6B','#4ECDC4','#45B7D1','#FFA07A','#98D8C8','#F7DC6F','#BB8FCE','#85C1E2','#F8B739','#52B788','#E07A5F','#81B29A','#C5A028','#9B59B6','#E74C3C','#1ABC9C'];
 const WEAPONS=[
   {id:'pistol',name:'Pistola',icon:'🔫',prob:0.20,failChance:0.33,kills:1,desc:'33% de fallar. Si impacta, elimina a 1 persona.'},
@@ -676,79 +609,217 @@ let bracketMatches = [];
 function initBracket() {
   bracketMatches = [];
   for (let i = 0; i < NUM_MATCHES; i++) {
-    bracketMatches.push({p1:'',p2:'',score1:0,score2:0,log:[],done:false,winner:''});
+    bracketMatches.push({
+      p1:'', p2:'',
+      score1:0, score2:0,
+      log:[], done:false, winner:'',
+      // ══ Campos de Muerte Súbita ══
+      suddenDeath: false,   // ¿está en modo muerte súbita?
+      sdScore1: 0,          // puntos en fase SD para p1
+      sdScore2: 0,          // puntos en fase SD para p2
+      sdTarget: 2           // diferencia necesaria para ganar en SD (siempre 2)
+    });
   }
 }
 
+// ══ Muerte súbita: gana quien saque 2 puntos de ventaja ══
+function isSuddenDeathWinner(match) {
+  const diff = Math.abs(match.sdScore1 - match.sdScore2);
+  if (diff >= match.sdTarget) {
+    return match.sdScore1 > match.sdScore2 ? match.p1 : match.p2;
+  }
+  return null;
+}
+
+// ══════════════════════════════════════════════
+//  ROLL MATCH DICE — con lógica de muerte súbita
+// ══════════════════════════════════════════════
+function rollMatchDice(idx) {
+  const match = bracketMatches[idx];
+  if (!match || match.done || !match.p1 || !match.p2) return;
+  playDiceRollSound();
+
+  const r1 = Math.floor(Math.random()*6)+1;
+  const r2 = Math.floor(Math.random()*6)+1;
+  const dice1 = getDiceEmoji(r1);
+  const dice2 = getDiceEmoji(r2);
+
+  if (match.suddenDeath) {
+    // ══ MODO MUERTE SÚBITA ══
+    let msg = '';
+    let isSdEntry = true;
+
+    if (r1 > r2) {
+      match.sdScore1++;
+      msg = `⚡ SD ${dice1}${r1} vs ${dice2}${r2} → ${match.p1} (+${match.sdScore1}-${match.sdScore2})`;
+    } else if (r2 > r1) {
+      match.sdScore2++;
+      msg = `⚡ SD ${dice1}${r1} vs ${dice2}${r2} → ${match.p2} (+${match.sdScore1}-${match.sdScore2})`;
+    } else {
+      msg = `⚡ SD ${dice1}${r1} vs ${dice2}${r2} → Empate (SD: ${match.sdScore1}-${match.sdScore2})`;
+    }
+
+    match.log.push({ text: msg, sd: isSdEntry });
+
+    // Verificar si alguien gana por diferencia de 2
+    const sdWinner = isSuddenDeathWinner(match);
+    if (sdWinner) {
+      match.done = true;
+      match.winner = sdWinner;
+      playMatchWinSound();
+      showBanner(`⚡🏆 ¡${sdWinner} gana el Duelo ${idx+1} en MUERTE SÚBITA!`, 4000);
+    }
+
+  } else {
+    // ══ MODO NORMAL ══
+    let msg = '';
+    if (r1 > r2) { match.score1++; msg = `${dice1}${r1} vs ${dice2}${r2} → ${match.p1}`; }
+    else if (r2 > r1) { match.score2++; msg = `${dice1}${r1} vs ${dice2}${r2} → ${match.p2}`; }
+    else { msg = `${dice1}${r1} vs ${dice2}${r2} → Empate`; }
+
+    match.log.push({ text: msg, sd: false });
+
+    // Victoria normal: primero en llegar a 5
+    if (match.score1 >= 5 && match.score2 < 5) {
+      match.done = true;
+      match.winner = match.p1;
+      playMatchWinSound();
+      showBanner(`🏆 ¡${match.p1} gana el Duelo ${idx+1}!`, 3500);
+    } else if (match.score2 >= 5 && match.score1 < 5) {
+      match.done = true;
+      match.winner = match.p2;
+      playMatchWinSound();
+      showBanner(`🏆 ¡${match.p2} gana el Duelo ${idx+1}!`, 3500);
+    } else if (match.score1 >= 5 && match.score2 >= 5) {
+      // ══ EMPATE 4-4 → activa muerte súbita ══
+      // (Ambos llegaron a 5 en la misma ronda: empate exacto)
+      match.suddenDeath = true;
+      match.sdScore1 = 0;
+      match.sdScore2 = 0;
+      playSuddenDeathSound();
+      const sdMsg = `🔥 ¡EMPATE ${match.score1}-${match.score2}! → ⚡ MUERTE SÚBITA activada`;
+      match.log.push({ text: sdMsg, sd: true });
+      showBanner(`⚡ ¡MUERTE SÚBITA! Duelo ${idx+1} — diferencia de 2 para ganar`, 4000);
+    } else if (!match.done && match.score1 === 4 && match.score2 === 4) {
+      // ══ Ambos tienen 4-4: próximo punto lleva a 5-4, pero si ambos llegan a 5 en la misma tirada → muerte súbita ══
+      // Aquí simplemente dejamos seguir; la detección arriba lo maneja
+    }
+  }
+
+  renderBracketGrid();
+  setTimeout(() => {
+    const logEl = document.querySelector(`#matchCard${idx} .match-log`);
+    if (logEl) logEl.scrollTop = logEl.scrollHeight;
+  }, 50);
+}
+
+function getDiceEmoji(n) { return ['','⚀','⚁','⚂','⚃','⚄','⚅'][n] || n; }
+
+// ══════════════════════════════════════════════
+//  RENDER BRACKET — con indicadores de SD
+// ══════════════════════════════════════════════
 function renderBracketGrid() {
   const grid = document.getElementById('bracketGrid');
   grid.innerHTML = '';
   bracketMatches.forEach((match, idx) => {
-    const card = document.createElement('div');
-    card.className = 'match-card' + (match.done ? ' finished' : (!match.done && match.p1 && match.p2 ? ' active-match' : ''));
-    card.id = 'matchCard' + idx;
+    const isSd = match.suddenDeath && !match.done;
+    let cardClass = 'match-card';
+    if (match.done) cardClass += ' finished';
+    else if (isSd) cardClass += ' sudden-death-active';
+    else if (match.p1 && match.p2) cardClass += ' active-match';
+
     const nameP1 = match.p1 || '—';
     const nameP2 = match.p2 || '—';
-    const leading1 = match.score1 > match.score2;
-    const leading2 = match.score2 > match.score1;
+
+    // Determinar líder en SD
+    let sdLeader1 = isSd && match.sdScore1 > match.sdScore2;
+    let sdLeader2 = isSd && match.sdScore2 > match.sdScore1;
+
+    // Clases de score box
+    const scoreClass1 = match.done && match.winner===match.p1 ? 'match-won'
+      : isSd && sdLeader1 ? 'sd-leading'
+      : (!isSd && match.score1 > match.score2) ? 'leading' : '';
+    const scoreClass2 = match.done && match.winner===match.p2 ? 'match-won'
+      : isSd && sdLeader2 ? 'sd-leading'
+      : (!isSd && match.score2 > match.score1) ? 'leading' : '';
+
+    // Badge SD y texto de ventaja
+    let sdBadgeHtml = '';
+    let sdLeadHtml = '';
+    if (isSd) {
+      sdBadgeHtml = `<div class="sd-badge">⚡ MUERTE SÚBITA — diferencia de 2</div>`;
+      const diff = Math.abs(match.sdScore1 - match.sdScore2);
+      const leader = match.sdScore1 > match.sdScore2 ? match.p1 : match.sdScore2 > match.sdScore1 ? match.p2 : null;
+      if (leader) {
+        sdLeadHtml = `<div class="sd-lead-info">🔥 ${leader} lleva +${diff} (necesita +2)</div>`;
+      } else {
+        sdLeadHtml = `<div class="sd-lead-info">⚡ SD: ${match.sdScore1} — ${match.sdScore2}</div>`;
+      }
+    }
+
+    // Log entries
     let logHtml = '';
     if (match.log.length > 0) {
-      logHtml = `<div class="match-log">${match.log.map(l=>`<div class="match-log-entry">${l}</div>`).join('')}</div>`;
+      logHtml = `<div class="match-log">${match.log.map(l => {
+        const entry = typeof l === 'string' ? l : l.text;
+        const isSdEntry = typeof l === 'object' && l.sd;
+        return `<div class="match-log-entry${isSdEntry?' sd-entry':''}">${entry}</div>`;
+      }).join('')}</div>`;
     }
+
     let resultTag = '';
     if (match.done) {
       resultTag = `<div class="match-result-tag">🏆 ${match.winner}</div>`;
     }
+
     const canRoll = match.p1 && match.p2 && !match.done;
+    let btnClass = 'match-roll-btn';
+    if (match.done) btnClass += ' winner-set';
+    else if (isSd) btnClass += ' sd-mode';
+
+    const btnLabel = match.done
+      ? '✅ ' + match.winner
+      : isSd
+        ? '⚡ Tirar (Muerte Súbita)'
+        : (match.p1 && match.p2 ? '🎲 Tirar' : '⚠ Elige jugadores');
+
+    // Score display: en SD mostramos score base + SD score
+    const displayScore1 = isSd ? `${match.score1}<span style="font-size:0.5em;color:#ff9a9a;display:block">SD:${match.sdScore1}</span>` : match.score1;
+    const displayScore2 = isSd ? `${match.score2}<span style="font-size:0.5em;color:#ff9a9a;display:block">SD:${match.sdScore2}</span>` : match.score2;
+
+    const card = document.createElement('div');
+    card.className = cardClass;
+    card.id = 'matchCard' + idx;
     card.innerHTML = `
       <div class="match-label">Duelo ${idx+1}</div>
+      ${sdBadgeHtml}
+      ${sdLeadHtml}
       <div class="match-players">
         <span style="font-size:clamp(0.72em,2vw,0.85em);font-weight:700;color:${COLORS[idx*2%COLORS.length]};min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${nameP1}</span>
         <span class="match-vs-badge">VS</span>
         <span style="font-size:clamp(0.72em,2vw,0.85em);font-weight:700;color:${COLORS[(idx*2+1)%COLORS.length]};min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right">${nameP2}</span>
       </div>
       <div class="match-scores">
-        <div class="match-score-box ${match.done&&match.winner===match.p1?'match-won':leading1?'leading':''}">
+        <div class="match-score-box ${scoreClass1}">
           <div class="match-score-name">${nameP1}</div>
-          <div class="match-score-val">${match.score1}</div>
+          <div class="match-score-val">${displayScore1}</div>
         </div>
         <div class="match-score-sep">—</div>
-        <div class="match-score-box ${match.done&&match.winner===match.p2?'match-won':leading2?'leading':''}">
+        <div class="match-score-box ${scoreClass2}">
           <div class="match-score-name">${nameP2}</div>
-          <div class="match-score-val">${match.score2}</div>
+          <div class="match-score-val">${displayScore2}</div>
         </div>
       </div>
       ${logHtml}
       ${resultTag}
-      <button class="match-roll-btn ${match.done?'winner-set':''}" id="rollBtn${idx}" onclick="rollMatchDice(${idx})" ${canRoll?'':'disabled'}>
-        ${match.done ? '✅ '+match.winner : (match.p1&&match.p2 ? '🎲 Tirar' : '⚠ Elige jugadores')}
+      <button class="${btnClass}" id="rollBtn${idx}" onclick="rollMatchDice(${idx})" ${canRoll?'':'disabled'}>
+        ${btnLabel}
       </button>
     `;
     grid.appendChild(card);
   });
   checkBracketChampion();
 }
-
-function rollMatchDice(idx) {
-  const match = bracketMatches[idx];
-  if (!match || match.done || !match.p1 || !match.p2) return;
-  playDiceRollSound();
-  const r1 = Math.floor(Math.random()*6)+1;
-  const r2 = Math.floor(Math.random()*6)+1;
-  const dice1 = getDiceEmoji(r1);
-  const dice2 = getDiceEmoji(r2);
-  let msg = '';
-  if (r1 > r2) { match.score1++; msg = `${dice1}${r1} vs ${dice2}${r2} → ${match.p1}`; }
-  else if (r2 > r1) { match.score2++; msg = `${dice1}${r1} vs ${dice2}${r2} → ${match.p2}`; }
-  else { msg = `${dice1}${r1} vs ${dice2}${r2} → Empate`; }
-  match.log.push(msg);
-  if (match.score1 >= 5) { match.done = true; match.winner = match.p1; playMatchWinSound(); showBanner(`🏆 ¡${match.p1} gana el Duelo ${idx+1}!`, 3500); }
-  else if (match.score2 >= 5) { match.done = true; match.winner = match.p2; playMatchWinSound(); showBanner(`🏆 ¡${match.p2} gana el Duelo ${idx+1}!`, 3500); }
-  renderBracketGrid();
-  setTimeout(() => { const log = document.querySelector(`#matchCard${idx} .match-log`); if (log) log.scrollTop = log.scrollHeight; }, 50);
-}
-
-function getDiceEmoji(n) { return ['','⚀','⚁','⚂','⚃','⚄','⚅'][n] || n; }
 
 function checkBracketChampion() {
   const champion = document.getElementById('bracketChampion');
@@ -777,12 +848,12 @@ function setupBracketMatches() {
     row.innerHTML = `
       <div style="font-size:0.7em;font-weight:800;letter-spacing:3px;color:rgba(255,215,0,0.6);margin-bottom:8px;text-transform:uppercase;">Duelo ${i+1}</div>
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-        <select id="setupP1_${i}" class="match-player-select" style="flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;padding:8px 10px;font-size:0.9em;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;">
+        <select id="setupP1_${i}" style="flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;padding:8px 10px;font-size:0.9em;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;">
           <option value="">— J1 —</option>
           ${pool.map(p=>`<option value="${p}" ${match.p1===p?'selected':''}>${p}</option>`).join('')}
         </select>
         <span style="color:rgba(255,255,255,0.3);font-weight:900;font-size:0.85em;flex-shrink:0;">VS</span>
-        <select id="setupP2_${i}" class="match-player-select" style="flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;padding:8px 10px;font-size:0.9em;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;">
+        <select id="setupP2_${i}" style="flex:1;min-width:100px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;color:#fff;padding:8px 10px;font-size:0.9em;font-weight:600;cursor:pointer;appearance:none;-webkit-appearance:none;">
           <option value="">— J2 —</option>
           ${pool.map(p=>`<option value="${p}" ${match.p2===p?'selected':''}>${p}</option>`).join('')}
         </select>
@@ -800,7 +871,13 @@ function confirmBracketSetup() {
     if (p1 && p2 && p1 === p2) { showBanner(`⚠️ Duelo ${i+1}: No puedes enfrentar a ${p1} contra sí mismo.`, 3000); return; }
     if (!bracketMatches[i].done) {
       const prevP1 = bracketMatches[i].p1, prevP2 = bracketMatches[i].p2;
-      if (prevP1 !== p1 || prevP2 !== p2) { bracketMatches[i].p1=p1; bracketMatches[i].p2=p2; bracketMatches[i].score1=0; bracketMatches[i].score2=0; bracketMatches[i].log=[]; }
+      if (prevP1 !== p1 || prevP2 !== p2) {
+        bracketMatches[i].p1=p1; bracketMatches[i].p2=p2;
+        bracketMatches[i].score1=0; bracketMatches[i].score2=0;
+        bracketMatches[i].log=[];
+        bracketMatches[i].suddenDeath=false;
+        bracketMatches[i].sdScore1=0; bracketMatches[i].sdScore2=0;
+      }
     }
   }
   closeModal('bracketSetupModal');
@@ -813,6 +890,29 @@ function resetAllMatches() {
   document.getElementById('bracketChampion').classList.remove('show');
 }
 
+function autoAssignBracket() {
+  const pool = getActiveItems().length > 0 ? [...getActiveItems()] : [...items];
+  if (pool.length < 2) { showBanner('⚠️ Necesitas al menos 2 jugadores para asignar duelos.', 3500); return; }
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  for (let i = 0; i < NUM_MATCHES; i++) {
+    if (!bracketMatches[i]) bracketMatches[i] = {p1:'',p2:'',score1:0,score2:0,log:[],done:false,winner:'',suddenDeath:false,sdScore1:0,sdScore2:0,sdTarget:2};
+    if (!bracketMatches[i].done) {
+      bracketMatches[i].p1 = pool[i * 2] || '';
+      bracketMatches[i].p2 = pool[i * 2 + 1] || '';
+      bracketMatches[i].score1=0; bracketMatches[i].score2=0;
+      bracketMatches[i].log=[];
+      bracketMatches[i].suddenDeath=false;
+      bracketMatches[i].sdScore1=0; bracketMatches[i].sdScore2=0;
+    }
+  }
+  renderBracketGrid();
+  playDiceRollSound();
+  showBanner('🎲 ¡Contrincantes asignados al azar!', 3000);
+}
+
 function initPlayerDB(){playerDB={};eliminatedDB=[];items.forEach(name=>{playerDB[name]=makePlayer(name);});}
 function makePlayer(name){const lives=currentStage===3?1:2;return{name,lives,maxLives:lives,shield:false,bleeding:false,bleedRound:0,status:'alive'};}
 function ensurePlayer(name){if(!playerDB[name])playerDB[name]=makePlayer(name);}
@@ -820,7 +920,6 @@ function loadData(){try{const sw=localStorage.getItem('matashiroWheels');if(sw)s
 function saveData(){localStorage.setItem('matashiroWheels',JSON.stringify(savedWheels));localStorage.setItem('matashiroBg',currentBg);localStorage.setItem('matashiroItems',JSON.stringify(items));}
 function applyBg(k){document.body.style.background=BG_MAP[k]||BG_MAP['g1'];document.body.style.backgroundSize='400% 400%';}
 function changeBg(k){currentBg=k;applyBg(k);saveData();document.querySelectorAll('.color-option').forEach(el=>el.classList.remove('active'));const el=document.getElementById('bg-'+k);if(el)el.classList.add('active');}
-
 function updateQueueIndicator(){const el=document.getElementById('queueIndicator');if(spinQueue>0){el.textContent=`⏳ ${spinQueue} giro${spinQueue>1?'s':''} en cola`;el.classList.add('show');}else{el.classList.remove('show');}}
 
 function setMode(mode){
@@ -866,7 +965,7 @@ function setStage(stage,force){
     if(bracketMatches.length===0){initBracket();}
     renderBracketGrid();
     const anyAssigned = bracketMatches.some(m=>m.p1||m.p2);
-    if(!anyAssigned) setTimeout(()=>setupBracketMatches(), 300);
+    if(!anyAssigned) setTimeout(()=>autoAssignBracket(), 300);
     return;
   }
   showWheelSection();
