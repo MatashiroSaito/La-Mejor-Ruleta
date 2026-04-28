@@ -777,6 +777,11 @@ input[type=text]:focus{
 .mem-card:hover{transform:scale(1.06);}
 .mem-card.flipped{background:rgba(255,255,255,0.05);border-color:rgba(255,215,0,0.2);}
 .mem-card.matched{background:rgba(57,255,20,0.06);border-color:rgba(57,255,20,0.2);cursor:default;}
+.mem-card{
+  /* ya existe, agrega: */
+  overflow: hidden;
+  padding: 4px;
+}
 
 /* ── DAILY LOCK BANNER ── */
 .mg-daily-lock{
@@ -1522,7 +1527,16 @@ function ngGuess(){
 }
 
 /* MEMORY */
-const memEmojisPool=['🦊','🐼','🐬','🦋','🍕','⚡','💎','🎸'];
+const memEmojisPool=[
+    'https://s10.aconvert.com/convert/p3r68-cdx67/agyd2-fa3g7.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/audbp-eyb8e.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/abk82-32rme.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/akkhp-kzw5j.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/aplpx-ytn9q.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/ansfp-cs0mz.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/ampyn-awajs.jpg',
+    'https://s10.aconvert.com/convert/p3r68-cdx67/aw9hh-ququj.jpg',
+    ];
 let memCards=[],memFlipped=[],memMatchedPairs=0,memMoves=0,memLocked=false;
 function memReset(){
   memMatchedPairs=0;memMoves=0;memFlipped=[];memLocked=false;
@@ -1541,7 +1555,11 @@ function renderMemGrid(){
   memCards.forEach(card=>{
     const el=document.createElement('div');
     el.className='mem-card'+(card.flipped||card.matched?' flipped':'')+(card.matched?' matched':'');
-    el.textContent=card.flipped||card.matched?card.emoji:'';
+    if(card.flipped||card.matched){
+  el.innerHTML=`<img src="${card.emoji}" style="width:80%;height:80%;object-fit:cover;border-radius:6px;">`;
+} else {
+  el.innerHTML='';
+}
     if(!card.matched&&!locked)el.onclick=()=>memFlip(card.id);
     if(locked)el.style.pointerEvents='none';
     grid.appendChild(el);
