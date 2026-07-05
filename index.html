@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruleta de la suerte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="bg-collage" aria-hidden="true">
+    <div class="bg-tile" style="background-image:url('https://i.ibb.co/rfT7VxRt/c616bd856b0fd6bc516d8c886d010550.jpg')"></div>
+    <div class="bg-tile" style="background-image:url('https://i.ibb.co/x8S6S2Jf/162-sin-titulo-20260301164032.jpg')"></div>
+    <div class="bg-tile" style="background-image:url('https://i.ibb.co/Q7DkXgQJ/192-sin-titulo-20260323011907.jpg')"></div>
+    <div class="bg-tile" style="background-image:url('https://i.ibb.co/VYGFxNkH/17-sin-titulo-Restaurado-20260622150030.png')"></div>
+  </div>
+  <div class="bg-overlay" aria-hidden="true"></div>
+
+  <main class="page">
+
+    <header class="header">
+      <h1 class="title">Ruleta de la suerte</h1>
+      <p class="subtitle">Escribe tus opciones, gira la rueda y deja que el azar decida.</p>
+    </header>
+
+    <section class="board">
+
+      <div class="wheel-area">
+        <div class="marquee" id="marquee"></div>
+        <div class="pointer"></div>
+        <canvas id="wheel" width="320" height="320"></canvas>
+        <canvas id="confetti" width="320" height="320"></canvas>
+        <div class="hub"></div>
+      </div>
+
+      <div class="panel">
+        <label class="panel-label" for="items-input">Opciones <span>una por linea</span></label>
+        <textarea id="items-input" rows="8">Pizza
+Sushi
+Tacos
+Hamburguesa
+Ensalada
+Pasta</textarea>
+
+        <div class="actions">
+          <button id="update-btn" type="button" class="btn btn-ghost">Actualizar ruleta</button>
+          <button id="spin-btn" type="button" class="btn btn-primary">Girar</button>
+        </div>
+
+        <div id="result" class="result"></div>
+      </div>
+
+    </section>
+
+  </main>
+
+<script>
+function createMarquee(){
+  var area = document.querySelector('.wheel-area');
+  var marquee = document.getElementById('marquee');
+  marquee.innerHTML = '';
+  var box = area.clientWidth;
+  var half = box / 2;
+  var radius = half - 18;
+  var count = 26;
+  for (var i = 0; i < count; i++) {
+    var bulb = document.createElement('span');
+    bulb.className = 'bulb';
+    var angle = (i / count) * 2 * Math.PI;
+    var x = half + radius * Math.cos(angle) - 5;
+    var y = half + radius * Math.sin(angle) - 5;
+    bulb.style.left = x + 'px';
+    bulb.style.top = y + 'px';
+    bulb.style.animationDelay = (i * 0.09) + 's';
+    marquee.appendChild(bulb);
+  }
+}
+createMarquee();
+
+var resizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(createMarquee, 150);
+});
+
+function palette(){
+  return ['#F2545B', '#F7A440', '#FFD166', '#3FBF9F', '#3A86FF', '#9D6AE8', '#EF6FA7', '#57C785'];
+}
+
+function getItems(){
+  return document.getElementById('items-input').value
+    .split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+}
+
+function drawWheel(items){
+  var canvas = document.getElementById('wheel');
+  var ctx = canvas.getContext('2d');
+  var size = canvas.width;
+  var radius = size / 2;
+  ctx.clearRect(0, 0, size, size);
+  var colors = palette();
+  var seg = (2 * Math.PI) / items.length;
+
+  for (var i = 0; i < items.length; i++) {
+    var start = -Math.PI / 2 + i * seg;
+    var end = start + seg;
+    ctx.beginPath();
+    ctx.moveTo(radius, radius);
+    ctx.arc(radius, radius, radius - 4, start, end);
+    ctx.closePath();
+    ctx.fillStyle = colors[i % colors.length];
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = '#1f0a0f';
+    ctx.stroke();
+
+    ctx.save();
+    ctx.translate(radius, radius);
+    ctx.rotate(start + seg / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#1f0a0f';
+    ctx.font = '700 14px "Manrope", sans-serif';
+    var label = items[i];
+    if (label.length > 16) label = label.slice(0, 15) + '\u2026';
+    ctx.fillText(label, radius - 20, 5);
+    ctx.restore();
+  }
+}
+
+var currentRotation = 0;
+var spinning = false;
+var audioCtx = null;
+
+function ensureAudio(){
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function tick(){
+  ensureAudio();
+  var o = audioCtx.createOscillator();
+  var g = audioCtx.createGain();
+  o.frequency.value = 800;
+  o.connect(g);
+  g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+  o.start();
+  o.stop(audioCtx.currentTime + 0.06);
+}
+
+function playWin(){
+  ensureAudio();
+  var notes = [523.25, 659.25, 783.99, 1046.5];
+  for (var i = 0; i < notes.length; i++) {
+    var o = audioCtx.createOscillator();
+    var g = audioCtx.createGain();
+    o.frequency.value = notes[i];
+    o.connect(g);
+    g.connect(audioCtx.destination);
+    var t = audioCtx.currentTime + i * 0.12;
+    g.gain.setValueAtTime(0.001, t);
+    g.gain.exponentialRampToValueAtTime(0.12, t + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+    o.start(t);
+    o.stop(t + 0.3);
+  }
+}
+
+function launchConfetti(){
+  var canvas = document.getElementById('confetti');
+  var ctx = canvas.getContext('2d');
+  var colors = palette();
+  var particles = [];
+  for (var i = 0; i < 70; i++) {
+    particles.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      vx: (Math.random() - 0.5) * 7,
+      vy: (Math.random() - 1.5) * 7,
+      size: 4 + Math.random() * 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      life: 60 + Math.random() * 30
+    });
+  }
+  var frame = 0;
+  function animate(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var alive = false;
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      if (p.life <= 0) continue;
+      alive = true;
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.15;
+      p.life--;
+      ctx.fillStyle = p.color;
+      ctx.fillRect(p.x, p.y, p.size, p.size);
+    }
+    frame++;
+    if (alive && frame < 120) {
+      requestAnimationFrame(animate);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+  animate();
+}
+
+function spin(){
+  if (spinning) return;
+  var items = getItems();
+  var resultEl = document.getElementById('result');
+  if (items.length < 2) {
+    resultEl.textContent = 'Agrega al menos 2 opciones para girar.';
+    return;
+  }
+  spinning = true;
+  resultEl.innerHTML = '';
+  resultEl.classList.remove('has-winner');
+  document.querySelector('.wheel-area').classList.add('is-spinning');
+  ensureAudio();
+
+  var wheel = document.getElementById('wheel');
+  var segAngle = 360 / items.length;
+  var spins = 6 + Math.random() * 3;
+  var extra = Math.random() * 360;
+  var startRotation = currentRotation;
+  var target = startRotation + spins * 360 + extra;
+  var delta = target - startRotation;
+  var duration = 4800;
+  var startTime = null;
+  var lastTickBoundary = Math.floor(((360 - (startRotation % 360)) % 360) / segAngle);
+
+  function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
+
+  function frame(now){
+    if (startTime === null) startTime = now;
+    var elapsed = now - startTime;
+    var t = Math.min(elapsed / duration, 1);
+    var eased = easeOutCubic(t);
+    currentRotation = startRotation + delta * eased;
+    wheel.style.transform = 'translate(-50%, -50%) rotate(' + currentRotation + 'deg)';
+
+    var normalized = (360 - (currentRotation % 360)) % 360;
+    var boundary = Math.floor(normalized / segAngle);
+    if (boundary !== lastTickBoundary) {
+      tick();
+      lastTickBoundary = boundary;
+    }
+
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      spinning = false;
+      document.querySelector('.wheel-area').classList.remove('is-spinning');
+      var normalizedFinal = (360 - (currentRotation % 360)) % 360;
+      var winnerIndex = Math.floor(normalizedFinal / segAngle) % items.length;
+      var winner = items[winnerIndex];
+      resultEl.innerHTML = '<span class="result-label">Resultado</span><span class="result-winner">' + winner + '</span>';
+      resultEl.classList.add('has-winner');
+      playWin();
+      launchConfetti();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+document.getElementById('update-btn').addEventListener('click', function(){
+  var items = getItems();
+  var resultEl = document.getElementById('result');
+  if (items.length < 2) {
+    resultEl.textContent = 'Agrega al menos 2 opciones.';
+    resultEl.classList.remove('has-winner');
+    return;
+  }
+  currentRotation = 0;
+  document.getElementById('wheel').style.transform = 'translate(-50%, -50%) rotate(0deg)';
+  drawWheel(items);
+  resultEl.innerHTML = '';
+  resultEl.classList.remove('has-winner');
+});
+
+document.getElementById('spin-btn').addEventListener('click', spin);
+
+drawWheel(getItems());
+</script>
+</body>
+</html>
